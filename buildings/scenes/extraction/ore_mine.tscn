@@ -1,0 +1,30 @@
+[gd_scene load_steps=5 format=3 uid="uid://ore_mine_building"]
+
+[ext_resource type="PackedScene" uid="uid://building_base_root" path="res://buildings/scenes/building_base.tscn" id="1_base"]
+[ext_resource type="Script" path="res://buildings/jobs/job_slot_data.gd" id="2_job_slot"]
+[ext_resource type="Script" path="res://buildings/building_tier_config.gd" id="3_tier_config"]
+
+[sub_resource type="Resource" id="JobSlotData_t1"]
+script = ExtResource("2_job_slot")
+job_type = 0
+is_required = true
+outputs = { "ore": 3 }
+happiness_modifier = -0.5
+
+[sub_resource type="Resource" id="BuildingTierConfig_t1"]
+script = ExtResource("3_tier_config")
+tier_level = 1
+tier_name = "Rock Breaker"
+alloy_cost = 60
+build_time_months = 18
+upkeep = { "energy_credits": 1 }
+job_slots = [SubResource("JobSlotData_t1")]
+
+[node name="OreMine" parent="." instance=ExtResource("1_base")]
+building_id = "ore_mine"
+display_name = "Ore Mine"
+category = 0
+placement_condition = "Requires ore deposit"
+cascade_description = "Offline → Alloy Foundry output halves → ship construction freezes"
+requires_deposit = "ore"
+tier_configs = [SubResource("BuildingTierConfig_t1")]

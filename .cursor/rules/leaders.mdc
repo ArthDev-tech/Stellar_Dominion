@@ -1,0 +1,104 @@
+---
+description: Leader system design — four classes, trait architecture, council, Paragon leaders
+globs:
+  - autoloads/leader_manager.gd
+  - scenes/leaders/**
+  - scripts/resources/leader_*.gd
+alwaysApply: false
+---
+
+# Stellar Dominion — Leader System
+
+## Four Leader Classes
+| Class | Domain | Unique Role |
+|---|---|---|
+| `Commander` | Fleet combat, military operations | Admiral-equivalent |
+| `Governor` | Planet management, population, economy | Colony administrator |
+| `Scientist` | Research, exploration, anomaly resolution | Research director |
+| `Strategist` | Strategic resources, megastructures, cascade prevention | **Original class — not in Stellaris** |
+
+The Strategist is a deliberate addition. They are the only leader who can:
+- Manage strategic resource logistics
+- Oversee megastructure construction
+- Apply cascade prevention bonuses (reduces cascade propagation speed)
+
+## Trait Architecture
+Four layers. A leader accumulates traits across their lifespan.
+
+```
+Background Traits (1, assigned at creation — 10 total pool)
+    ↓
+Level Traits (1 per level-up, player-chosen from pool of 3 — 20 total pool)
+    ↓
+Veteran Subclass Traits (1 at level 5, defines subclass — 3 per class = 12 total)
+    ↓
+Destiny Traits (1 at level 10, defines legacy — 4 total pool)
+```
+
+**Key departure from Stellaris:** Traits are **player-chosen at level-up** from a curated pool of 3 options — not randomized. This is intentional. Do not implement random trait assignment.
+
+## LeaderData Resource
+```gdscript
+class_name LeaderData
+extends Resource
+
+@export_group("Identity")
+@export var leader_name: String = ""
+@export var leader_class: String = ""   # "commander" | "governor" | "scientist" | "strategist"
+@export var portrait_id: String = ""
+
+@export_group("Progression")
+@export var current_level: int = 1
+@export var experience: float = 0.0
+@export var background_trait: String = ""
+@export var level_traits: Array[String] = []
+@export var veteran_trait: String = ""
+@export var destiny_trait: String = ""
+
+@export_group("Assignment")
+@export var assigned_to: String = ""    # system_id, fleet_id, or "council"
+@export var council_position: int = -1  # -1 = not on council
+```
+
+## Council System
+7 positions. Unfilled positions apply penalties to their domain.
+
+| Position | Domain | Unfilled Penalty |
+|---|---|---|
+| 0 | Military Affairs | -15% fleet combat power |
+| 1 | Interior Affairs | -10% governor effectiveness |
+| 2 | Science Directorate | -10% all research |
+| 3 | Resource Oversight | -15% strategic resource income |
+| 4 | Expansion Bureau | -20% colonization speed |
+| 5 | Diplomatic Corps | -25% influence gain |
+| 6 | Strategic Command | -20% megastructure build speed |
+
+Penalties are applied as multipliers by `LeaderManager` during monthly tick.
+Never hardcode penalty values — they must be `@export` on the council position data.
+
+## 6 Council Agendas
+Each agenda buffs its domain when active. Only one agenda active at a time.
+Agendas are selected by the player from available options — not automatic.
+
+## Legendary Paragon Leaders
+5 Paragons seeded from existing planetary event chains. Each has unique unlock conditions.
+
+| Paragon | Source Event | Unlock Condition |
+|---|---|---|
+| The Sleeping Leviathan | Biological modifier event | Befriend resolution path |
+| The Godmachine | Precursor event | Peaceful integration path |
+| Atmospheric Memory | Atmospheric modifier event | Full decoding complete |
+| The Dry Docks | Precursor event | Ship restoration complete |
+| The Buried Titan | Geological modifier event | Third resolution path |
+
+Paragon leaders have one unique Paragon Trait not available to normal leaders.
+They cannot be dismissed from the roster (only from council positions).
+
+## LeaderManager Contract
+```gdscript
+LeaderManager.get_all_leaders()                          # → Array[LeaderData]
+LeaderManager.get_council()                              # → Array[LeaderData] (7 slots, null = unfilled)
+LeaderManager.assign_to_council(leader_id, position)     # → bool
+LeaderManager.get_council_penalty(position: int)         # → float (multiplier, 1.0 = no penalty)
+LeaderManager.level_up_leader(leader_id, chosen_trait)   # called after player picks trait
+```

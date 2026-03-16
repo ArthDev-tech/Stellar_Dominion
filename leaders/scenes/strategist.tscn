@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://leader_strategist"]
+
+[ext_resource type="PackedScene" uid="uid://leader_base_root" path="res://leaders/scenes/leader_base.tscn" id="1_base"]
+
+[node name="Strategist" parent="." instance=ExtResource("1_base")]
+leader_class = 3
+class_display_name = "Strategist"

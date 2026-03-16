@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="DistrictDefinitionResource" load_steps=2 format=3 uid="uid://district_energy"]
+
+[ext_resource type="Script" path="res://scripts/resources/district_definition.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "energy"
+name_key = "Generator District"
+description = "Power generation infrastructure. Provides housing and technician jobs."
+cost = {
+0: 80
+}
+jobs = {
+"technician": 200
+}
+housing = 2
+icon_path = ""

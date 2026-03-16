@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="CouncilPosition" load_steps=2 format=3 uid="uid://council_high_admiral"]
+
+[ext_resource type="Script" path="res://leaders/council/council_position.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+position_id = "high_admiral"
+display_name = "High Admiral"
+required_class = 0
+is_base_position = true
+base_modifiers = {
+"empire_naval_capacity": 2
+}
+unfilled_penalty = {
+"empire_fleet_fire_rate": -0.05
+}

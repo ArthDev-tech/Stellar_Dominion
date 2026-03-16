@@ -1,0 +1,30 @@
+[gd_scene load_steps=6 format=3 uid="uid://alloy_foundry_building"]
+
+[ext_resource type="PackedScene" uid="uid://building_base_root" path="res://buildings/scenes/building_base.tscn" id="1_base"]
+[ext_resource type="Script" path="res://buildings/jobs/job_slot_data.gd" id="2_job_slot"]
+[ext_resource type="Script" path="res://buildings/building_tier_config.gd" id="3_tier_config"]
+
+[sub_resource type="Resource" id="JobSlotData_req"]
+script = ExtResource("2_job_slot")
+job_type = 3
+is_required = true
+outputs = { "alloys": 3 }
+inputs_consumed = { "ore": 2, "gas": 1 }
+happiness_modifier = -0.2
+
+[sub_resource type="Resource" id="BuildingTierConfig_t1"]
+script = ExtResource("3_tier_config")
+tier_level = 1
+tier_name = "Basic Foundry"
+alloy_cost = 80
+build_time_months = 18
+upkeep = { "energy_credits": 2 }
+job_slots = [SubResource("JobSlotData_req")]
+
+[node name="AlloyFoundry" parent="." instance=ExtResource("1_base")]
+building_id = "alloy_foundry"
+display_name = "Alloy Foundry"
+category = 1
+placement_condition = "Requires Ore + Gas supply upstream"
+cascade_description = "Offline → ship construction freezes → building queue halts"
+tier_configs = [SubResource("BuildingTierConfig_t1")]

@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="GameplayConfig" load_steps=3 format=3 uid="uid://v0k3qubfiyf5"]
+
+[ext_resource type="Script" uid="uid://dib1115032vir" path="res://core/gameplay_config.gd" id="1_config"]
+[ext_resource type="Resource" path="res://resources/resource_icons.tres" id="2_icons"]
+
+[resource]
+script = ExtResource("1_config")
+resource_icon_set = ExtResource("2_icons")

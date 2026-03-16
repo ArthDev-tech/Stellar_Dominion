@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="CouncilAgenda" load_steps=2 format=3 uid="uid://agenda_industrial_surge"]
+
+[ext_resource type="Script" path="res://leaders/council/council_agenda.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+agenda_id = "industrial_surge"
+display_name = "Industrial Surge"
+base_progress_cost = 7000.0
+preparation_modifiers = {
+"empire_alloy_output_percent": 0.05
+}
+active_modifiers = {
+"empire_alloy_output_percent": 0.25,
+"empire_building_construction_speed": 0.2
+}
+active_duration_months = 120
+cooldown_months = 360

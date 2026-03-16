@@ -1,0 +1,6 @@
+[
+	{ "id": "city", "name_key": "City District", "housing": 5, "jobs": { "clerk": 100 }, "cost": { "0": 100 } },
+	{ "id": "energy", "name_key": "Generator District", "housing": 2, "jobs": { "technician": 200 }, "cost": { "0": 80 } },
+	{ "id": "mining", "name_key": "Mining District", "housing": 2, "jobs": { "miner": 200 }, "cost": { "0": 80 } },
+	{ "id": "farming", "name_key": "Agriculture District", "housing": 2, "jobs": { "farmer": 200 }, "cost": { "0": 80 } }
+]

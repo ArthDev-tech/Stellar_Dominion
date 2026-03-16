@@ -1,0 +1,8 @@
+[
+	{ "id": "industrial", "name_key": "Industrial Zone", "building_slots": 4, "jobs": { "metallurgist": 100, "artisan": 100 }, "cost": { "0": 239, "1": 1000 }, "allowed_buildings": ["alloy_foundry", "civilian_industries", "fuel_cell_plant", "synthetic_fabricator", "consumer_goods_factory", "pharmaceutical_lab"] },
+	{ "id": "foundry", "name_key": "Foundries", "building_slots": 4, "jobs": { "metallurgist": 200 }, "cost": { "0": 239, "1": 1000 }, "allowed_buildings": ["alloy_foundry", "fuel_cell_plant", "synthetic_fabricator"] },
+	{ "id": "civic", "name_key": "Civic Industries", "building_slots": 4, "jobs": { "artisan": 200 }, "cost": { "0": 239, "1": 1000 }, "allowed_buildings": ["civilian_industries", "consumer_goods_factory", "pharmaceutical_lab"] },
+	{ "id": "research_physics", "name_key": "Research (Physics)", "building_slots": 4, "jobs": { "researcher": 200 }, "cost": { "0": 239, "1": 1000 }, "allowed_buildings": ["research_lab", "planetary_science_complex", "physical_research_institute"] },
+	{ "id": "research_society", "name_key": "Research (Society)", "building_slots": 4, "jobs": { "researcher": 200 }, "cost": { "0": 239, "1": 1000 }, "allowed_buildings": ["research_lab", "planetary_science_complex", "social_research_centre"] },
+	{ "id": "research_engineering", "name_key": "Research (Engineering)", "building_slots": 4, "jobs": { "researcher": 200 }, "cost": { "0": 239, "1": 1000 }, "allowed_buildings": ["research_lab", "planetary_science_complex", "xenological_institute"] }
+]

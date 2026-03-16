@@ -1,0 +1,125 @@
+[gd_scene load_steps=2 format=3 uid="uid://galaxy_setup_001"]
+
+[ext_resource type="Script" path="res://scenes/main/galaxy_setup.gd" id="1_script"]
+
+[node name="GalaxySetup" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_script")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 60
+theme_override_constants/margin_top = 40
+theme_override_constants/margin_right = 60
+theme_override_constants/margin_bottom = 40
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="VBox" type="VBoxContainer" parent="MarginContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 16
+
+[node name="Title" type="Label" parent="MarginContainer/ScrollContainer/VBox"]
+layout_mode = 2
+text = "Galaxy Setup"
+theme_override_font_sizes/font_size = 36
+theme_override_colors/font_color = Color(0.9, 0.9, 1, 1)
+
+[node name="OptionsGrid" type="GridContainer" parent="MarginContainer/ScrollContainer/VBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/h_separation = 24
+theme_override_constants/v_separation = 12
+columns = 2
+
+[node name="StarsLabel" type="Label" parent="MarginContainer/ScrollContainer/VBox/OptionsGrid"]
+layout_mode = 2
+text = "Number of stars"
+
+[node name="StarsOption" type="OptionButton" parent="MarginContainer/ScrollContainer/VBox/OptionsGrid"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="ShapeLabel" type="Label" parent="MarginContainer/ScrollContainer/VBox/OptionsGrid"]
+layout_mode = 2
+text = "Galaxy shape"
+
+[node name="ShapeOption" type="OptionButton" parent="MarginContainer/ScrollContainer/VBox/OptionsGrid"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="HyperlaneLabel" type="Label" parent="MarginContainer/ScrollContainer/VBox/OptionsGrid"]
+layout_mode = 2
+text = "Hyperlane density"
+
+[node name="HyperlaneOption" type="OptionButton" parent="MarginContainer/ScrollContainer/VBox/OptionsGrid"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="WormholeLabel" type="Label" parent="MarginContainer/ScrollContainer/VBox/OptionsGrid"]
+layout_mode = 2
+text = "Wormhole pairs"
+
+[node name="WormholeSpin" type="SpinBox" parent="MarginContainer/ScrollContainer/VBox/OptionsGrid"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="AILabel" type="Label" parent="MarginContainer/ScrollContainer/VBox/OptionsGrid"]
+layout_mode = 2
+text = "AI empires"
+
+[node name="AISpin" type="SpinBox" parent="MarginContainer/ScrollContainer/VBox/OptionsGrid"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="SeedLabel" type="Label" parent="MarginContainer/ScrollContainer/VBox/OptionsGrid"]
+layout_mode = 2
+text = "Seed (optional)"
+
+[node name="SeedEdit" type="LineEdit" parent="MarginContainer/ScrollContainer/VBox/OptionsGrid"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+placeholder_text = "Random"
+
+[node name="DevTestingLabel" type="Label" parent="MarginContainer/ScrollContainer/VBox/OptionsGrid"]
+layout_mode = 2
+text = "Dev testing start"
+
+[node name="DevTestingCheck" type="CheckBox" parent="MarginContainer/ScrollContainer/VBox/OptionsGrid"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+tooltip_text = "Player starts with extra resources for testing."
+
+[node name="Buttons" type="HBoxContainer" parent="MarginContainer/ScrollContainer/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="StartButton" type="Button" parent="MarginContainer/ScrollContainer/VBox/Buttons"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Start Game"
+
+[node name="BackButton" type="Button" parent="MarginContainer/ScrollContainer/VBox/Buttons"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Back"

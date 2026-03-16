@@ -1,0 +1,22 @@
+[gd_scene load_steps=4 format=3 uid="uid://power_plant_building"]
+
+[ext_resource type="PackedScene" uid="uid://building_base_root" path="res://buildings/scenes/building_base.tscn" id="1_base"]
+[ext_resource type="Script" path="res://buildings/building_tier_config.gd" id="2_tier_config"]
+
+[sub_resource type="Resource" id="BuildingTierConfig_t1"]
+script = ExtResource("2_tier_config")
+tier_level = 1
+tier_name = "Fission Reactor"
+alloy_cost = 75
+build_time_months = 18
+passive_outputs = { "energy_credits": 8 }
+passive_inputs_consumed = { "ore": 1 }
+job_slots = []
+
+[node name="PowerPlant" parent="." instance=ExtResource("1_base")]
+building_id = "power_plant"
+display_name = "Power Plant"
+category = 2
+placement_condition = "None"
+cascade_description = "Offline → EC drops → building death spiral"
+tier_configs = [SubResource("BuildingTierConfig_t1")]

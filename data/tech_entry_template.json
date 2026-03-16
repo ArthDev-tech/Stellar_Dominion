@@ -1,0 +1,11 @@
+{
+	"id": "tech_example",
+	"name_key": "Example Technology",
+	"category": 0,
+	"tier": 1,
+	"cost": 50,
+	"prerequisites": ["tech_basic_energy", "tech_computers_1"],
+	"description": "Optional short description shown on the card.",
+	"unlocks": [],
+	"card_scene": "res://ui/tech_tree/technology_cards/physical/tier_1/tech_example.tscn"
+}

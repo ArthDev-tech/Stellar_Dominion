@@ -1,0 +1,101 @@
+---
+description: Scene architecture, autoload registry, resource patterns, and integration points for Stellar Dominion
+alwaysApply: true
+---
+
+# Stellar Dominion — Architecture
+
+## Autoload Registry
+These autoloads are registered in project.godot. Never create a second instance of these.
+
+| Autoload Name | File | Responsibility |
+|---|---|---|
+| `ResourceManager` | `autoloads/resource_manager.gd` | Monthly tick, all resource balances |
+| `SelectionManager` | `autoloads/selection_manager.gd` | Selected ships/fleets, selection state |
+| `TechManager` | `autoloads/tech_manager.gd` | Researched nodes, unlock checks |
+| `LeaderManager` | `autoloads/leader_manager.gd` | All leaders, council state, agendas |
+| `EventBus` | `autoloads/event_bus.gd` | Global signal relay for cross-system events |
+| `GameState` | `autoloads/game_state.gd` | Current date, game speed, pause state |
+
+## Scene Structure
+```
+Main.tscn
+├── GalaxyView.tscn          # Hyperlane map, star nodes, fleet icons
+│   ├── GalaxyCamera         # Camera2D — pan/zoom
+│   ├── HyperlaneRenderer    # Line2D drawing
+│   ├── SystemLayer          # All StarSystemNode instances
+│   ├── FleetLayer           # All FleetGalaxyIcon instances
+│   └── SelectionHandler     # Box/click select logic
+├── PlanetView.tscn          # Colony management
+├── TechTreeView.tscn        # Research UI
+├── LeaderView.tscn          # Leader roster, council
+└── UIOverlay.tscn           # HUD, resource bar, alerts
+```
+
+## Resource (Data) Pattern
+Game data lives in `.tres` / `.res` files, not in scripts.
+
+```gdscript
+# BuildingTierConfig — one .tres per building tier
+class_name BuildingTierConfig
+extends Resource
+
+@export_group("Output")
+@export var base_output: float = 0.0
+@export var output_resource: String = ""
+
+@export_group("Cost")
+@export var construction_cost: Dictionary = {}
+@export var upkeep_cost: Dictionary = {}
+
+@export_group("Jobs")
+@export var job_slots: Array[JobSlotData] = []
+```
+
+- Resources are embedded in building scenes via `@export var config: BuildingTierConfig`
+- Never load `.tres` files at runtime with hardcoded paths — use `@export` on the parent scene
+
+## Building Scene Hierarchy
+```
+BuildingBase.tscn (parent)
+└── 28 inherited building scenes
+    Each carries its own BuildingTierConfig resources per tier
+    Root node exposes @export global_output_multiplier: float = 1.0
+```
+
+## Signal Convention via EventBus
+Cross-system events go through `EventBus` autoload — never direct node references across scenes.
+
+```gdscript
+# Emitting
+EventBus.building_completed.emit(building_id, planet_id)
+
+# Connecting
+EventBus.building_completed.connect(_on_building_completed)
+```
+
+## File Organization
+```
+stellar_dominion/
+├── autoloads/
+├── scenes/
+│   ├── galaxy/
+│   ├── planet/
+│   ├── ui/
+│   └── shared/
+├── scripts/
+│   ├── resources/       # .gd files for custom Resources
+│   └── components/      # Reusable node scripts
+├── data/
+│   ├── buildings/       # .tres files
+│   ├── leaders/
+│   └── tech/
+└── assets/
+```
+
+## Groups
+Nodes must be added to these groups for cross-system queries:
+- `"galaxy_ships"` — all fleet icons on the galaxy map
+- `"star_systems"` — all StarSystemNode instances
+- `"buildings"` — all active building nodes on planets
+- `"leaders"` — all active leader nodes

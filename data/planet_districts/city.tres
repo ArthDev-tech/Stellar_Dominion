@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="DistrictDefinitionResource" load_steps=2 format=3 uid="uid://district_city"]
+
+[ext_resource type="Script" path="res://scripts/resources/district_definition.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "city"
+name_key = "City District"
+description = "Urban development. Provides housing and clerk jobs; specializations add more jobs."
+cost = {
+0: 100
+}
+jobs = {
+"clerk": 100
+}
+housing = 5
+icon_path = ""

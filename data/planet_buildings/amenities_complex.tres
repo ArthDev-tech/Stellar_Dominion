@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PlanetBuildingDefinitionResource" load_steps=2 format=3 uid="uid://planet_building_amenities"]
+
+[ext_resource type="Script" path="res://scripts/resources/planet_building_definition.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "amenities_complex"
+name_key = "Amenities Complex"
+description = "Provides amenities. Provides clerk jobs."
+cost = { 0: 55, 1: 30 }
+jobs = { "clerk": 200 }
+upkeep = {}
+building_slots = 1
+slot_type = "planetary"
+district_type = ""
+icon_path = ""

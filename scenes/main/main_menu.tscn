@@ -1,0 +1,110 @@
+[gd_scene load_steps=3 format=3 uid="uid://eqrjv08dscwp"]
+
+[ext_resource type="Script" uid="uid://cpqkanrupgh5p" path="res://scenes/main/main_menu.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://d1qpo3byru6gx" path="res://BackGroundArt/MainMenuBG.jpg" id="2_5vafy"]
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_script")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 60
+theme_override_constants/margin_top = 60
+theme_override_constants/margin_right = 60
+theme_override_constants/margin_bottom = 60
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="Title" type="Label" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9, 0.9, 1, 1)
+theme_override_font_sizes/font_size = 48
+text = "Stellar Dominion"
+horizontal_alignment = 1
+
+[node name="NewGameButton" type="Button" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+text = "New Game"
+
+[node name="QuickStartButton" type="Button" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Quick Start"
+
+[node name="DevTestingCheck" type="CheckBox" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+tooltip_text = "Player starts with extra resources for testing."
+text = "Dev testing start"
+
+[node name="QuitButton" type="Button" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Quit"
+
+[node name="LeonardoLightningXlAResplendentlyDecayingRingWorldInT2" type="Sprite2D" parent="MarginContainer/VBoxContainer"]
+z_index = -3
+position = Vector2(1247, 619.00006)
+scale = Vector2(2.5, 2.5)
+texture = ExtResource("2_5vafy")
+
+[node name="MusicPlayerPanel" type="PanelContainer" parent="."]
+layout_mode = 0
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -332.0
+offset_top = 20.0
+offset_right = -12.0
+offset_bottom = 88.0
+grow_horizontal = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="MusicPlayerPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 14
+theme_override_constants/margin_top = 14
+theme_override_constants/margin_right = 14
+theme_override_constants/margin_bottom = 14
+
+[node name="HBox" type="HBoxContainer" parent="MusicPlayerPanel/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="MusicPlayButton" type="Button" parent="MusicPlayerPanel/MarginContainer/HBox"]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+text = "Play"
+
+[node name="MusicPauseButton" type="Button" parent="MusicPlayerPanel/MarginContainer/HBox"]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+text = "Pause"
+
+[node name="MusicNextButton" type="Button" parent="MusicPlayerPanel/MarginContainer/HBox"]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+text = "Next"
+
+[node name="MusicVolumeSlider" type="HSlider" parent="MusicPlayerPanel/MarginContainer/HBox"]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+size_flags_vertical = 1
+max_value = 1.0
+step = 0.05
+value = 0.15

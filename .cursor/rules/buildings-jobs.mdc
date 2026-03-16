@@ -1,0 +1,96 @@
+---
+description: Building catalogue, job slot architecture, output model, and BuildingBase scene conventions
+globs:
+  - scenes/planet/buildings/**
+  - scripts/resources/building_*.gd
+  - scripts/resources/job_slot*.gd
+alwaysApply: false
+---
+
+# Stellar Dominion — Buildings & Jobs System
+
+## Building Families (8 Categories, 68 Tiers Total)
+1. **Extraction** — raw resource mining
+2. **Refinement** — tier 1 → tier 2 conversion
+3. **Energy** — energy credit generation
+4. **Research** — Physical / Social / Xeno research output
+5. **Population & Social** — housing, happiness, consumer goods, unity
+6. **Military** — defense platforms, army recruitment
+7. **Strategic Processing** — exotic material production
+8. **Megascale** — late-game planet-level structures
+
+## Scene Architecture
+```
+BuildingBase.tscn
+└── [28 inherited .tscn files, one per building family]
+    Each scene root carries:
+    - @export var tier_configs: Array[BuildingTierConfig]
+    - @export var current_tier: int = 0
+    - @export var global_output_multiplier: float = 1.0  ← bulk balance knob
+    - @export var is_operational: bool = true
+```
+
+`BuildingTierConfig` resource (one `.tres` per tier per building):
+```gdscript
+class_name BuildingTierConfig
+extends Resource
+
+@export_group("Identity")
+@export var building_name: String = ""
+@export var tier: int = 1
+
+@export_group("Tech Unlock")
+@export var required_branch: String = ""   # "physical" | "social" | "xeno"
+@export var required_tier: int = 0
+@export var required_node: String = ""
+
+@export_group("Construction")
+@export var construction_cost: Dictionary = {}
+@export var build_time_months: int = 3
+@export var upkeep_cost: Dictionary = {}
+
+@export_group("Output")
+@export var passive_output: Dictionary = {}     # no jobs required
+@export var required_job_slots: Array[JobSlotData] = []
+@export var bonus_job_slots: Array[JobSlotData] = []
+
+@export_group("Cascade")
+@export var cascade_failure_description: String = ""
+```
+
+## Job Output Model — Critical Design Rule
+Two types of job slots. Treat them differently in output calculation:
+
+**Required Slots** — scale output by fill ratio
+```gdscript
+# If 3/4 required slots filled → 75% of base output
+var fill_ratio = float(filled_required) / float(total_required)
+var required_output = base_output * fill_ratio * global_output_multiplier
+```
+
+**Bonus Slots** — each filled slot adds its full value, unfilled adds nothing
+```gdscript
+# No partial credit — filled = full value, empty = zero
+var bonus_output = 0.0
+for slot in bonus_job_slots:
+    if slot.is_filled:
+        bonus_output += slot.output_value
+```
+
+**Passive Buildings** (Power Plants at early tiers, etc.):
+- Zero job slots
+- Output always at `passive_output * global_output_multiplier`
+- Operator bonus slots appear at Tier 3+ only
+
+## Tech Unlock Check
+Before allowing construction or upgrade, always check:
+```gdscript
+TechManager.is_unlocked(config.required_branch, config.required_tier, config.required_node)
+```
+
+## Planetary Modifier Synergies
+Building scripts must listen for planetary modifier changes via EventBus:
+```gdscript
+EventBus.planetary_modifier_applied.connect(_recalculate_output)
+```
+Synergy bonuses are defined on the building scene, not on the modifier — keeps modifier data passive.

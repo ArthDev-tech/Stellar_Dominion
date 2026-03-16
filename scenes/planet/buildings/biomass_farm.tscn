@@ -1,0 +1,43 @@
+[gd_scene load_steps=5 format=3 uid="uid://coj370uanyqvk"]
+
+[ext_resource type="Script" uid="uid://cmjlbcsd10oud" path="res://scenes/planet/buildings/planet_building_display.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://vx2doqynekfs" path="res://scripts/resources/planet_building_definition.gd" id="2_def_script"]
+[ext_resource type="Script" uid="uid://cbje4ya614tmo" path="res://scripts/components/job_slots_controller.gd" id="3_controller"]
+
+[sub_resource type="Resource" id="2_def"]
+script = ExtResource("2_def_script")
+id = "biomass_farm"
+name_key = "Biomass Farm"
+description = "Produces biomass. Provides farmer jobs."
+cost = {
+0: 50,
+1: 30
+}
+jobs = {
+"farmer": 200
+}
+
+[node name="BiomassFarm" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_script")
+definition = SubResource("2_def")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="JobSlotsController" type="Node" parent="."]
+script = ExtResource("3_controller")
+jobs = {
+"farmer": 200
+}

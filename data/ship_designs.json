@@ -1,0 +1,53 @@
+[
+	{
+		"id": "construction_ship",
+		"name_key": "Construction Ship",
+		"category": "civilian",
+		"hull_id": "civilian_small",
+		"hull_color": [0.2, 0.75, 0.5],
+		"shape": "arrow",
+		"cost": { "0": 60, "1": 100 },
+		"build_time_months": 12,
+		"loadout": {}
+	},
+	{
+		"id": "science_ship",
+		"name_key": "Science Ship",
+		"category": "civilian",
+		"hull_id": "civilian_small",
+		"hull_color": [0.4, 0.65, 1.0],
+		"shape": "diamond",
+		"cost": { "0": 60, "1": 100 },
+		"build_time_months": 12,
+		"loadout": { "utility_1": "utility_sensor_t1" }
+	},
+	{
+		"id": "colony_ship",
+		"name_key": "Colony Ship",
+		"category": "civilian",
+		"hull_id": "civilian_small",
+		"hull_color": [0.9, 0.7, 0.35],
+		"shape": "chevron",
+		"cost": { "0": 100, "1": 100, "2": 80, "3": 50 },
+		"build_time_months": 24,
+		"loadout": {}
+	},
+	{
+		"id": "corvette",
+		"name_key": "Corvette",
+		"category": "military",
+		"hull_id": "corvette",
+		"hull_color": [0.85, 0.35, 0.3],
+		"shape": "triangle",
+		"cost": { "0": 30, "1": 30, "3": 15 },
+		"build_time_months": 6,
+		"loadout": {
+			"utility_1": "utility_sensor_t1",
+			"utility_2": "utility_computer_t1",
+			"weapon_1": "weapon_laser_s_t1",
+			"weapon_2": "weapon_kinetic_s_t1",
+			"armor_1": "armor_plate_s_t1",
+			"reactor_1": "reactor_s_t1"
+		}
+	}
+]

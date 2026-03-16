@@ -1,0 +1,41 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=5
+
+[application]
+
+config/name="SpaceGame"
+run/main_scene="res://scenes/main/main_menu.tscn"
+config/features=PackedStringArray("4.5")
+
+[autoload]
+
+DebugLogger="*res://core/debug_logger.gd"
+GameState="*res://core/game_state.gd"
+GalaxyManager="*res://core/galaxy_manager.gd"
+EmpireManager="*res://empire/empire_manager.gd"
+EconomyManager="*res://economy/economy_manager.gd"
+ShipDesignManager="*res://ships/ship_design_manager.gd"
+ResearchManager="*res://empire/research_manager.gd"
+LeaderManager="*res://leaders/leader_manager.gd"
+CouncilManager="*res://leaders/council/council_manager.gd"
+PrecursorManager="*res://galaxy/scripts/precursor_manager.gd"
+ProjectPaths="*res://core/project_paths.gd"
+EventBus="*res://core/event_bus.gd"
+JobAssignmentManager="*res://buildings/jobs/job_assignment_manager.gd"
+SelectionManager="*res://core/selection_manager.gd"
+MusicPlayer="*res://core/music_player.gd"
+
+[display]
+
+window/size/viewport_width=2560
+window/size/viewport_height=1440
+config/features=PackedStringArray("4.5", "Forward Plus")
+config/icon="res://icon.svg"
+run/main_scene="res://scenes/main/main_menu.tscn"

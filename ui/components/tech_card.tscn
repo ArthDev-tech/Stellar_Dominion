@@ -1,0 +1,59 @@
+[gd_scene load_steps=2 format=3 uid="uid://tech_card_001"]
+
+[ext_resource type="Script" path="res://ui/components/tech_card.gd" id="1_script"]
+
+[node name="TechCard" type="PanelContainer"]
+custom_minimum_size = Vector2(260, 140)
+custom_maximum_size = Vector2(260, 140)
+clip_contents = true
+layout_mode = 3
+script = ExtResource("1_script")
+
+[node name="CardButton" type="Button" parent="."]
+layout_mode = 2
+flat = true
+theme_override_constants/focus_margin_left = 0
+theme_override_constants/focus_margin_top = 0
+theme_override_constants/focus_margin_right = 0
+theme_override_constants/focus_margin_bottom = 0
+
+[node name="Content" type="HBoxContainer" parent="CardButton"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="IconRect" type="ColorRect" parent="CardButton/Content"]
+custom_minimum_size = Vector2(44, 44)
+layout_mode = 2
+
+[node name="VBox" type="VBoxContainer" parent="CardButton/Content"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 6
+
+[node name="TitleLabel" type="Label" parent="CardButton/Content/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 15
+text = "Tech Name"
+autowrap_mode = 2
+
+[node name="DescLabel" type="Label" parent="CardButton/Content/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 11
+theme_override_colors/font_color = Color(0.7, 0.75, 0.88, 1)
+text = "Description text — edit in scene or from tech data."
+autowrap_mode = 2
+lines_visible = 4
+
+[node name="CostLabel" type="Label" parent="CardButton/Content/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+theme_override_colors/font_color = Color(0.55, 0.6, 0.75, 1)
+text = "0 RP"
+
+[node name="RequireLabel" type="Label" parent="CardButton/Content/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 10
+theme_override_colors/font_color = Color(0.5, 0.55, 0.7, 1)
+text = "Requires: None"
+autowrap_mode = 2

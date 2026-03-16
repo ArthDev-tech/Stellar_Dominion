@@ -1,0 +1,90 @@
+[gd_resource type="Resource" script_class="JobBalanceConfig" load_steps=15 format=3 uid="uid://beuieiwteusf2"]
+
+[ext_resource type="Script" uid="uid://xwsug602ht3e" path="res://scripts/resources/job_balance_config.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://bv6cqai7dw05m" path="res://scripts/resources/job_definition_resource.gd" id="2_script"]
+
+[sub_resource type="Resource" id="3"]
+script = ExtResource("2_script")
+job_id = "technician"
+name_key = "Technician"
+output_amount = 0.04
+
+[sub_resource type="Resource" id="4"]
+script = ExtResource("2_script")
+job_id = "miner"
+name_key = "Miner"
+output_resource_type = 1
+output_amount = 0.04
+
+[sub_resource type="Resource" id="5"]
+script = ExtResource("2_script")
+job_id = "farmer"
+name_key = "Farmer"
+output_resource_type = 2
+output_amount = 0.04
+
+[sub_resource type="Resource" id="6"]
+script = ExtResource("2_script")
+job_id = "researcher"
+name_key = "Researcher"
+output_resource_type = 4
+output_amount = 0.03
+
+[sub_resource type="Resource" id="7"]
+script = ExtResource("2_script")
+job_id = "metallurgist"
+name_key = "Metallurgist"
+output_resource_type = 3
+output_amount = 0.02
+upkeep = {
+1: 0.01
+}
+
+[sub_resource type="Resource" id="8"]
+script = ExtResource("2_script")
+job_id = "clerk"
+name_key = "Clerk"
+output_amount = 0.01
+
+[sub_resource type="Resource" id="9"]
+script = ExtResource("2_script")
+job_id = "ruler"
+name_key = "Ruler"
+output_resource_type = -1
+
+[sub_resource type="Resource" id="10"]
+script = ExtResource("2_script")
+job_id = "enforcer"
+name_key = "Enforcer"
+output_resource_type = -1
+
+[sub_resource type="Resource" id="11"]
+script = ExtResource("2_script")
+job_id = "artisan"
+name_key = "Artisan"
+output_amount = 0.02
+
+[sub_resource type="Resource" id="12"]
+script = ExtResource("2_script")
+job_id = "acolyte"
+name_key = "Acolyte"
+output_resource_type = 7
+output_amount = 0.02
+
+[sub_resource type="Resource" id="13"]
+script = ExtResource("2_script")
+job_id = "chemist"
+name_key = "Chemist"
+output_resource_type = 26
+output_amount = 0.02
+
+[sub_resource type="Resource" id="14"]
+script = ExtResource("2_script")
+job_id = "soldier"
+name_key = "Soldier"
+output_resource_type = 32
+output_amount = 0.005
+
+[resource]
+script = ExtResource("1_script")
+job_definitions = Array[ExtResource("2_script")]([SubResource("3"), SubResource("4"), SubResource("5"), SubResource("6"), SubResource("7"), SubResource("8"), SubResource("9"), SubResource("10"), SubResource("11"), SubResource("12"), SubResource("13"), SubResource("14")])

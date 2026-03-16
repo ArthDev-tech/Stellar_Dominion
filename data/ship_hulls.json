@@ -1,0 +1,43 @@
+[
+	{
+		"id": "civilian_small",
+		"name_key": "Civilian Small Hull",
+		"category": "civilian",
+		"hull_color": [0.5, 0.65, 0.9],
+		"shape": "arrow",
+		"base_hull": 100,
+		"base_armor": 0,
+		"base_evasion": 20,
+		"base_power": 2,
+		"ship_size": 1,
+		"naval_capacity": 1.0,
+		"base_build_time_months": 12,
+		"slots": [
+			{ "id": "utility_1", "type": "utility", "size": "S" }
+		]
+	},
+	{
+		"id": "corvette",
+		"name_key": "Corvette Hull",
+		"category": "military",
+		"hull_color": [0.85, 0.35, 0.3],
+		"shape": "triangle",
+		"base_hull": 300,
+		"base_armor": 0,
+		"base_evasion": 60,
+		"base_power": 2,
+		"ship_size": 1,
+		"naval_capacity": 1.0,
+		"base_build_time_months": 6,
+		"slots": [
+			{ "id": "utility_1", "type": "utility", "size": "S" },
+			{ "id": "utility_2", "type": "utility", "size": "S" },
+			{ "id": "utility_3", "type": "utility", "size": "S" },
+			{ "id": "weapon_1", "type": "weapon", "size": "S" },
+			{ "id": "weapon_2", "type": "weapon", "size": "S" },
+			{ "id": "armor_1", "type": "armor", "size": "S" },
+			{ "id": "armor_2", "type": "armor", "size": "S" },
+			{ "id": "reactor_1", "type": "reactor", "size": "S" }
+		]
+	}
+]

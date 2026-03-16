@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PlanetBuildingDefinitionResource" load_steps=2 format=3 uid="uid://planet_building_civilian"]
+
+[ext_resource type="Script" path="res://scripts/resources/planet_building_definition.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "civilian_industries"
+name_key = "Civilian Industries"
+description = "Produces consumer goods. Provides artisan jobs."
+cost = { 0: 100, 1: 50 }
+jobs = { "artisan": 200 }
+upkeep = {}
+building_slots = 1
+slot_type = "planetary"
+district_type = ""
+icon_path = ""

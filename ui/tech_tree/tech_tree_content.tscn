@@ -1,0 +1,64 @@
+[gd_scene load_steps=3 format=3 uid="uid://tech_tree_content_001"]
+
+[ext_resource type="Script" path="res://ui/tech_tree/tech_tree_lines.gd" id="1_lines"]
+[ext_resource type="PackedScene" uid="uid://tech_card_001" path="res://ui/components/tech_card.tscn" id="2_card"]
+
+[node name="TechTreeContent" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+custom_minimum_size = Vector2(1580, 1480)
+
+[node name="TreeCanvas" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+custom_minimum_size = Vector2(1580, 1480)
+
+[node name="Background" type="ColorRect" parent="TreeCanvas"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.055, 0.065, 0.1, 0.97)
+mouse_filter = 2
+z_index = -2
+
+[node name="LinesLayer" type="Control" parent="TreeCanvas"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_lines")
+z_index = -1
+
+[node name="PlaceholderCard1" parent="TreeCanvas" instance=ExtResource("2_card")]
+layout_mode = 3
+position = Vector2(32, 32)
+groups = ["placeholder"]
+
+[node name="PlaceholderCard2" parent="TreeCanvas" instance=ExtResource("2_card")]
+layout_mode = 3
+position = Vector2(320, 32)
+groups = ["placeholder"]
+
+[node name="PlaceholderCard3" parent="TreeCanvas" instance=ExtResource("2_card")]
+layout_mode = 3
+position = Vector2(32, 448)
+groups = ["placeholder"]
+
+[node name="PlaceholderCard4" parent="TreeCanvas" instance=ExtResource("2_card")]
+layout_mode = 3
+position = Vector2(320, 448)
+groups = ["placeholder"]

@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PlanetBuildingDefinitionResource" load_steps=2 format=3 uid="uid://planet_building_science"]
+
+[ext_resource type="Script" path="res://scripts/resources/planet_building_definition.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "planetary_science_complex"
+name_key = "Planetary Science Complex"
+description = "Major research facility. Provides researcher jobs."
+cost = { 0: 150, 1: 80 }
+jobs = { "researcher": 400 }
+upkeep = {}
+building_slots = 1
+slot_type = "planetary"
+district_type = ""
+icon_path = ""

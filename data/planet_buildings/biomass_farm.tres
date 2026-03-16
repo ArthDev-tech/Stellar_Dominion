@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PlanetBuildingDefinitionResource" load_steps=2 format=3 uid="uid://planet_building_biomass"]
+
+[ext_resource type="Script" path="res://scripts/resources/planet_building_definition.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "biomass_farm"
+name_key = "Biomass Farm"
+description = "Produces biomass. Provides farmer jobs."
+cost = { 0: 50, 1: 30 }
+jobs = { "farmer": 200 }
+upkeep = {}
+building_slots = 1
+slot_type = "planetary"
+district_type = ""
+icon_path = ""

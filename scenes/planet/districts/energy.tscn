@@ -1,0 +1,40 @@
+[gd_scene load_steps=4 format=3 uid="uid://planet_district_energy_scene"]
+
+[ext_resource type="Script" path="res://scenes/planet/districts/district_display.gd" id="1_script"]
+[ext_resource type="Script" path="res://scripts/resources/district_definition.gd" id="2_def_script"]
+[ext_resource type="Script" path="res://scripts/components/job_slots_controller.gd" id="3_controller"]
+
+[sub_resource type="Resource" id="2_def"]
+script = ExtResource("2_def_script")
+id = "energy"
+name_key = "Generator District"
+description = "Power generation infrastructure. Provides housing and technician jobs."
+cost = {
+0: 80
+}
+jobs = {
+"technician": 200
+}
+housing = 2
+icon_path = ""
+
+[node name="Energy" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource("1_script")
+definition = SubResource("2_def")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+visible = false
+
+[node name="JobSlotsController" type="Node" parent="."]
+script = ExtResource("3_controller")
+jobs = {
+"technician": 200
+}

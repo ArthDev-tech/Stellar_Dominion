@@ -1,0 +1,109 @@
+---
+description: Galaxy map view architecture — camera controls, ship selection system, fleet icon visuals
+globs:
+  - scenes/galaxy/**
+  - scripts/galaxy_*.gd
+  - autoloads/selection_manager.gd
+alwaysApply: false
+---
+
+# Stellar Dominion — Galaxy Map View
+
+## Input Method (Critical)
+Galaxy map and system view input MUST use `_unhandled_input()`, never `_input()`. Using `_input()` with `accept_event()` or `set_input_as_handled()` on mouse clicks will silently prevent all UI button presses.
+
+## Camera Controls
+File: `scenes/galaxy/galaxy_camera.gd`
+
+| Input | Action |
+|---|---|
+| Middle mouse button drag | Pan camera |
+| Scroll wheel | Zoom in/out |
+| Left click / drag | Selection only — NOT pan |
+
+**This is a hard rule.** Left mouse button is reserved entirely for selection.
+If you see left-click used for panning anywhere in galaxy camera code, that is a bug.
+
+```gdscript
+@export_group("Camera")
+@export var pan_speed: float = 1.0
+@export var zoom_min: float = 0.2
+@export var zoom_max: float = 3.0
+@export var zoom_step: float = 0.1
+```
+
+## Selection System
+File: `scenes/galaxy/galaxy_selection_handler.gd`
+
+Selection state is owned by `SelectionManager` autoload.
+The handler only reads input and calls SelectionManager — it holds no selection state itself.
+
+### Input Lifecycle
+```
+LMB PRESSED   → record drag_start, is_dragging = false
+MOUSE MOVED   → if LMB held and delta > DRAG_THRESHOLD: is_dragging = true, draw rect
+LMB RELEASED  → is_dragging ? box_select() : click_select()
+               → clear rect, reset state
+```
+
+### Inspector-Tunable Values
+```gdscript
+@export_group("Selection Tuning")
+@export var DRAG_THRESHOLD: float = 8.0
+@export var CLICK_RADIUS: float = 24.0
+@export var box_fill_color: Color = Color(0.27, 0.67, 1.0, 0.08)
+@export var box_border_color: Color = Color(0.27, 0.67, 1.0, 0.55)
+@export var box_border_width: float = 1.5
+```
+
+### Shift-Click Additive Selection
+- No modifier key: replace selection
+- Shift held: add to existing selection
+- Click on empty space (no ship in radius): clear selection
+
+### Ship Discovery
+Ships are found via group query — never hardcoded references:
+```gdscript
+get_tree().get_nodes_in_group("galaxy_ships")
+```
+
+## Fleet Galaxy Icon
+File: `scenes/galaxy/fleet_galaxy_icon.gd`
+
+Each fleet in a system renders as a small colored shape beneath the system node.
+
+### Selected State Visual
+A pulsing halo drawn beneath the ship shape in `_draw()`.
+
+```gdscript
+@export_group("Selection Visual")
+@export var selected: bool = false :
+    set(v):
+        selected = v
+        queue_redraw()
+@export var halo_color: Color = Color(0.27, 0.67, 1.0, 0.6)
+@export var halo_radius_offset: float = 6.0
+@export var pulse_speed: float = 2.5
+@export var pulse_min_alpha: float = 0.3
+@export var pulse_max_alpha: float = 0.75
+```
+
+Pulse is driven by `_process(delta)` incrementing a `pulse_timer` float.
+`queue_redraw()` is only called when `selected == true` to avoid unnecessary redraws.
+
+## SelectionManager Autoload Contract
+```gdscript
+SelectionManager.set_selection(ships: Array[Node])      # replace, sets selected = true on each
+SelectionManager.add_to_selection(ships: Array[Node])   # additive
+SelectionManager.clear_selection()                      # deselects all
+SelectionManager.selected_ships                         # Array[Node] — read only externally
+
+signal selection_changed(ships: Array)                  # fired after any selection change
+```
+
+## Star System Nodes
+File: `scenes/galaxy/star_system_node.gd`
+
+- Expose `world_position: Vector2` (mirrors `global_position`) for selection handler
+- Systems are in group `"star_systems"`
+- System selection is a separate future feature — not part of ship selection system

@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="LeaderTrait" load_steps=2 format=3 uid="uid://trait_industrialist"]
+
+[ext_resource type="Script" path="res://leaders/leader_trait.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+trait_id = "industrialist"
+display_name = "Industrialist"
+description = "Good early-game recruit for industrial planets."
+trait_tier = 0
+eligible_classes = [ 1, 3 ]
+applies_always = true
+applies_when_on_council = true
+council_effect_scale_with_level = true
+field_modifiers = {
+"building_construction_speed_percent": 0.1,
+"alloy_output_percent": 0.05
+}
+council_modifiers = {
+"empire_alloy_output_percent": 0.01
+}
+global_modifier_scale = 1.0

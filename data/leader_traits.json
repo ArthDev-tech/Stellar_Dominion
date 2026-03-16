@@ -1,0 +1,8 @@
+[
+	{ "id": "spark_of_genius", "name_key": "Spark of Genius", "leader_types": ["scientist"], "effect": "research_speed", "value": 0.1 },
+	{ "id": "careful", "name_key": "Careful", "leader_types": ["scientist"], "effect": "survey_speed", "value": 0.05 },
+	{ "id": "aggressive", "name_key": "Aggressive", "leader_types": ["admiral"], "effect": "fire_rate", "value": 0.1 },
+	{ "id": "tactician", "name_key": "Tactician", "leader_types": ["admiral"], "effect": "evasion", "value": 0.05 },
+	{ "id": "bureaucrat", "name_key": "Bureaucrat", "leader_types": ["governor"], "effect": "unity", "value": 0.1 },
+	{ "id": "architect", "name_key": "Architect", "leader_types": ["governor"], "effect": "build_speed", "value": 0.1 }
+]

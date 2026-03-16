@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="CouncilPosition" load_steps=2 format=3 uid="uid://council_head_of_research"]
+
+[ext_resource type="Script" path="res://leaders/council/council_position.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+position_id = "head_of_research"
+display_name = "Head of Research"
+required_class = 2
+is_base_position = true
+base_modifiers = {
+"empire_all_research_percent": 0.02
+}
+unfilled_penalty = {
+"empire_all_research_percent": -0.05
+}

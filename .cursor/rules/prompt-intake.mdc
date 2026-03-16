@@ -1,0 +1,43 @@
+---
+description: Workflow rule for handling structured implementation prompts delivered from Claude (the external design partner)
+alwaysApply: true
+---
+
+# Stellar Dominion — Prompt Intake Workflow
+
+## Design Partner Integration
+This project uses a split workflow:
+- **Claude** (claude.ai) handles game design, system architecture, and writes implementation prompts
+- **Cursor** (you) handles implementation of those prompts
+
+Claude produces structured prompts with explicit file paths, class definitions, method signatures, scope boundaries, and "what NOT to build" sections.
+
+## When You Receive a Prompt Structured Like This...
+Look for these sections and treat them as authoritative:
+
+| Section | How to treat it |
+|---|---|
+| `### Context` | Background — read but don't re-implement already existing systems |
+| `### What To Build` | Implementation spec — follow exactly |
+| `### File Summary` | Canonical file paths — use these, don't invent alternatives |
+| `### What NOT To Build` | Hard scope boundary — do not add these even if they seem helpful |
+| `@export` declarations in code blocks | Must appear exactly as shown — these are the Inspector-tunable values |
+
+## Before Starting Any Implementation Task
+1. Read `core.mdc` constraints — especially Inspector-First
+2. Check if the relevant system rule (economy, buildings, leaders, galaxy-map) applies
+3. Confirm the file paths in the prompt match the architecture in `architecture.mdc`
+4. If there's a conflict between the prompt and these rules, flag it — don't silently resolve it
+
+## When Scope Is Ambiguous
+- Default to **less** — implement the minimum that satisfies the prompt
+- Add `# TODO: [feature] — deliberately out of scope for this task` comments at boundaries
+- Never add UI polish, extra signals, or bonus features not in the spec
+
+## Confirming Understanding
+Before writing any code on a complex multi-file task, briefly restate:
+- What files will be created/modified
+- What the entry point is
+- Any conflicts or questions you spotted
+
+Then proceed unless the user says to stop.

@@ -1,0 +1,324 @@
+[gd_scene load_steps=9 format=3 uid="uid://dwo1vtasyjy6v"]
+
+[ext_resource type="Script" uid="uid://l1lo61txu4s5" path="res://scenes/galaxy/game_scene.gd" id="1_script"]
+[ext_resource type="Resource" uid="uid://v0k3qubfiyf5" path="res://resources/default_gameplay_config.tres" id="2_config"]
+[ext_resource type="Texture2D" uid="uid://bb35kbkapw1y7" path="res://BackGroundArt/ParalaxBG2TiledDark.jpg" id="2_tex"]
+[ext_resource type="Script" uid="uid://cma05diy35yod" path="res://scenes/galaxy/galaxy_selection_handler.gd" id="3_script"]
+[ext_resource type="Script" uid="uid://cq6o07djhxgbk" path="res://scenes/galaxy/galaxy_camera.gd" id="4_script"]
+[ext_resource type="PackedScene" uid="uid://5hloswkcf1ts" path="res://ui/overlays/fleet_panel.tscn" id="5_fleetpanel"]
+[ext_resource type="Script" uid="uid://cqw04mf8vgbg" path="res://ui/components/draggable_panel.gd" id="6_draggable"]
+[ext_resource type="Script" uid="uid://c5rbo4sigk626" path="res://scripts/components/parallax_tiled_layer.gd" id="8_tiled"]
+
+[node name="GameScene" type="Node2D"]
+script = ExtResource("1_script")
+gameplay_config = ExtResource("2_config")
+
+[node name="ParallaxBackground" type="ParallaxBackground" parent="."]
+
+[node name="ParallaxLayer" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_scale = Vector2(0.05, 0.05)
+script = ExtResource("8_tiled")
+grid_radius = 10
+zoom_compensation = 0.0
+
+[node name="BackgroundSprite" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer"]
+scale = Vector2(3, 3)
+texture = ExtResource("2_tex")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position_smoothing_enabled = true
+position_smoothing_speed = 8.0
+script = ExtResource("4_script")
+
+[node name="GalaxyMap" type="Node2D" parent="."]
+
+[node name="Hyperlines" type="Node2D" parent="GalaxyMap"]
+
+[node name="SystemsLayer" type="Node2D" parent="GalaxyMap"]
+
+[node name="ShipsLayer" type="Node2D" parent="GalaxyMap"]
+
+[node name="UICanvas" type="CanvasLayer" parent="."]
+
+[node name="TopBar" type="PanelContainer" parent="UICanvas"]
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 92.0
+grow_horizontal = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="UICanvas/TopBar"]
+layout_mode = 2
+theme_override_constants/margin_left = 92
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 8
+
+[node name="VBox" type="VBoxContainer" parent="UICanvas/TopBar/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="Row1" type="HBoxContainer" parent="UICanvas/TopBar/MarginContainer/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="ResourceLine1" type="HBoxContainer" parent="UICanvas/TopBar/MarginContainer/VBox/Row1"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Spacer" type="Control" parent="UICanvas/TopBar/MarginContainer/VBox/Row1"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DateLabel" type="Label" parent="UICanvas/TopBar/MarginContainer/VBox/Row1"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9, 0.9, 1, 1)
+theme_override_font_sizes/font_size = 14
+text = "Year 1, Month 1, Day 1"
+
+[node name="PauseButton" type="Button" parent="UICanvas/TopBar/MarginContainer/VBox/Row1"]
+layout_mode = 2
+toggle_mode = true
+text = "Pause"
+
+[node name="ScaleButtonsContainer" type="HBoxContainer" parent="UICanvas/TopBar/MarginContainer/VBox/Row1"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="Row2" type="HBoxContainer" parent="UICanvas/TopBar/MarginContainer/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="ResourceLine2" type="HBoxContainer" parent="UICanvas/TopBar/MarginContainer/VBox/Row2"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="SelectedPanel" type="PanelContainer" parent="UICanvas"]
+anchors_preset = -1
+anchor_top = 0.08
+anchor_bottom = 0.5
+offset_left = 2180.0
+offset_top = 368.8
+offset_right = 2524.0
+offset_bottom = 688.80005
+grow_horizontal = 0
+script = ExtResource("6_draggable")
+metadata/_edit_group_ = true
+
+[node name="TitleBar" type="HBoxContainer" parent="UICanvas/SelectedPanel"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="TitleLabel" type="Label" parent="UICanvas/SelectedPanel/TitleBar"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.9, 0.9, 1, 1)
+theme_override_font_sizes/font_size = 14
+text = "System"
+
+[node name="CloseButton" type="Button" parent="UICanvas/SelectedPanel/TitleBar"]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+text = "✕"
+
+[node name="MarginContainer" type="MarginContainer" parent="UICanvas/SelectedPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 14
+theme_override_constants/margin_top = 14
+theme_override_constants/margin_right = 14
+theme_override_constants/margin_bottom = 14
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UICanvas/SelectedPanel/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="SelectedLabel" type="Label" parent="UICanvas/SelectedPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9, 0.9, 1, 1)
+theme_override_font_sizes/font_size = 14
+text = "No system selected"
+autowrap_mode = 2
+
+[node name="ViewSystemButton" type="Button" parent="UICanvas/SelectedPanel/MarginContainer/VBoxContainer"]
+visible = false
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+text = "View System"
+
+[node name="SurveyButton" type="Button" parent="UICanvas/SelectedPanel/MarginContainer/VBoxContainer"]
+visible = false
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+text = "Survey Anomaly"
+
+[node name="ManageColonyButton" type="Button" parent="UICanvas/SelectedPanel/MarginContainer/VBoxContainer"]
+visible = false
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+text = "Manage Colony"
+
+[node name="ManageStationButton" type="Button" parent="UICanvas/SelectedPanel/MarginContainer/VBoxContainer"]
+visible = false
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+text = "Manage Station"
+
+[node name="ResearchPanel" type="PanelContainer" parent="UICanvas"]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -332.0
+offset_top = 219.0
+offset_right = -12.0
+offset_bottom = 359.0
+grow_horizontal = 0
+metadata/_edit_group_ = true
+
+[node name="MarginContainer" type="MarginContainer" parent="UICanvas/ResearchPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 14
+theme_override_constants/margin_top = 14
+theme_override_constants/margin_right = 14
+theme_override_constants/margin_bottom = 14
+
+[node name="VBox" type="VBoxContainer" parent="UICanvas/ResearchPanel/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="ResearchTitle" type="Label" parent="UICanvas/ResearchPanel/MarginContainer/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.95, 1, 1)
+theme_override_font_sizes/font_size = 18
+text = "Research"
+
+[node name="ResearchLabel" type="Label" parent="UICanvas/ResearchPanel/MarginContainer/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "No tech selected"
+autowrap_mode = 2
+
+[node name="DrawHBox" type="HBoxContainer" parent="UICanvas/ResearchPanel/MarginContainer/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Tech1Btn" type="Button" parent="UICanvas/ResearchPanel/MarginContainer/VBox/DrawHBox"]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Tech 1"
+
+[node name="Tech2Btn" type="Button" parent="UICanvas/ResearchPanel/MarginContainer/VBox/DrawHBox"]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Tech 2"
+
+[node name="Tech3Btn" type="Button" parent="UICanvas/ResearchPanel/MarginContainer/VBox/DrawHBox"]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Tech 3"
+
+[node name="NavStrip" type="PanelContainer" parent="UICanvas"]
+offset_top = 92.0
+offset_right = 80.0
+offset_bottom = 400.0
+
+[node name="MarginContainer" type="MarginContainer" parent="UICanvas/NavStrip"]
+layout_mode = 2
+theme_override_constants/margin_left = 6
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 6
+theme_override_constants/margin_bottom = 8
+
+[node name="VBox" type="VBoxContainer" parent="UICanvas/NavStrip/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="GalaxyMapButton" type="Button" parent="UICanvas/NavStrip/MarginContainer/VBox"]
+layout_mode = 2
+text = "Galaxy"
+
+[node name="PlanetsButton" type="Button" parent="UICanvas/NavStrip/MarginContainer/VBox"]
+layout_mode = 2
+text = "Planets"
+
+[node name="TechnologyButton" type="Button" parent="UICanvas/NavStrip/MarginContainer/VBox"]
+layout_mode = 2
+text = "Tech"
+
+[node name="TechTreeButton" type="Button" parent="UICanvas/NavStrip/MarginContainer/VBox"]
+layout_mode = 2
+text = "Tech Tree"
+
+[node name="LeadersButton" type="Button" parent="UICanvas/NavStrip/MarginContainer/VBox"]
+layout_mode = 2
+text = "Leaders"
+
+[node name="ShipDesignerButton" type="Button" parent="UICanvas/NavStrip/MarginContainer/VBox"]
+layout_mode = 2
+text = "Ships"
+
+[node name="FleetPanel" parent="UICanvas" instance=ExtResource("5_fleetpanel")]
+anchors_preset = 2
+
+[node name="MusicPlayerPanel" type="PanelContainer" parent="UICanvas"]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -332.0
+offset_top = 136.0
+offset_right = -12.0
+offset_bottom = 204.0
+grow_horizontal = 0
+metadata/_edit_group_ = true
+
+[node name="MarginContainer" type="MarginContainer" parent="UICanvas/MusicPlayerPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 14
+theme_override_constants/margin_top = 14
+theme_override_constants/margin_right = 14
+theme_override_constants/margin_bottom = 14
+
+[node name="HBox" type="HBoxContainer" parent="UICanvas/MusicPlayerPanel/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="MusicPlayButton" type="Button" parent="UICanvas/MusicPlayerPanel/MarginContainer/HBox"]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+text = "Play"
+
+[node name="MusicPauseButton" type="Button" parent="UICanvas/MusicPlayerPanel/MarginContainer/HBox"]
+visible = false
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+text = "Pause"
+
+[node name="MusicNextButton" type="Button" parent="UICanvas/MusicPlayerPanel/MarginContainer/HBox"]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+text = "Next"
+
+[node name="MusicVolumeSlider" type="HSlider" parent="UICanvas/MusicPlayerPanel/MarginContainer/HBox"]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+size_flags_vertical = 1
+max_value = 1.0
+step = 0.05
+value = 0.4
+
+[node name="OverlayLayer" type="CanvasLayer" parent="."]
+layer = 10
+
+[node name="SelectionOverlay" type="CanvasLayer" parent="."]
+
+[node name="GalaxySelectionHandler" type="Control" parent="SelectionOverlay"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("3_script")
+metadata/_edit_lock_ = true

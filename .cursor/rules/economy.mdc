@@ -1,0 +1,78 @@
+---
+description: Resource economy design — tiers, recipes, cascade failure logic, and ResourceManager integration
+globs:
+  - autoloads/resource_manager.gd
+  - scripts/resources/resource_*.gd
+  - scenes/planet/**
+alwaysApply: false
+---
+
+# Stellar Dominion — Economy System
+
+## Three-Tier Resource Pipeline
+All economy flows through exactly three tiers. This is a design invariant — do not flatten.
+
+### Tier 1 — Raw
+Extracted directly from planetary deposits. No recipe required.
+- `ore`, `gas`, `ice`, `biomass`
+
+### Tier 2 — Refined
+Produced by Refinement buildings from raw inputs. Each has a defined recipe.
+```
+alloys:           2 ore + 1 gas       → 3 alloys
+fuel_cells:       2 ice + 1 gas       → 4 fuel_cells
+synthetics:       2 ore + 2 energy    → 3 synthetics
+pharmaceuticals:  3 biomass + 1 ice   → 2 pharmaceuticals
+consumer_goods:   2 biomass + 1 ore   → 3 consumer_goods
+```
+
+### Tier 3 — Strategic
+Spawn in limited systems (3–6 per galaxy). Never synthesizable except where noted.
+- `stellite`, `void_gas`, `nanite_dust`, `psionic_ore`, `dark_lattice`
+
+### Abstract Resources
+Not stored in planets — tracked globally by `ResourceManager`.
+- `energy_credits`, `influence`, `unity`, `research_physical`, `research_social`, `research_xeno`, `command_points`, `cognition`
+
+### Exotic Materials
+End-game crafted materials. Require specific tech unlocks. See megastructure rules.
+- `aetheric_lattice`, `voidweave`, `degnite`, `computronium_inner`, `computronium_mid`, `computronium_outer`, `cognite`
+
+## ResourceManager Contract
+```gdscript
+# Reading balances — always via ResourceManager, never cached locally
+ResourceManager.get_balance("alloys")          # → float
+ResourceManager.get_income("alloys")           # → float (per month)
+ResourceManager.get_upkeep("alloys")           # → float (per month)
+
+# Spending — returns false if insufficient
+ResourceManager.spend("alloys", 50.0)          # → bool
+
+# Monthly tick fires this signal after processing
+ResourceManager.monthly_tick_completed         # signal()
+```
+
+## Cascade Failure Logic
+Cascades are the primary tension mechanic. Each has a defined trigger and propagation path.
+
+| Cascade | Trigger | Propagation |
+|---|---|---|
+| Industrial Core | Ore < 0 | Alloy production stops → construction halts → energy crisis → buildings offline spiral |
+| Population Engine | Biomass < 0 | Consumer Goods deficit → happiness decay → Unity collapse → Research drops |
+| Energy Death Spiral | Energy < 0 | Buildings offline → reduced income → more offline |
+| Influence Lock | Influence < 0 | Can't claim, can't respond to crises, edicts disabled |
+
+Implementation rules:
+- Cascade warnings fire as EventBus signals **before** the resource hits zero (at 20% threshold)
+- Buildings going offline reduce their job output to zero but do NOT delete job slots
+- Cascade recovery does not require player action beyond restoring the triggering resource
+- Cascades are deterministic — same resource state always produces same cascade outcome
+
+## Resource Dictionary Format
+All cost/upkeep dictionaries use string keys matching resource identifiers above:
+```gdscript
+var construction_cost: Dictionary = {
+    "alloys": 150.0,
+    "energy_credits": 50.0
+}
+```

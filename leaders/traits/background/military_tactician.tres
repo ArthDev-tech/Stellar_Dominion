@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="LeaderTrait" load_steps=2 format=3 uid="uid://trait_military_tactician"]
+
+[ext_resource type="Script" path="res://leaders/leader_trait.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+trait_id = "military_tactician"
+display_name = "Military Tactician"
+description = "Straightforward combat Commander."
+trait_tier = 0
+eligible_classes = Array[int]([0])
+field_modifiers = {
+"fleet_fire_rate": 0.08,
+"fleet_evasion": 0.05
+}
+council_modifiers = {
+"empire_naval_capacity": 5
+}
+council_effect_scale_with_level = false
+global_modifier_scale = 1.0

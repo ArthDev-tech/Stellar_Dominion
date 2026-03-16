@@ -1,0 +1,3151 @@
+[
+	{
+		"id": "tech_deep_survey_protocols",
+		"name_key": "Deep Survey Protocols",
+		"category": 0,
+		"tier": 1,
+		"cost": 50,
+		"prerequisites": [],
+		"description": "Standardises sensor packages and logging procedures across all science vessels, allowing systematic cataloguing of stellar bodies, subsurface deposits, and gravitational anomalies.",
+		"unlocks": [
+			"Science ship survey capability, Ore Mine T1, Gas Harvester T1, Ice Extractor T1, Physical Research Institute T1"
+		]
+	},
+	{
+		"id": "tech_automated_mining",
+		"name_key": "Automated Mining",
+		"category": 0,
+		"tier": 1,
+		"cost": 50,
+		"prerequisites": [
+			"tech_deep_survey_protocols"
+		],
+		"description": "Replaces manual extraction crews with semi-autonomous drilling rigs coordinated by basic logistics AI, enabling extraction under conditions fatal to organic labour.",
+		"unlocks": [
+			"Ore Mine T2 chain, Alloy Foundry T1, Synthetic Fabricator T1"
+		]
+	},
+	{
+		"id": "tech_orbital_fabrication",
+		"name_key": "Orbital Fabrication",
+		"category": 0,
+		"tier": 1,
+		"cost": 50,
+		"prerequisites": [
+			"tech_deep_survey_protocols"
+		],
+		"description": "Establishes zero-gravity orbital platforms where alloys can be cast and hulls assembled without surface-to-orbit transport costs.",
+		"unlocks": [
+			"Shipyard T1, Fuel Cell Plant T1"
+		]
+	},
+	{
+		"id": "tech_propellant_chemistry",
+		"name_key": "Propellant Chemistry",
+		"category": 0,
+		"tier": 1,
+		"cost": 50,
+		"prerequisites": [],
+		"description": "Basic high-efficiency propellant formulations that extend early fleet range beyond chemical rockets and reduce fuel consumption on short hauls.",
+		"unlocks": [
+			"Fleet range tier 1, Ice Extractor T1 efficiency upgrades"
+		]
+	},
+	{
+		"id": "tech_fusion_drive_arrays",
+		"name_key": "Fusion Drive Arrays",
+		"category": 0,
+		"tier": 2,
+		"cost": 100,
+		"prerequisites": [
+			"tech_orbital_fabrication"
+		],
+		"description": "Replaces fission propulsion with compact fusion drives; gas consumption becomes the primary fuel constraint and Ice extraction becomes economically critical.",
+		"unlocks": [
+			"Gas Harvester T2, Ice Extractor T2, Fuel Cell Plant T2, Power Plant T2 (Fusion Reactor), fleet range tier 2"
+		]
+	},
+	{
+		"id": "tech_advanced_metallurgy",
+		"name_key": "Advanced Metallurgy",
+		"category": 0,
+		"tier": 2,
+		"cost": 100,
+		"prerequisites": [
+			"tech_automated_mining"
+		],
+		"description": "Unlocks high-pressure alloy synthesis, heat treatment protocols, and the first composite hull materials. Cruiser-class hulls become feasible.",
+		"unlocks": [
+			"Alloy Foundry T2, Shipyard T2 (Cruiser hulls), Ore Mine T2, Army Barracks T2"
+		]
+	},
+	{
+		"id": "tech_gravitational_scanning",
+		"name_key": "Gravitational Scanning",
+		"category": 0,
+		"tier": 2,
+		"cost": 100,
+		"prerequisites": [
+			"tech_deep_survey_protocols"
+		],
+		"description": "Develops gravitometric sensors sensitive enough to detect buried ore concentrations, subsurface voids, and the signatures of exotic deposits not visible to optical or chemical survey.",
+		"unlocks": [
+			"Ore Mine T3 chain, Physical Research Institute T2, Defense Platform T2"
+		]
+	},
+	{
+		"id": "tech_plasma_containment_fundamentals",
+		"name_key": "Plasma Containment Fundamentals",
+		"category": 0,
+		"tier": 2,
+		"cost": 100,
+		"prerequisites": [
+			"tech_fusion_drive_arrays"
+		],
+		"description": "Magnetic bottle designs capable of sustaining plasma at temperatures relevant to both power generation and directed energy weapons. The first practical precursor to beam armaments.",
+		"unlocks": [
+			"Power Plant T2 efficiency upgrade, early energy weapon research, Physical Research Institute T2 bonus"
+		]
+	},
+	{
+		"id": "tech_orbital_mechanics_mastery",
+		"name_key": "Orbital Mechanics Mastery",
+		"category": 0,
+		"tier": 2,
+		"cost": 100,
+		"prerequisites": [
+			"tech_propellant_chemistry"
+		],
+		"description": "Formal mathematical models of multi-body gravitational systems, enabling precise navigation, orbit insertion, and fuel-optimal intercept trajectories.",
+		"unlocks": [
+			"Survey time reduction, fleet evasion bonus (tier 1), prerequisite for Gravitational Scanning"
+		]
+	},
+	{
+		"id": "tech_stellite_extraction",
+		"name_key": "Stellite Extraction",
+		"category": 0,
+		"tier": 3,
+		"cost": 200,
+		"prerequisites": [
+			"tech_advanced_metallurgy",
+			"tech_gravitational_scanning"
+		],
+		"description": "Ancient crystalline formations found in only 3–6 systems per galaxy. This research provides the containment and cutting protocols to harvest them without triggering the resonant fracture cascade that destroys unshielded equipment.",
+		"unlocks": [
+			"Stellite Refinery T1, Synthetic Fabricator T3, Shipyard T3 (Battleship / T3 hulls)"
+		]
+	},
+	{
+		"id": "tech_gravitational_engineering",
+		"name_key": "Gravitational Engineering",
+		"category": 0,
+		"tier": 3,
+		"cost": 200,
+		"prerequisites": [
+			"tech_fusion_drive_arrays",
+			"tech_gravitational_scanning"
+		],
+		"description": "Extends scanning into active manipulation — localised gravitational field generators strong enough to assist extraction, reinforce structural materials, and guide plasma flows in reactor cores.",
+		"unlocks": [
+			"Gas Harvester T3, Fuel Cell Plant T3, Power Plant T3 (Antimatter Reactor), Alloy Foundry T3, Physical Research Institute T3"
+		]
+	},
+	{
+		"id": "tech_star_lifting_theory",
+		"name_key": "Star-Lifting Theory",
+		"category": 0,
+		"tier": 3,
+		"cost": 200,
+		"prerequisites": [
+			"tech_gravitational_engineering"
+		],
+		"description": "Develops the theoretical framework for extracting matter directly from stellar atmospheres using magnetically-focused solar wind amplification. No practical star-lifting yet — this is the science that proves it can be done.",
+		"unlocks": [
+			"Ice Extractor T3 (Cometary Capture), prerequisite chain for Gravitational Press (T5)"
+		]
+	},
+	{
+		"id": "tech_exotic_mineral_survey",
+		"name_key": "Exotic Mineral Survey",
+		"category": 0,
+		"tier": 3,
+		"cost": 200,
+		"prerequisites": [
+			"tech_gravitational_scanning"
+		],
+		"description": "Enhanced long-range detection algorithms tuned to the gravitational and electromagnetic signatures of strategic resource deposits. Reduces the galaxy survey time to find Void Gas, Nanite Dust, and Dark Lattice.",
+		"unlocks": [
+			"Strategic resource detection range +50%, anomaly discovery chance improvement, Physical Research Institute T3 bonus output"
+		]
+	},
+	{
+		"id": "tech_high_energy_particle_physics",
+		"name_key": "High-Energy Particle Physics",
+		"category": 0,
+		"tier": 3,
+		"cost": 200,
+		"prerequisites": [
+			"tech_plasma_containment_fundamentals"
+		],
+		"description": "Studies particles accelerated to relativistic velocities and the exotic interactions they produce — the theoretical basis for particle beam weapons and later for understanding dark matter.",
+		"unlocks": [
+			"Particle weapon research line, Physical Research Institute T3 output, prerequisite for Dark Energy Theory (T4)"
+		]
+	},
+	{
+		"id": "tech_degnite_extraction",
+		"name_key": "Degnite Extraction",
+		"category": 0,
+		"tier": 4,
+		"cost": 400,
+		"prerequisites": [
+			"tech_gravitational_engineering",
+			"tech_star_lifting_theory"
+		],
+		"description": "Electron-degenerate matter found only in neutron star systems — impossible to synthesise. Develops the magnetic confinement harnesses required to extract, transport, and work with it without catastrophic release.",
+		"unlocks": [
+			"Degnite extraction (neutron star systems only), Birch World construction chain prerequisite"
+		]
+	},
+	{
+		"id": "tech_dark_energy_theory",
+		"name_key": "Dark Energy Theory",
+		"category": 0,
+		"tier": 4,
+		"cost": 400,
+		"prerequisites": [
+			"tech_gravitational_engineering",
+			"tech_high_energy_particle_physics"
+		],
+		"description": "Formalises interactions between Void Gas, Dark Lattice, and conventional matter under extreme field conditions. Void Gas Condensers become buildable. The gateway to Spacetime Engineering.",
+		"unlocks": [
+			"Void Gas Condenser T1, Gas Harvester T4, Power Plant T4 (Dark Energy Tap), Dark Lattice Crystallizer T1, Physical Research Institute T4"
+		]
+	},
+	{
+		"id": "tech_spacetime_engineering",
+		"name_key": "Spacetime Engineering",
+		"category": 0,
+		"tier": 4,
+		"cost": 400,
+		"prerequisites": [
+			"tech_dark_energy_theory",
+			"tech_gravitational_engineering"
+		],
+		"description": "Develops practical application of spacetime curvature manipulation. The Quantum Smelter improves alloy ratios via micro-compression fields. Jump drives become feasible.",
+		"unlocks": [
+			"Alloy Foundry T4, Ice Extractor T4, Fuel Cell Plant T4, Shipyard T4, Defense Platform T4, Army Barracks T4, Ore Mine T4, jump drive research"
+		]
+	},
+	{
+		"id": "tech_magnetic_confinement_mastery",
+		"name_key": "Magnetic Confinement Mastery",
+		"category": 0,
+		"tier": 4,
+		"cost": 400,
+		"prerequisites": [
+			"tech_degnite_extraction",
+			"tech_plasma_containment_fundamentals"
+		],
+		"description": "Advances magnetic field shaping from reactor-scale to structural-scale applications, dramatically reducing the risk profile of Degnite work and improving power generation density.",
+		"unlocks": [
+			"Degnite upkeep cost reduction, Power Plant T4 efficiency bonus, prerequisite for Gravitational Press (T5)"
+		]
+	},
+	{
+		"id": "tech_relativistic_drive_theory",
+		"name_key": "Relativistic Drive Theory",
+		"category": 0,
+		"tier": 4,
+		"cost": 400,
+		"prerequisites": [
+			"tech_orbital_mechanics_mastery",
+			"tech_dark_energy_theory"
+		],
+		"description": "Formal treatment of propulsion systems approaching meaningful fractions of lightspeed, and the spacetime distortion effects that produce apparent FTL travel. The theoretical backbone of the jump drive.",
+		"unlocks": [
+			"Jump drive research chain, fleet range tier 3, Fuel Cell Plant T4 bonus output"
+		]
+	},
+	{
+		"id": "tech_aetheric_lattice_synthesis",
+		"name_key": "Aetheric Lattice Synthesis",
+		"category": 0,
+		"tier": 5,
+		"cost": 800,
+		"prerequisites": [
+			"tech_stellite_extraction",
+			"tech_nanite_integration",
+			"tech_psionic_ore_applications"
+		],
+		"description": "Synthesises Stellite, Void Gas, and Nanite Dust simultaneously into a self-repairing structural material with tensile strength near the strong nuclear force. Every megastructure depends on it.",
+		"unlocks": [
+			"Aetheric Forge (unique empire building), Power Plant T5, Alloy Foundry T5, Ore Mine T5, Shipyard T5, Physical Research Institute T5"
+		]
+	},
+	{
+		"id": "tech_voidweave_fabrication",
+		"name_key": "Voidweave Fabrication",
+		"category": 0,
+		"tier": 5,
+		"cost": 800,
+		"prerequisites": [
+			"tech_spacetime_engineering",
+			"tech_psionic_ore_applications"
+		],
+		"description": "A micro-wormhole lattice that distributes mechanical stress across folded space. Required for Ringworld stress layers, Dyson collectors, and Alderson edge stabilisation.",
+		"unlocks": [
+			"Voidweave material, Defense Platform T5, Fuel Cell Plant T5, Void Gas Condenser T3, Psionic Resonance Chamber T3"
+		]
+	},
+	{
+		"id": "tech_gravitational_press",
+		"name_key": "Gravitational Press",
+		"category": 0,
+		"tier": 5,
+		"cost": 800,
+		"prerequisites": [
+			"tech_degnite_extraction",
+			"tech_magnetic_confinement_mastery",
+			"tech_aetheric_lattice_synthesis"
+		],
+		"description": "The Birch World bootstrap problem: Degnite must be worked under gravitational compression that destroys ordinary machinery — so the Press itself must be built from Degnite first. This research unlocks the multi-stage quest chain that solves that paradox.",
+		"unlocks": [
+			"Birch World construction chain (bootstrap quest), Ore Mine T5 (Stellar Mass Driver)"
+		]
+	},
+	{
+		"id": "tech_quantum_crystallography",
+		"name_key": "Quantum Crystallography",
+		"category": 0,
+		"tier": 5,
+		"cost": 800,
+		"prerequisites": [
+			"tech_dark_energy_theory",
+			"tech_gravitational_scanning"
+		],
+		"description": "Studies the lattice structure of Dark Lattice formations at the quantum level, revealing the computational potential that Computronium Theory (Xeno T4) will eventually exploit.",
+		"unlocks": [
+			"Dark Lattice Crystallizer T2 (alongside Computronium Theory), Physical Research Institute T5 bonus, prerequisite for Dark Matter Catalysis (T7)"
+		]
+	},
+	{
+		"id": "tech_stellar_plasma_engineering",
+		"name_key": "Stellar Plasma Engineering",
+		"category": 0,
+		"tier": 5,
+		"cost": 800,
+		"prerequisites": [
+			"tech_star_lifting_theory",
+			"tech_gravitational_engineering"
+		],
+		"description": "Moves star-lifting from theory to practice at small scale — controlled extraction of stellar plasma jets for direct material harvesting. Lays the groundwork for the industrial star-lifting required by megastructures.",
+		"unlocks": [
+			"Star-lifting efficiency improvement, prerequisite for Stellar Mass Redistribution (T9 Path B), Ore Mine T5 chain prerequisite"
+		]
+	},
+	{
+		"id": "tech_gravitational_lens_arrays",
+		"name_key": "Gravitational Lens Arrays",
+		"category": 0,
+		"tier": 6,
+		"cost": 1600,
+		"prerequisites": [
+			"tech_aetheric_lattice_synthesis",
+			"tech_gravitational_engineering"
+		],
+		"description": "System-scale gravitational focusing arrays that can direct solar radiation, accelerate particles, or create localised high-gravity zones for exotic material synthesis. The first step toward treating a star system as an engineering platform.",
+		"unlocks": [
+			"Power Plant T5 upgrade path, Defense Platform T5 (Gravitational Redoubt), megastructure site preparation bonus"
+		]
+	},
+	{
+		"id": "tech_neutronium_alloys",
+		"name_key": "Neutronium Alloys",
+		"category": 0,
+		"tier": 6,
+		"cost": 1600,
+		"prerequisites": [
+			"tech_gravitational_press",
+			"tech_degnite_extraction"
+		],
+		"description": "Working with near-degenerate matter at densities beyond conventional metallurgy produces hull materials of extraordinary strength-to-mass ratio. Requires the Gravitational Press to work at all.",
+		"unlocks": [
+			"Shipyard T5 (Leviathan-class hulls), Alloy Foundry T5 upgrade, Army Barracks T5"
+		]
+	},
+	{
+		"id": "tech_void_drive_arrays",
+		"name_key": "Void Drive Arrays",
+		"category": 0,
+		"tier": 6,
+		"cost": 1600,
+		"prerequisites": [
+			"tech_voidweave_fabrication",
+			"tech_relativistic_drive_theory"
+		],
+		"description": "Integrates Voidweave micro-wormhole technology into drive systems — fleet transit via temporarily stabilised spacetime shortcuts rather than conventional propulsion.",
+		"unlocks": [
+			"Jump drive T2 (Void Drive), fleet range tier 4, Fuel Cell Plant T5 variant"
+		]
+	},
+	{
+		"id": "tech_photon_capture_grid",
+		"name_key": "Photon Capture Grid",
+		"category": 0,
+		"tier": 6,
+		"cost": 1600,
+		"prerequisites": [
+			"tech_gravitational_lens_arrays",
+			"tech_stellar_plasma_engineering"
+		],
+		"description": "Preliminary orbital collector arrays that intercept and convert a fraction of stellar output to energy. A prototype of the Dyson Sphere concept — incomplete but immediately useful.",
+		"unlocks": [
+			"Power Plant T6 (Partial Photon Collector), prerequisite chain for Dyson Sphere Program (Soc T11), Physical Research Institute T6"
+		]
+	},
+	{
+		"id": "tech_resonant_field_architecture",
+		"name_key": "Resonant Field Architecture",
+		"category": 0,
+		"tier": 6,
+		"cost": 1600,
+		"prerequisites": [
+			"tech_aetheric_lattice_synthesis",
+			"tech_quantum_crystallography"
+		],
+		"description": "Precise tuning of Aetheric Lattice resonance frequencies reduces the probability of the cascade failures that arise from Nanite Dust fluctuations. The engineering discipline that makes megastructures survivable long-term.",
+		"unlocks": [
+			"Aetheric Lattice cascade risk reduction (−25%), Nanite Containment Facility T3, prerequisite for Dimensional Stress Analysis (T7)"
+		]
+	},
+	{
+		"id": "tech_dark_matter_catalysis",
+		"name_key": "Dark Matter Catalysis",
+		"category": 0,
+		"tier": 7,
+		"cost": 3200,
+		"prerequisites": [
+			"tech_dark_energy_theory",
+			"tech_quantum_crystallography"
+		],
+		"description": "Practical harnessing of dark matter particles as a reactor fuel — not combustion but catalytic annihilation. Energy output per unit volume surpasses anything achievable with conventional fusion.",
+		"unlocks": [
+			"Power Plant T6 (Dark Matter Reactor), Fuel Cell Plant T6, prerequisite for Dark Matter Engineering (T8 Shared)"
+		]
+	},
+	{
+		"id": "tech_dimensional_stress_analysis",
+		"name_key": "Dimensional Stress Analysis",
+		"category": 0,
+		"tier": 7,
+		"cost": 3200,
+		"prerequisites": [
+			"tech_resonant_field_architecture",
+			"tech_spacetime_engineering"
+		],
+		"description": "Formal engineering discipline for calculating how megastructure-scale objects interact with the curvature of spacetime, predicting stress concentrations that conventional structural analysis cannot detect.",
+		"unlocks": [
+			"Megastructure cascade risk reduction (−20%), prerequisite for Unified Field Theory (T8), Physical Research Institute T7"
+		]
+	},
+	{
+		"id": "tech_tachyon_detection_arrays",
+		"name_key": "Tachyon Detection Arrays",
+		"category": 0,
+		"tier": 7,
+		"cost": 3200,
+		"prerequisites": [
+			"tech_relativistic_drive_theory",
+			"tech_exotic_mineral_survey"
+		],
+		"description": "Sensor systems sensitive to the tachyon wake produced by anything travelling faster than light. Provides strategic early warning of incoming fleets and jump-capable vessels.",
+		"unlocks": [
+			"FTL detection range, fleet early warning system, espionage countermeasures improvement"
+		]
+	},
+	{
+		"id": "tech_neutron_star_engineering",
+		"name_key": "Neutron Star Engineering",
+		"category": 0,
+		"tier": 7,
+		"cost": 3200,
+		"prerequisites": [
+			"tech_degnite_extraction",
+			"tech_gravitational_engineering"
+		],
+		"description": "Exploits the extreme conditions of neutron star systems beyond simple Degnite extraction — tidal power harvesting, exotic particle extraction, and proximity construction using the star's own magnetic field as a tool.",
+		"unlocks": [
+			"Special neutron star system buildings, prerequisite for Birch World Architecture (T12), unique resource extraction bonuses"
+		]
+	},
+	{
+		"id": "tech_quantum_tunneling_fabrication",
+		"name_key": "Quantum Tunneling Fabrication",
+		"category": 0,
+		"tier": 7,
+		"cost": 3200,
+		"prerequisites": [
+			"tech_quantum_crystallography",
+			"tech_spacetime_engineering"
+		],
+		"description": "Controlled quantum tunneling as a manufacturing technique — particles placed through barriers rather than moved around them. Allows fabrication tolerances impossible by any macroscale method.",
+		"unlocks": [
+			"Aetheric Forge T2 upgrade, Synthetic Fabricator T5, prerequisite for Quantum Foam Manipulation (T9)"
+		]
+	},
+	{
+		"id": "tech_gravitational_siege_weapons",
+		"name_key": "Gravitational Siege Weapons",
+		"category": 0,
+		"tier": 8,
+		"cost": 6400,
+		"prerequisites": [
+			"tech_gravitational_lens_arrays",
+			"tech_dimensional_stress_analysis"
+		],
+		"description": "Weapons that weaponise gravitational tidal forces — fleet-mounted tidal disruptors, planetary bombardment systems that induce tectonic stress, and siege platforms that can collapse orbital infrastructure.",
+		"unlocks": [
+			"Tidal Disruptor weapon line, Planetary Bastion T3 upgrade, Army Barracks T5 (Orbital Shock Division)"
+		]
+	},
+	{
+		"id": "tech_point_singularity_warheads",
+		"name_key": "Point Singularity Warheads",
+		"category": 0,
+		"tier": 8,
+		"cost": 6400,
+		"prerequisites": [
+			"tech_gravitational_siege_weapons",
+			"tech_dark_matter_catalysis"
+		],
+		"description": "Micro-singularities with a survival time of milliseconds — sufficient to produce a gravitational pulse capable of tearing hulls, collapsing shields, and permanently disabling critical infrastructure.",
+		"unlocks": [
+			"Singularity weapon line (most destructive conventional armament), Shipyard T5 upgrade, prerequisite for Nova Bomb Theory (T9 Path A)"
+		]
+	},
+	{
+		"id": "tech_stellar_architecture_theory",
+		"name_key": "Stellar Architecture Theory",
+		"category": 0,
+		"tier": 8,
+		"cost": 6400,
+		"prerequisites": [
+			"tech_dimensional_stress_analysis",
+			"tech_neutron_star_engineering"
+		],
+		"description": "Formal engineering discipline treating a star system as a single construction object — stress analysis at AU scale, material flow modelling across stellar distances, and construction sequencing for projects measured in decades.",
+		"unlocks": [
+			"Megastructure build speed +20%, prerequisite for Stellar Mass Redistribution (T9 Path B), Physical Research Institute T7 output bonus"
+		]
+	},
+	{
+		"id": "tech_planetary_deconstruction_protocols",
+		"name_key": "Planetary Deconstruction Protocols",
+		"category": 0,
+		"tier": 8,
+		"cost": 6400,
+		"prerequisites": [
+			"tech_stellar_architecture_theory",
+			"tech_stellar_plasma_engineering"
+		],
+		"description": "The practical engineering doctrine for efficiently dismantling planets for raw mass — sequencing, mass transport, and hazard management for operations that kill a world in years rather than millennia.",
+		"unlocks": [
+			"System Disassembly speed +40%, mass harvesting efficiency, prerequisite for Binary Star Engineering (T9 Path B)"
+		]
+	},
+	{
+		"id": "tech_unified_field_theory",
+		"name_key": "Unified Field Theory",
+		"category": 0,
+		"tier": 8,
+		"cost": 6400,
+		"prerequisites": [
+			"tech_dimensional_stress_analysis",
+			"tech_high_energy_particle_physics"
+		],
+		"description": "A single mathematical framework reconciling gravity, electromagnetism, and the strong and weak nuclear forces. The theoretical foundation without which T10+ physical research is impossible. A cross-branch gate: also requires Post-Biological Cognition (Xeno T9 Shared) or Digital Society Transition (Soc T9 Shared).",
+		"unlocks": [
+			"Prerequisite for all T10 Physical nodes, Physical Research Institute T8, cross-branch gate opportunity"
+		]
+	},
+	{
+		"id": "tech_dark_matter_engineering",
+		"name_key": "Dark Matter Engineering",
+		"category": 0,
+		"tier": 8,
+		"cost": 6400,
+		"prerequisites": [
+			"tech_dark_matter_catalysis",
+			"tech_quantum_tunneling_fabrication"
+		],
+		"description": "Moves dark matter from fuel source to construction material — shaped dark matter structures that interact with gravity but not electromagnetism, enabling entirely new classes of building and weapon.",
+		"unlocks": [
+			"Dark matter construction tier, Void Anchor precursor research, prerequisite for Null Space Theory (T10)"
+		]
+	},
+	{
+		"id": "tech_nova_bomb_theory",
+		"name_key": "Nova Bomb Theory",
+		"category": 0,
+		"tier": 9,
+		"cost": 12800,
+		"prerequisites": [
+			"tech_point_singularity_warheads"
+		],
+		"description": "A weapon that initiates uncontrolled stellar fusion amplification — in theory, capable of inducing a nova in a target star system. Possession alone is a galactic diplomatic event. Use is another.",
+		"unlocks": [
+			"Nova Bomb (unique weapon, galactic event on use), prerequisite for System-Scale Weapons (T9A), massive threat level increase with all empires"
+		]
+	},
+	{
+		"id": "tech_dimensional_siege_arrays",
+		"name_key": "Dimensional Siege Arrays",
+		"category": 0,
+		"tier": 9,
+		"cost": 12800,
+		"prerequisites": [
+			"tech_nova_bomb_theory",
+			"tech_dark_matter_engineering"
+		],
+		"description": "Weapons systems that exploit spacetime geometry to bypass conventional shielding — attacks routed through pocket-space, emerging inside target hulls. The most tactically decisive weapons before T12.",
+		"unlocks": [
+			"Dimensional weapon line, Shipyard T5 upgrade (Siege Bay), prerequisite for Advanced Stellar Engineering convergence (T10)"
+		]
+	},
+	{
+		"id": "tech_stellar_mass_redistribution",
+		"name_key": "Stellar Mass Redistribution",
+		"category": 0,
+		"tier": 9,
+		"cost": 12800,
+		"prerequisites": [
+			"tech_planetary_deconstruction_protocols",
+			"tech_stellar_plasma_engineering"
+		],
+		"description": "Industrial-scale star-lifting — extracting stellar mass at a rate relevant to megastructure construction timelines. Moving billions of tonnes of stellar material per year becomes routine engineering.",
+		"unlocks": [
+			"Ringworld mass sourcing prerequisite, Birch World mass sourcing, star-lifting rate ×10, prerequisite for Advanced Stellar Engineering (T10)"
+		]
+	},
+	{
+		"id": "tech_binary_star_engineering",
+		"name_key": "Binary Star Engineering",
+		"category": 0,
+		"tier": 9,
+		"cost": 12800,
+		"prerequisites": [
+			"tech_stellar_mass_redistribution",
+			"tech_neutron_star_engineering"
+		],
+		"description": "Exploiting multi-star systems as coordinated energy and mass sources — orbital mechanics tuned for optimal energy capture, mass transfer between stellar companions, and exotic particle harvesting from stellar interactions.",
+		"unlocks": [
+			"Binary star system bonus buildings, Dyson Sphere efficiency in multi-star systems, unique research output in binary systems"
+		]
+	},
+	{
+		"id": "tech_hyperspace_engineering",
+		"name_key": "Hyperspace Engineering",
+		"category": 0,
+		"tier": 9,
+		"cost": 12800,
+		"prerequisites": [
+			"tech_void_drive_arrays",
+			"tech_dimensional_stress_analysis"
+		],
+		"description": "Stable, persistent hyperspace lane construction rather than one-time jumps — infrastructure that creates permanent transit corridors between systems. Changes fleet logistics fundamentally.",
+		"unlocks": [
+			"Constructed hyperspace lanes, fleet transit time reduction, prerequisite for Void Anchor Network (T12)"
+		]
+	},
+	{
+		"id": "tech_quantum_foam_manipulation",
+		"name_key": "Quantum Foam Manipulation",
+		"category": 0,
+		"tier": 9,
+		"cost": 12800,
+		"prerequisites": [
+			"tech_quantum_tunneling_fabrication",
+			"tech_unified_field_theory"
+		],
+		"description": "Working at Planck scale — manipulating the quantum foam that constitutes the underlying substrate of spacetime. The bridge between conventional physics and the reality-engineering research that follows.",
+		"unlocks": [
+			"Prerequisite for all T10 Physical nodes requiring Unified Field Theory, Physical Research Institute T9, Dimensional Membrane Theory chain (T11)"
+		]
+	},
+	{
+		"id": "tech_advanced_stellar_engineering",
+		"name_key": "Advanced Stellar Engineering",
+		"category": 0,
+		"tier": 10,
+		"cost": 25600,
+		"prerequisites": [
+			"tech_dimensional_siege_arrays",
+			"tech_stellar_mass_redistribution",
+			"tech_unified_field_theory"
+		],
+		"description": "The synthesis of weapons physics and megastructure physics — understanding that the same forces that tear hulls apart can hold a Ringworld together, if controlled precisely enough.",
+		"unlocks": [
+			"Prerequisite for all T11 and T12 Physical nodes, Gravitational Lens Array T2, Physical Research Institute T10"
+		]
+	},
+	{
+		"id": "tech_dark_energy_channeling",
+		"name_key": "Dark Energy Channeling",
+		"category": 0,
+		"tier": 10,
+		"cost": 25600,
+		"prerequisites": [
+			"tech_dark_matter_engineering",
+			"tech_quantum_foam_manipulation"
+		],
+		"description": "Directing large-scale dark energy flows through artificially constructed channels — not merely harvesting dark energy passively but actively routing it like electricity through wire.",
+		"unlocks": [
+			"Power Plant T7 (Dark Energy Channeling Station), megastructure upkeep reduction (−15%), prerequisite for Metric Engineering (T13)"
+		]
+	},
+	{
+		"id": "tech_spacetime_fabric_weaving",
+		"name_key": "Spacetime Fabric Weaving",
+		"category": 0,
+		"tier": 10,
+		"cost": 25600,
+		"prerequisites": [
+			"tech_quantum_foam_manipulation",
+			"tech_hyperspace_engineering"
+		],
+		"description": "Stable artificial spacetime constructs — geometric pockets with custom curvature, dimensions not naturally present in this universe, and topology that allows for storage and transit impossible in normal space.",
+		"unlocks": [
+			"Spacetime pocket storage infrastructure, Void Anchor T2, prerequisite for Null Space Theory (T10) and Pocket Dimension Seeding (T13)"
+		]
+	},
+	{
+		"id": "tech_null_space_theory",
+		"name_key": "Null Space Theory",
+		"category": 0,
+		"tier": 10,
+		"cost": 25600,
+		"prerequisites": [
+			"tech_dark_matter_engineering",
+			"tech_spacetime_fabric_weaving"
+		],
+		"description": "Understanding the physics between dimensional membranes — not empty space but a structured medium with its own rules. The map of territory that future expansion will cross.",
+		"unlocks": [
+			"Prerequisite for Dimensional Membrane Theory (T11), Dark Lattice Crystallizer T3, Physical Research Institute T10 output bonus"
+		]
+	},
+	{
+		"id": "tech_matter_energy_equivalence_engines",
+		"name_key": "Matter-Energy Equivalence Engines",
+		"category": 0,
+		"tier": 10,
+		"cost": 25600,
+		"prerequisites": [
+			"tech_advanced_stellar_engineering",
+			"tech_dark_energy_channeling"
+		],
+		"description": "Direct matter-to-energy conversion at industrial scale — not nuclear reactions but mass annihilation at efficiencies approaching Einstein's limit. The energy available from a single asteroid exceeds a star's lifetime output.",
+		"unlocks": [
+			"Power Plant T7 (Mass Annihilation Reactor), fleet power systems upgrade, Alloy Foundry T6 (Matter Recombination), prerequisite for T11 Stellar Core Intervention"
+		]
+	},
+	{
+		"id": "tech_event_horizon_engineering",
+		"name_key": "Event Horizon Engineering",
+		"category": 0,
+		"tier": 11,
+		"cost": 51200,
+		"prerequisites": [
+			"tech_advanced_stellar_engineering",
+			"tech_neutron_star_engineering"
+		],
+		"description": "Controlled manipulation of black hole event horizons for construction and power — adjusting the Hawking radiation profile, stabilising the ergosphere for near-horizon operations, and anchoring megastructures in extreme gravity.",
+		"unlocks": [
+			"Prerequisite for Birch World Architecture (T12), Hawking Radiation Harnessing (T12), unique black hole system buildings"
+		]
+	},
+	{
+		"id": "tech_spacetime_topology_mastery",
+		"name_key": "Spacetime Topology Mastery",
+		"category": 0,
+		"tier": 11,
+		"cost": 51200,
+		"prerequisites": [
+			"tech_spacetime_fabric_weaving",
+			"tech_null_space_theory"
+		],
+		"description": "Reshaping the geometric properties of local space — changing the number of spatial dimensions in a volume, creating non-orientable regions, and designing spatial configurations that have no natural analogue.",
+		"unlocks": [
+			"Prerequisite for Metric Engineering (T13), Void Anchor T3, Physical Research Institute T11"
+		]
+	},
+	{
+		"id": "tech_stellar_core_intervention",
+		"name_key": "Stellar Core Intervention",
+		"category": 0,
+		"tier": 11,
+		"cost": 51200,
+		"prerequisites": [
+			"tech_matter_energy_equivalence_engines",
+			"tech_event_horizon_engineering"
+		],
+		"description": "Direct manipulation of stellar fusion processes — adjusting hydrogen consumption rates, changing spectral output, extending stellar lifespans, or triggering controlled burnoff. A star under control rather than simply orbited.",
+		"unlocks": [
+			"Stellar lifespan extension, Dyson Sphere efficiency bonus, prerequisite for Stellar Forge (T12), Physical Research Institute T11 bonus"
+		]
+	},
+	{
+		"id": "tech_quantum_vacuum_engineering",
+		"name_key": "Quantum Vacuum Engineering",
+		"category": 0,
+		"tier": 11,
+		"cost": 51200,
+		"prerequisites": [
+			"tech_quantum_foam_manipulation",
+			"tech_matter_energy_equivalence_engines"
+		],
+		"description": "Extracting energy from the quantum vacuum — the baseline energy state of empty space. Theoretically limitless; practically constrained by the difficulty of coupling to vacuum fluctuations at exploitable scale.",
+		"unlocks": [
+			"Power Plant T8 (Quantum Vacuum Tap), massive energy surplus, prerequisite for Causal Loop Architecture (T14)"
+		]
+	},
+	{
+		"id": "tech_dimensional_membrane_theory",
+		"name_key": "Dimensional Membrane Theory",
+		"category": 0,
+		"tier": 11,
+		"cost": 51200,
+		"prerequisites": [
+			"tech_null_space_theory",
+			"tech_spacetime_topology_mastery"
+		],
+		"description": "A complete formal model of the dimensional structure of reality — how many layers exist, how thick the membranes between them are, and under what conditions they can be crossed.",
+		"unlocks": [
+			"Prerequisite for Dimensional Membrane Thinning (T14), Pocket Dimension Seeding (T13), Physical Research Institute T11 output"
+		]
+	},
+	{
+		"id": "tech_ringworld_engineering",
+		"name_key": "Ringworld Engineering",
+		"category": 0,
+		"tier": 12,
+		"cost": 99999,
+		"prerequisites": [
+			"tech_aetheric_lattice_synthesis",
+			"tech_voidweave_fabrication",
+			"tech_system_disassembly_mandate",
+			"tech_stellar_engineering_corps",
+			"tech_advanced_stellar_engineering"
+		],
+		"description": "The accumulated synthesis of everything Physical Sciences has developed. Requires disassembling all planets in the target system for raw mass.",
+		"unlocks": [
+			"Ringworld megastructure construction chain"
+		]
+	},
+	{
+		"id": "tech_birch_world_architecture",
+		"name_key": "Birch World Architecture",
+		"category": 0,
+		"tier": 12,
+		"cost": 99999,
+		"prerequisites": [
+			"tech_gravitational_press",
+			"tech_degnite_extraction",
+			"tech_event_horizon_engineering",
+			"tech_neutron_star_engineering"
+		],
+		"description": "A habitable shell enclosing a black hole or neutron star. Gravity points outward. Hawking radiation shielding incorporated into the Aetheric Lattice surface layer.",
+		"unlocks": [
+			"Birch World megastructure construction chain"
+		]
+	},
+	{
+		"id": "tech_stellar_forge",
+		"name_key": "Stellar Forge",
+		"category": 0,
+		"tier": 12,
+		"cost": 99999,
+		"prerequisites": [
+			"tech_stellar_core_intervention",
+			"tech_stellar_mass_redistribution",
+			"tech_planetary_deconstruction_protocols"
+		],
+		"description": "Complete reconstruction of star systems — rebuilding planets from stored mass reserves, moving stellar bodies into new configurations, and constructing entirely artificial stellar objects.",
+		"unlocks": [
+			"Star system reconstruction mechanics, artificial planet construction, unique system configurations"
+		]
+	},
+	{
+		"id": "tech_void_anchor_network",
+		"name_key": "Void Anchor Network",
+		"category": 0,
+		"tier": 12,
+		"cost": 99999,
+		"prerequisites": [
+			"tech_hyperspace_engineering",
+			"tech_spacetime_topology_mastery",
+			"tech_dark_matter_engineering"
+		],
+		"description": "Permanent, stable wormhole infrastructure rather than temporary jump corridors — anchored to dark matter frames that prevent the topology from collapsing. The backbone of a truly galactic empire.",
+		"unlocks": [
+			"Void Anchor permanent wormhole buildings, fleet transit +unlimited range in connected systems"
+		]
+	},
+	{
+		"id": "tech_hawking_radiation_harnessing",
+		"name_key": "Hawking Radiation Harnessing",
+		"category": 0,
+		"tier": 12,
+		"cost": 99999,
+		"prerequisites": [
+			"tech_event_horizon_engineering",
+			"tech_quantum_vacuum_engineering"
+		],
+		"description": "Amplifying and collecting the Hawking radiation emitted by black holes — typically negligibly small, but engineerable at stellar-mass scales into a significant power source with appropriate focusing infrastructure.",
+		"unlocks": [
+			"Black hole power plant tier, Birch World power systems, unique black hole system buildings"
+		]
+	},
+	{
+		"id": "tech_pocket_dimension_seeding",
+		"name_key": "Pocket Dimension Seeding",
+		"category": 0,
+		"tier": 13,
+		"cost": 99999,
+		"prerequisites": [
+			"tech_spacetime_fabric_weaving",
+			"tech_dimensional_membrane_theory"
+		],
+		"description": "Creating stable micro-dimensional spaces — not just pockets of normal space but regions with custom topology, separate conservation laws, and entrance points that can be placed anywhere.",
+		"unlocks": [
+			"Pocket dimension storage infrastructure, Population Relocation to pocket dimension, prerequisite for Bubble Universe Theory (T14)"
+		]
+	},
+	{
+		"id": "tech_causality_engineering",
+		"name_key": "Causality Engineering",
+		"category": 0,
+		"tier": 13,
+		"cost": 99999,
+		"prerequisites": [
+			"tech_spacetime_topology_mastery",
+			"tech_quantum_vacuum_engineering"
+		],
+		"description": "Local manipulation of cause-effect relationships — creating temporal structures where effects precede causes, events loop stably, or causal chains are deliberately severed. Applied to construction, this means building things before the resources to build them exist.",
+		"unlocks": [
+			"Causal construction bonus (−15% build time via causal manipulation), prerequisite for Causal Loop Architecture (T14)"
+		]
+	},
+	{
+		"id": "tech_physical_constants_research",
+		"name_key": "Physical Constants Research",
+		"category": 0,
+		"tier": 13,
+		"cost": 99999,
+		"prerequisites": [
+			"tech_unified_field_theory",
+			"tech_dimensional_membrane_theory",
+			"tech_universal_mind_theory"
+		],
+		"description": "Understanding why the universe's constants have their specific values — whether they are the only possible values, or one choice among infinite alternatives. The first steps toward changing them.",
+		"unlocks": [
+			"Prerequisite for Fundamental Force Modulation (T14), Physical Research Institute T13, cross-branch research bonus"
+		]
+	},
+	{
+		"id": "tech_dark_flow_channeling",
+		"name_key": "Dark Flow Channeling",
+		"category": 0,
+		"tier": 13,
+		"cost": 99999,
+		"prerequisites": [
+			"tech_dark_energy_channeling",
+			"tech_stellar_forge"
+		],
+		"description": "Harnessing the large-scale dark energy currents that flow through the universe at cosmic scales — not local dark energy but the directional flows that influence galaxy cluster motion.",
+		"unlocks": [
+			"Empire-wide energy surplus (passive), prerequisite for Eternal Compression Drive (T15), Physical Research Institute T13 bonus"
+		]
+	},
+	{
+		"id": "tech_metric_engineering",
+		"name_key": "Metric Engineering",
+		"category": 0,
+		"tier": 13,
+		"cost": 99999,
+		"prerequisites": [
+			"tech_spacetime_topology_mastery",
+			"tech_dark_energy_channeling"
+		],
+		"description": "Reshaping spacetime geometry at will within defined volumes — creating local regions where the speed of light, gravitational constant, or dimensional count differ from the broader universe.",
+		"unlocks": [
+			"Metric manipulation zone buildings, fleet speed bonus in controlled regions, prerequisite for Bubble Universe Theory (T14)"
+		]
+	},
+	{
+		"id": "tech_bubble_universe_theory",
+		"name_key": "Bubble Universe Theory",
+		"category": 0,
+		"tier": 14,
+		"cost": 99999,
+		"prerequisites": [
+			"tech_pocket_dimension_seeding",
+			"tech_metric_engineering"
+		],
+		"description": "Formal framework for spawning self-consistent physical domains — regions with their own conservation laws, physical constants, and spacetime topology that are self-sustaining rather than requiring external maintenance.",
+		"unlocks": [
+			"Prototype bubble universe construction (unique galactic event), prerequisite for Pocket Reality Engine (T15)"
+		]
+	},
+	{
+		"id": "tech_fundamental_force_modulation",
+		"name_key": "Fundamental Force Modulation",
+		"category": 0,
+		"tier": 14,
+		"cost": 99999,
+		"prerequisites": [
+			"tech_physical_constants_research",
+			"tech_quantum_vacuum_engineering"
+		],
+		"description": "Adjusting the effective strength of electromagnetism and gravity within controlled volumes — weakening gravity to allow construction methods otherwise impossible, or strengthening electromagnetism to create materials with extraordinary properties.",
+		"unlocks": [
+			"Unique construction methods, material property engineering, prerequisite for Physical Law Codex (T15)"
+		]
+	},
+	{
+		"id": "tech_causal_loop_architecture",
+		"name_key": "Causal Loop Architecture",
+		"category": 0,
+		"tier": 14,
+		"cost": 99999,
+		"prerequisites": [
+			"tech_causality_engineering",
+			"tech_quantum_vacuum_engineering"
+		],
+		"description": "Stable, self-consistent time loops used as a construction method — the finished structure is part of the causal chain that enables its own construction. Requires mathematical proof of consistency before construction begins.",
+		"unlocks": [
+			"Unique causal construction methods, Research Institute T14 bonus (past discoveries become available), Eternal Compression Drive prerequisite"
+		]
+	},
+	{
+		"id": "tech_dimensional_membrane_thinning",
+		"name_key": "Dimensional Membrane Thinning",
+		"category": 0,
+		"tier": 14,
+		"cost": 99999,
+		"prerequisites": [
+			"tech_dimensional_membrane_theory",
+			"tech_metric_engineering"
+		],
+		"description": "Reducing the energetic barrier between dimensional layers — making it easier to access null space, cross between dimensional membranes, and eventually construct bridges to entirely separate realities.",
+		"unlocks": [
+			"Dimensional crossing infrastructure, access to null space resources, prerequisite for Pocket Reality Engine (T15)"
+		]
+	},
+	{
+		"id": "tech_pocket_reality_engine",
+		"name_key": "Pocket Reality Engine",
+		"category": 0,
+		"tier": 15,
+		"cost": 99999,
+		"prerequisites": [
+			"tech_bubble_universe_theory",
+			"tech_dimensional_membrane_thinning",
+			"tech_cognite_apotheosis"
+		],
+		"description": "A self-sustaining new universe with designed physical laws — not a simulation but a genuine physical domain separate from this one, accessible from this universe via a permanent bridge. The empire can migrate civilisation here.",
+		"unlocks": [
+			"Pocket Reality construction chain (unique endgame event), civilisation migration option, unique victory condition"
+		]
+	},
+	{
+		"id": "tech_the_physical_law_codex",
+		"name_key": "The Physical Law Codex",
+		"category": 0,
+		"tier": 15,
+		"cost": 99999,
+		"prerequisites": [
+			"tech_fundamental_force_modulation",
+			"tech_physical_constants_research",
+			"tech_the_unified_mind"
+		],
+		"description": "A complete written description of this universe's fundamental rules — every physical law, constant, and relationship expressed in a single unified formalism. The knowledge required to write a different universe.",
+		"unlocks": [
+			"Universal physical law manipulation (endgame), prerequisite for authoring reality in pocket universes, unique diplomatic tool with any civilisation that has reached T15"
+		]
+	},
+	{
+		"id": "tech_eternal_compression_drive",
+		"name_key": "Eternal Compression Drive",
+		"category": 0,
+		"tier": 15,
+		"cost": 99999,
+		"prerequisites": [
+			"tech_dark_flow_channeling",
+			"tech_causal_loop_architecture"
+		],
+		"description": "An escape from the heat death of the universe — a propulsion system that uses dark flow currents to accelerate the civilisation toward regions of higher entropy gradient, extending habitable existence indefinitely. The empire does not transcend physics. It outruns its end.",
+		"unlocks": [
+			"Unique survival endgame path, heat death countdown mechanics (if active in campaign settings), galactic departure event"
+		]
+	},
+	{
+		"id": "tech_colonial_administration",
+		"name_key": "Colonial Administration",
+		"category": 1,
+		"tier": 1,
+		"cost": 50,
+		"prerequisites": [],
+		"description": "Establishes bureaucratic infrastructure for managing populations across multiple worlds — census systems, resource allocation protocols, and the first administrative hierarchy.",
+		"unlocks": [
+			"Housing Complex T2, Amenities Complex T2, Unity Monument T2, base Influence generation, Social Research Centre T1"
+		]
+	},
+	{
+		"id": "tech_trade_network_protocols",
+		"name_key": "Trade Network Protocols",
+		"category": 1,
+		"tier": 1,
+		"cost": 50,
+		"prerequisites": [],
+		"description": "Defines the legal, logistical, and communication standards that allow trade to flow between systems. The Trade Hub becomes constructable.",
+		"unlocks": [
+			"Trade Hub T1"
+		]
+	},
+	{
+		"id": "tech_democratic_councils",
+		"name_key": "Democratic Councils",
+		"category": 1,
+		"tier": 1,
+		"cost": 50,
+		"prerequisites": [
+			"tech_colonial_administration"
+		],
+		"description": "Formal deliberative structures that give population factions representation in governance decisions, reducing unrest and improving Influence generation by legitimising authority.",
+		"unlocks": [
+			"Political stability system, Influence generation +20%, Council Agenda speed bonus (T1 tier)"
+		]
+	},
+	{
+		"id": "tech_census_and_logistics",
+		"name_key": "Census and Logistics",
+		"category": 1,
+		"tier": 1,
+		"cost": 50,
+		"prerequisites": [
+			"tech_colonial_administration",
+			"tech_trade_network_protocols"
+		],
+		"description": "Population tracking systems and resource flow modelling that allow the empire to predict shortages before they become cascades — the first warning layer of the cascade prevention system.",
+		"unlocks": [
+			"Cascade early warning window +15 days, resource prediction improvements, Social Research Centre T1 bonus"
+		]
+	},
+	{
+		"id": "tech_bureaucratic_reform",
+		"name_key": "Bureaucratic Reform",
+		"category": 1,
+		"tier": 2,
+		"cost": 100,
+		"prerequisites": [
+			"tech_colonial_administration"
+		],
+		"description": "Streamlines administrative processes, reduces redundancy, and introduces specialised governance roles. Admin efficiency improves empire-wide.",
+		"unlocks": [
+			"Consumer Goods Factory T2, Amenities Complex T3, Trade Hub T2, Social Research Centre T2"
+		]
+	},
+	{
+		"id": "tech_megaproject_doctrine",
+		"name_key": "Megaproject Doctrine",
+		"category": 1,
+		"tier": 2,
+		"cost": 100,
+		"prerequisites": [
+			"tech_trade_network_protocols"
+		],
+		"description": "The governance frameworks required to mobilise an entire empire's industrial capacity toward a single construction goal. No megastructure is legally or logistically possible without this.",
+		"unlocks": [
+			"Unity Monument T3, Defense Platform T3, Council Agenda: Cascade Fortification, prerequisite chain for System Disassembly Mandate"
+		]
+	},
+	{
+		"id": "tech_media_and_propaganda_networks",
+		"name_key": "Media and Propaganda Networks",
+		"category": 1,
+		"tier": 2,
+		"cost": 100,
+		"prerequisites": [
+			"tech_democratic_councils"
+		],
+		"description": "Information control and distribution infrastructure — state media, cultural programming, and the engineering of consensus. Unity output increases. Public opinion becomes a managed resource.",
+		"unlocks": [
+			"Unity Monument T2 bonus, pop happiness stabilisation, Social Research Centre T2 output, prerequisite for Cultural Propagation Networks (T7)"
+		]
+	},
+	{
+		"id": "tech_economic_modeling",
+		"name_key": "Economic Modeling",
+		"category": 1,
+		"tier": 2,
+		"cost": 100,
+		"prerequisites": [
+			"tech_census_and_logistics"
+		],
+		"description": "Formal economic prediction algorithms trained on multi-system resource flow data. Reduces the frequency of resource cascade events by giving the empire earlier warning of developing shortages.",
+		"unlocks": [
+			"Cascade early warning window +20 days, Trade Hub T2 efficiency, prerequisite for Post-Scarcity Theory (T6)"
+		]
+	},
+	{
+		"id": "tech_advanced_pop_management",
+		"name_key": "Advanced Pop Management",
+		"category": 1,
+		"tier": 3,
+		"cost": 200,
+		"prerequisites": [
+			"tech_bureaucratic_reform"
+		],
+		"description": "Large-scale demographic management — growth incentives, resource-to-happiness modelling, and the engineering required to keep enormous populations stable. Arcology Spires become constructable.",
+		"unlocks": [
+			"Housing Complex T3, Consumer Goods Factory T3, Amenities Complex T4, Social Research Centre T3"
+		]
+	},
+	{
+		"id": "tech_system_disassembly_mandate",
+		"name_key": "System Disassembly Mandate",
+		"category": 1,
+		"tier": 3,
+		"cost": 200,
+		"prerequisites": [
+			"tech_megaproject_doctrine"
+		],
+		"description": "The legal and moral framework that permits an empire to legislate the complete disassembly of a star system's planetary bodies for construction material. Entire worlds become building supplies.",
+		"unlocks": [
+			"Planetary disassembly legality, prerequisite for Ringworld Engineering (Phys T12), prerequisite for Alderson Disk Architecture (Soc T12), Trade Hub T3"
+		]
+	},
+	{
+		"id": "tech_social_engineering",
+		"name_key": "Social Engineering",
+		"category": 1,
+		"tier": 3,
+		"cost": 200,
+		"prerequisites": [
+			"tech_media_and_propaganda_networks",
+			"tech_advanced_pop_management"
+		],
+		"description": "Targeted modification of population cultural traits and ethical distributions — not passive propaganda but active reshaping of who a population believes itself to be.",
+		"unlocks": [
+			"Pop ethics modification system, Cultural Erasure Program (Path A T8), pop trait adjustment mechanics"
+		]
+	},
+	{
+		"id": "tech_interstellar_law_framework",
+		"name_key": "Interstellar Law Framework",
+		"category": 1,
+		"tier": 3,
+		"cost": 200,
+		"prerequisites": [
+			"tech_democratic_councils",
+			"tech_megaproject_doctrine"
+		],
+		"description": "Formal legal frameworks governing relations between star systems and empires — contracts, treaties, and the mechanisms for enforcing them across distances where communication takes months.",
+		"unlocks": [
+			"Diplomatic framework improvements, war declaration cost increase (for others), Social Research Centre T3 bonus"
+		]
+	},
+	{
+		"id": "tech_galactic_market_integration",
+		"name_key": "Galactic Market Integration",
+		"category": 1,
+		"tier": 4,
+		"cost": 400,
+		"prerequisites": [
+			"tech_bureaucratic_reform",
+			"tech_system_disassembly_mandate"
+		],
+		"description": "Integrates the empire's trade infrastructure into a galaxy-wide commodity exchange with dynamic pricing. Resource surpluses that would otherwise stagnate can be liquidated.",
+		"unlocks": [
+			"Trade Hub T4, Consumer Goods Factory T4, Social Research Centre T4"
+		]
+	},
+	{
+		"id": "tech_cultural_homogenization",
+		"name_key": "Cultural Homogenization",
+		"category": 1,
+		"tier": 4,
+		"cost": 400,
+		"prerequisites": [
+			"tech_advanced_pop_management",
+			"tech_social_engineering"
+		],
+		"description": "Reduces inter-planetary cultural friction through propaganda standardisation, education reform, and cultural exchange. Unity generation increases. Diversity decreases.",
+		"unlocks": [
+			"Housing Complex T4, Unity Monument T4, Consumer Goods Factory T3 efficiency bonus"
+		]
+	},
+	{
+		"id": "tech_imperial_doctrine",
+		"name_key": "Imperial Doctrine",
+		"category": 1,
+		"tier": 4,
+		"cost": 400,
+		"prerequisites": [
+			"tech_interstellar_law_framework"
+		],
+		"description": "Military governance improvements — occupation efficiency, conquered world integration speed, and the legal authority to deploy military force inside the empire's own borders.",
+		"unlocks": [
+			"Occupation efficiency +25%, Army Barracks T4, Defense Platform T4 governance bonus"
+		]
+	},
+	{
+		"id": "tech_species_integration_protocols",
+		"name_key": "Species Integration Protocols",
+		"category": 1,
+		"tier": 4,
+		"cost": 400,
+		"prerequisites": [
+			"tech_social_engineering",
+			"tech_interstellar_law_framework"
+		],
+		"description": "Management frameworks for multi-species empires — converting alien pops from a source of instability into functional contributors by addressing the specific cultural friction points of each species combination.",
+		"unlocks": [
+			"Multi-species happiness bonus, pop growth in alien-populated colonies, Social Research Centre T4 bonus, prerequisite for Multi-Species Parliament (T8 Path B)"
+		]
+	},
+	{
+		"id": "tech_stellar_engineering_corps",
+		"name_key": "Stellar Engineering Corps",
+		"category": 1,
+		"tier": 5,
+		"cost": 800,
+		"prerequisites": [
+			"tech_cultural_homogenization",
+			"tech_advanced_pop_management"
+		],
+		"description": "A permanent, empire-wide professional corps of megastructure engineers, stellar architects, and construction logistics specialists.",
+		"unlocks": [
+			"Housing Complex T5, prerequisite for Ringworld Engineering (Phys T12), Council Agenda: Megastructure Commission"
+		]
+	},
+	{
+		"id": "tech_post_scarcity_diplomacy",
+		"name_key": "Post-Scarcity Diplomacy",
+		"category": 1,
+		"tier": 5,
+		"cost": 800,
+		"prerequisites": [
+			"tech_galactic_market_integration",
+			"tech_imperial_doctrine"
+		],
+		"description": "An empire that has mastered resource abundance approaches diplomacy from a position of genuine generosity — and genuine leverage. Consumer Goods no longer require Ore input at T5.",
+		"unlocks": [
+			"Consumer Goods Factory T5, Trade Hub T5, Unity Monument T5, Social Research Centre T5"
+		]
+	},
+	{
+		"id": "tech_utopian_urban_planning",
+		"name_key": "Utopian Urban Planning",
+		"category": 1,
+		"tier": 5,
+		"cost": 800,
+		"prerequisites": [
+			"tech_advanced_pop_management",
+			"tech_galactic_market_integration"
+		],
+		"description": "Planetary development optimisation — integrated Housing, Amenities, and production districts designed as systems rather than individual buildings. Synergy bonuses between adjacent building types.",
+		"unlocks": [
+			"Housing/Amenities synergy bonuses, pop cap increase, building adjacency bonus system, Social Research Centre T5 bonus"
+		]
+	},
+	{
+		"id": "tech_galactic_citizenship_act",
+		"name_key": "Galactic Citizenship Act",
+		"category": 1,
+		"tier": 5,
+		"cost": 800,
+		"prerequisites": [
+			"tech_species_integration_protocols",
+			"tech_cultural_homogenization"
+		],
+		"description": "Trans-species governance framework that defines rights and responsibilities applying to all sapient life regardless of species, reducing the diplomatic friction of multi-species diplomacy.",
+		"unlocks": [
+			"Diplomatic cost reduction, multi-species empire stability bonus, prerequisite for Galactic Heritage Preservation (T7)"
+		]
+	},
+	{
+		"id": "tech_interstellar_federation_law",
+		"name_key": "Interstellar Federation Law",
+		"category": 1,
+		"tier": 6,
+		"cost": 1600,
+		"prerequisites": [
+			"tech_interstellar_law_framework",
+			"tech_galactic_citizenship_act"
+		],
+		"description": "Multi-empire legal frameworks that allow alliance mechanics to function formally — binding agreements, arbitration bodies, and the shared legal infrastructure that makes sustained cooperation possible.",
+		"unlocks": [
+			"Alliance mechanics improvements, trade route protection framework, Social Research Centre T6"
+		]
+	},
+	{
+		"id": "tech_cognitive_liberty_acts",
+		"name_key": "Cognitive Liberty Acts",
+		"category": 1,
+		"tier": 6,
+		"cost": 1600,
+		"prerequisites": [
+			"tech_species_integration_protocols",
+			"tech_post_scarcity_diplomacy"
+		],
+		"description": "Legal frameworks protecting the right of sapient minds to remain unmodified — a direct reaction to Social Engineering. Defines the boundary between permissible cultural influence and prohibited cognitive manipulation.",
+		"unlocks": [
+			"Psionic pop trait legal protection, Neural Interface Protocols prerequisites (Xeno T3 cross-reference), pop happiness bonus in psionic populations"
+		]
+	},
+	{
+		"id": "tech_resource_sharing_protocols",
+		"name_key": "Resource Sharing Protocols",
+		"category": 1,
+		"tier": 6,
+		"cost": 1600,
+		"prerequisites": [
+			"tech_galactic_market_integration",
+			"tech_economic_modeling"
+		],
+		"description": "Formal cross-empire resource exchange frameworks that reduce the value of blockades and resource-denial strategies. An empire with Resource Sharing Protocols converts scarcity from a weapon into a diplomacy tool.",
+		"unlocks": [
+			"Resource exchange with allies, blockade effectiveness reduction, Social Research Centre T6 bonus"
+		]
+	},
+	{
+		"id": "tech_the_great_optimization",
+		"name_key": "The Great Optimization",
+		"category": 1,
+		"tier": 6,
+		"cost": 1600,
+		"prerequisites": [
+			"tech_utopian_urban_planning",
+			"tech_stellar_engineering_corps"
+		],
+		"description": "Empire-wide efficiency review — a once-per-game social technology that generates a massive one-time bonus to all resource outputs as systematic inefficiencies are identified and corrected.",
+		"unlocks": [
+			"One-time resource output surge (all resources +30% for 12 months), permanent efficiency bonus (all outputs +5%), Social Research Institute T6"
+		]
+	},
+	{
+		"id": "tech_post_scarcity_theory",
+		"name_key": "Post-Scarcity Theory",
+		"category": 1,
+		"tier": 6,
+		"cost": 1600,
+		"prerequisites": [
+			"tech_economic_modeling",
+			"tech_post_scarcity_diplomacy"
+		],
+		"description": "Academic research into what a post-scarcity civilisation actually looks like — the social structures, governance models, and cultural forms that emerge when material want is eliminated. Foundation for T7+ Social research.",
+		"unlocks": [
+			"Prerequisite for all T7 Social nodes, Social Research Centre T6 output bonus"
+		]
+	},
+	{
+		"id": "tech_synthetic_governance",
+		"name_key": "Synthetic Governance",
+		"category": 1,
+		"tier": 7,
+		"cost": 3200,
+		"prerequisites": [
+			"tech_post_scarcity_theory",
+			"tech_cognitive_liberty_acts"
+		],
+		"description": "AI administrative assistance — not replacing sapient leadership but augmenting it with systems that track millions of decisions simultaneously and surface conflicts and inefficiencies humans miss.",
+		"unlocks": [
+			"Admin cap burden reduction, Social Research Centre T7, prerequisite for Digital Society Transition (T9 Shared)"
+		]
+	},
+	{
+		"id": "tech_cultural_propagation_networks",
+		"name_key": "Cultural Propagation Networks",
+		"category": 1,
+		"tier": 7,
+		"cost": 3200,
+		"prerequisites": [
+			"tech_media_and_propaganda_networks",
+			"tech_galactic_citizenship_act"
+		],
+		"description": "Active cultural spread to neighbouring systems and empires — not passive cultural influence but designed cultural exports that shift the ethics distributions of populations beyond the empire's borders.",
+		"unlocks": [
+			"Cross-border cultural influence, soft diplomacy improvements, Unity generation from cultural exports"
+		]
+	},
+	{
+		"id": "tech_galactic_heritage_preservation",
+		"name_key": "Galactic Heritage Preservation",
+		"category": 1,
+		"tier": 7,
+		"cost": 3200,
+		"prerequisites": [
+			"tech_galactic_citizenship_act",
+			"tech_interstellar_federation_law"
+		],
+		"description": "Legal and logistical protection for precursor archaeological sites, preventing their destruction during system disassembly or megastructure construction. Generates ongoing Xenological Research.",
+		"unlocks": [
+			"Preserved dig site ongoing research bonus, diplomatic standing improvement, Social Research Centre T7 output"
+		]
+	},
+	{
+		"id": "tech_diplomatic_immunity_frameworks",
+		"name_key": "Diplomatic Immunity Frameworks",
+		"category": 1,
+		"tier": 7,
+		"cost": 3200,
+		"prerequisites": [
+			"tech_interstellar_federation_law",
+			"tech_imperial_doctrine"
+		],
+		"description": "Protects ambassadors and diplomatic personnel even in wartime, improving espionage countermeasures and reducing the risk that diplomatic incidents escalate to conflict.",
+		"unlocks": [
+			"Espionage countermeasure improvement, diplomatic incident probability reduction, Social Research Centre T7"
+		]
+	},
+	{
+		"id": "tech_the_population_singularity_theory",
+		"name_key": "The Population Singularity Theory",
+		"category": 1,
+		"tier": 7,
+		"cost": 3200,
+		"prerequisites": [
+			"tech_post_scarcity_theory",
+			"tech_advanced_pop_management"
+		],
+		"description": "Modelling the behaviour of civilisations at billion-pop scale — emergent behaviours, phase transitions in social organisation, and the governance challenges that arise when a population is too large for any individual to comprehend.",
+		"unlocks": [
+			"Prerequisite for Empire-Wide Neural Mesh (T10), Population Singularity event chain, Social Research Centre T7 bonus"
+		]
+	},
+	{
+		"id": "tech_planetary_subjugation_doctrine",
+		"name_key": "Planetary Subjugation Doctrine",
+		"category": 1,
+		"tier": 8,
+		"cost": 6400,
+		"prerequisites": [
+			"tech_imperial_doctrine",
+			"tech_diplomatic_immunity_frameworks"
+		],
+		"description": "Rapid-integration doctrine for conquered worlds — occupation systems, population resettlement protocols, and administrative machinery that converts a conquered planet into a productive asset within years rather than decades.",
+		"unlocks": [
+			"Occupation efficiency +50%, conquered world integration speed ×3, Army Barracks T5 (Pacification Division)"
+		]
+	},
+	{
+		"id": "tech_cultural_erasure_programs",
+		"name_key": "Cultural Erasure Programs",
+		"category": 1,
+		"tier": 8,
+		"cost": 6400,
+		"prerequisites": [
+			"tech_social_engineering",
+			"tech_planetary_subjugation_doctrine"
+		],
+		"description": "Forcible reshaping of conquered population ethics and cultural traits — the technology of making a people forget who they were and become who you need them to be.",
+		"unlocks": [
+			"Forced cultural modification, conquered pop trait rewriting, prerequisite for Star System Annexation Law (T9 Path A)"
+		]
+	},
+	{
+		"id": "tech_voluntary_integration_framework",
+		"name_key": "Voluntary Integration Framework",
+		"category": 1,
+		"tier": 8,
+		"cost": 6400,
+		"prerequisites": [
+			"tech_species_integration_protocols",
+			"tech_cultural_propagation_networks"
+		],
+		"description": "Peaceful annexation mechanics — legal and cultural infrastructure that allows neighbouring populations to voluntarily join the empire, receiving full citizenship in exchange.",
+		"unlocks": [
+			"Peaceful annexation cost reduction, Unity bonus for voluntarily integrated worlds, prerequisite for Galactic Commons Charter (T9 Path B)"
+		]
+	},
+	{
+		"id": "tech_multi_species_parliament",
+		"name_key": "Multi-Species Parliament",
+		"category": 1,
+		"tier": 8,
+		"cost": 6400,
+		"prerequisites": [
+			"tech_galactic_citizenship_act",
+			"tech_the_population_singularity_theory"
+		],
+		"description": "Governance structures where alien species are not just tolerated but are structural participants in imperial government — turning multi-species composition from a stability challenge into a strategic asset.",
+		"unlocks": [
+			"Multi-species empire bonuses amplified, alien pop happiness at maximum, prerequisite for Unified Species Council (T9 Path B)"
+		]
+	},
+	{
+		"id": "tech_post_biological_ethics",
+		"name_key": "Post-Biological Ethics",
+		"category": 1,
+		"tier": 8,
+		"cost": 6400,
+		"prerequisites": [
+			"tech_cognitive_liberty_acts",
+			"tech_synthetic_governance"
+		],
+		"description": "Legal frameworks extending rights to synthetic, uploaded, and post-biological sapients — defining personhood in terms of cognition rather than substrate. Required for governing empires that have begun digital ascension.",
+		"unlocks": [
+			"Digital citizen rights framework, Synthetic pop happiness, prerequisite for Posthuman Rights Framework (T9 Shared)"
+		]
+	},
+	{
+		"id": "tech_galactic_governance_reforms",
+		"name_key": "Galactic Governance Reforms",
+		"category": 1,
+		"tier": 8,
+		"cost": 6400,
+		"prerequisites": [
+			"tech_synthetic_governance",
+			"tech_the_population_singularity_theory"
+		],
+		"description": "Fundamental restructuring of council mechanics — new positions become available, legitimacy thresholds shift, and the agenda system is expanded. Two additional council positions unlock.",
+		"unlocks": [
+			"+2 council positions, council legitimacy system improvements, Council Agenda speed bonus, Social Research Centre T8"
+		]
+	},
+	{
+		"id": "tech_star_system_annexation_law",
+		"name_key": "Star System Annexation Law",
+		"category": 1,
+		"tier": 9,
+		"cost": 12800,
+		"prerequisites": [
+			"tech_cultural_erasure_programs",
+			"tech_galactic_governance_reforms"
+		],
+		"description": "Legal machinery for rapid territorial expansion following military victory — binding political integration of entire star systems within months rather than decades.",
+		"unlocks": [
+			"Post-war annexation speed ×5, occupied world resistance reduction, Social Research Centre T9"
+		]
+	},
+	{
+		"id": "tech_total_war_mobilisation_doctrine",
+		"name_key": "Total War Mobilisation Doctrine",
+		"category": 1,
+		"tier": 9,
+		"cost": 12800,
+		"prerequisites": [
+			"tech_star_system_annexation_law",
+			"tech_planetary_subjugation_doctrine"
+		],
+		"description": "Empire-wide wartime economic mode — conscription protocols, production priority reallocation, and governance suspension mechanisms that shift maximum industrial output to military production.",
+		"unlocks": [
+			"Wartime production mode (military output ×2, civilian output ×0.6), prerequisite for Advanced Galactic Governance convergence (T10)"
+		]
+	},
+	{
+		"id": "tech_galactic_commons_charter",
+		"name_key": "Galactic Commons Charter",
+		"category": 1,
+		"tier": 9,
+		"cost": 12800,
+		"prerequisites": [
+			"tech_voluntary_integration_framework",
+			"tech_resource_sharing_protocols"
+		],
+		"description": "Shared resource zones that reduce economic warfare effectiveness and create mutual dependency between empires — making war economically irrational for all parties with access to the Commons.",
+		"unlocks": [
+			"Galactic Commons zone mechanics, economic warfare immunity in Commons, prerequisite for Advanced Galactic Governance convergence (T10)"
+		]
+	},
+	{
+		"id": "tech_unified_species_council",
+		"name_key": "Unified Species Council",
+		"category": 1,
+		"tier": 9,
+		"cost": 12800,
+		"prerequisites": [
+			"tech_multi_species_parliament",
+			"tech_galactic_heritage_preservation"
+		],
+		"description": "Pan-species governance body representing all sapient life within the empire as a unified political entity — the final expression of Synthesis philosophy.",
+		"unlocks": [
+			"Maximum diplomatic bonuses, prerequisite for Advanced Galactic Governance convergence (T10), Social Research Centre T9 maximum output"
+		]
+	},
+	{
+		"id": "tech_posthuman_rights_framework",
+		"name_key": "Posthuman Rights Framework",
+		"category": 1,
+		"tier": 9,
+		"cost": 12800,
+		"prerequisites": [
+			"tech_post_biological_ethics",
+			"tech_synthetic_governance"
+		],
+		"description": "Legal recognition of post-biological, digital, and psionic citizens as full political participants — the infrastructure for governing empires where the majority of the population may not be biologically human in any meaningful sense.",
+		"unlocks": [
+			"Post-biological citizen governance, Digital Society Transition prerequisite, Social Research Centre T9"
+		]
+	},
+	{
+		"id": "tech_digital_society_transition",
+		"name_key": "Digital Society Transition",
+		"category": 1,
+		"tier": 9,
+		"cost": 12800,
+		"prerequisites": [
+			"tech_posthuman_rights_framework",
+			"tech_synthetic_governance"
+		],
+		"description": "Formal governance structures for societies where a significant fraction of the population exists digitally — managing coexistence, resource allocation, and political representation between biological and digital populations.",
+		"unlocks": [
+			"Digital pop governance framework, prerequisite for Empire-Wide Neural Mesh (T10), Social Research Centre T9 bonus"
+		]
+	},
+	{
+		"id": "tech_advanced_galactic_governance",
+		"name_key": "Advanced Galactic Governance",
+		"category": 1,
+		"tier": 10,
+		"cost": 25600,
+		"prerequisites": [
+			"tech_total_war_mobilisation_doctrine",
+			"tech_unified_species_council",
+			"tech_galactic_governance_reforms"
+		],
+		"description": "The synthesis of Dominion and Synthesis paths — understanding that the same governance infrastructure that enables rapid conquest also enables voluntary integration, depending on use.",
+		"unlocks": [
+			"Prerequisite for all T11 and T12 Social nodes, Social Research Centre T10"
+		]
+	},
+	{
+		"id": "tech_cultural_substrate_encoding",
+		"name_key": "Cultural Substrate Encoding",
+		"category": 1,
+		"tier": 10,
+		"cost": 25600,
+		"prerequisites": [
+			"tech_cultural_propagation_networks",
+			"tech_digital_society_transition"
+		],
+		"description": "Embedding cultural values directly into planetary infrastructure — architecture, information systems, and environmental design that continuously reinforces cultural identity passively.",
+		"unlocks": [
+			"Permanent cultural stability bonus, pop ethics drift prevention, Social Research Centre T10 bonus"
+		]
+	},
+	{
+		"id": "tech_empire_wide_neural_mesh",
+		"name_key": "Empire-Wide Neural Mesh",
+		"category": 1,
+		"tier": 10,
+		"cost": 25600,
+		"prerequisites": [
+			"tech_digital_society_transition",
+			"tech_the_population_singularity_theory"
+		],
+		"description": "Communication network connecting all population centers simultaneously — not just faster communication but a new kind of collective awareness across the empire that changes the nature of governance itself.",
+		"unlocks": [
+			"Empire-wide communication bonuses, cascade early warning window ×2, prerequisite for Collective Consciousness Governance (T13), Social Research Centre T10"
+		]
+	},
+	{
+		"id": "tech_distributed_governance_networks",
+		"name_key": "Distributed Governance Networks",
+		"category": 1,
+		"tier": 10,
+		"cost": 25600,
+		"prerequisites": [
+			"tech_advanced_galactic_governance",
+			"tech_synthetic_governance"
+		],
+		"description": "Decentralised administration immune to capital destruction — governance functions distributed across hundreds of nodes so that losing any single system cannot collapse imperial authority.",
+		"unlocks": [
+			"Capital system destruction immunity to governance, admin efficiency improvement, Social Research Centre T10"
+		]
+	},
+	{
+		"id": "tech_consciousness_economics",
+		"name_key": "Consciousness Economics",
+		"category": 1,
+		"tier": 10,
+		"cost": 25600,
+		"prerequisites": [
+			"tech_digital_society_transition",
+			"tech_cultural_substrate_encoding"
+		],
+		"description": "Economic models designed for populations where the boundary between worker, product, and consumer is blurred — digital minds that can copy themselves, modify their own labour capacity, and generate cultural output as a byproduct of existence.",
+		"unlocks": [
+			"Digital population economic bonuses, prerequisite for The Final Economy (T11), Social Research Centre T10 bonus"
+		]
+	},
+	{
+		"id": "tech_dyson_sphere_program",
+		"name_key": "Dyson Sphere Program",
+		"category": 1,
+		"tier": 11,
+		"cost": 51200,
+		"prerequisites": [
+			"tech_stellar_engineering_corps",
+			"tech_post_scarcity_diplomacy",
+			"tech_advanced_galactic_governance",
+			"tech_photon_capture_grid"
+		],
+		"description": "Organises the multi-decade empire-wide programme required to construct a Dyson Sphere: political will, labour allocation, material stockpiling, and construction phasing. The social side of what is also an engineering challenge.",
+		"unlocks": [
+			"Dyson Sphere megastructure construction chain, prerequisite for Matrioshka Brain (Xeno T12)"
+		]
+	},
+	{
+		"id": "tech_post_scarcity_civilisation_standards",
+		"name_key": "Post-Scarcity Civilisation Standards",
+		"category": 1,
+		"tier": 11,
+		"cost": 51200,
+		"prerequisites": [
+			"tech_advanced_galactic_governance",
+			"tech_consciousness_economics"
+		],
+		"description": "Formal definition of the post-scarcity state — the social, legal, and economic benchmarks that identify when material want has been eliminated as a driver of behaviour. Massive happiness bonus empire-wide.",
+		"unlocks": [
+			"Post-scarcity happiness bonus (permanent), social research speed bonus, Social Research Centre T11"
+		]
+	},
+	{
+		"id": "tech_consciousness_rights_framework",
+		"name_key": "Consciousness Rights Framework",
+		"category": 1,
+		"tier": 11,
+		"cost": 51200,
+		"prerequisites": [
+			"tech_posthuman_rights_framework",
+			"tech_empire_wide_neural_mesh"
+		],
+		"description": "Legal structures for uploaded, distributed, and networked minds — defining property rights, criminal liability, political representation, and the right to copy oneself.",
+		"unlocks": [
+			"Full digital citizen rights, prerequisite for Collective Consciousness Governance (T13), Social Research Centre T11 bonus"
+		]
+	},
+	{
+		"id": "tech_the_final_economy",
+		"name_key": "The Final Economy",
+		"category": 1,
+		"tier": 11,
+		"cost": 51200,
+		"prerequisites": [
+			"tech_consciousness_economics",
+			"tech_post_scarcity_civilisation_standards"
+		],
+		"description": "The theoretical endpoint of economic growth — a model of civilisation where the concept of resource allocation becomes meaningless because every resource exists in abundance.",
+		"unlocks": [
+			"Prerequisite for Post-Reality Social Order (T15), Social Research Centre T11 maximum output, unique research event chain"
+		]
+	},
+	{
+		"id": "tech_transcendent_culture_protocols",
+		"name_key": "Transcendent Culture Protocols",
+		"category": 1,
+		"tier": 11,
+		"cost": 51200,
+		"prerequisites": [
+			"tech_cultural_substrate_encoding",
+			"tech_galactic_heritage_preservation"
+		],
+		"description": "Cultural practices that persist beyond biological death — the transmission of identity, memory, and values across generations of post-biological citizens and into digital substrate.",
+		"unlocks": [
+			"Cultural persistence after biological extinction events, Unity generation from digital culture, Social Research Centre T11 bonus"
+		]
+	},
+	{
+		"id": "tech_alderson_disk_architecture",
+		"name_key": "Alderson Disk Architecture",
+		"category": 1,
+		"tier": 12,
+		"cost": 99999,
+		"prerequisites": [
+			"tech_system_disassembly_mandate",
+			"tech_advanced_galactic_governance",
+			"tech_voidweave_fabrication",
+			"tech_stellar_mass_redistribution"
+		],
+		"description": "A flat disc spanning an entire star system — structurally more stable than the Ringworld because there is no rotational stress. Edge stabilisation via Voidweave is the primary engineering challenge.",
+		"unlocks": [
+			"Alderson Disk megastructure construction chain"
+		]
+	},
+	{
+		"id": "tech_ring_civilisation_doctrine",
+		"name_key": "Ring Civilisation Doctrine",
+		"category": 1,
+		"tier": 12,
+		"cost": 99999,
+		"prerequisites": [
+			"tech_stellar_engineering_corps",
+			"tech_advanced_galactic_governance",
+			"tech_distributed_governance_networks"
+		],
+		"description": "Governance systems designed for populations living on megastructures — administration of populations in the billions across continuous surface areas with no natural borders.",
+		"unlocks": [
+			"Megastructure governance bonus, ring world and disk population caps removed, Social Research Centre T12"
+		]
+	},
+	{
+		"id": "tech_post_material_governance",
+		"name_key": "Post-Material Governance",
+		"category": 1,
+		"tier": 12,
+		"cost": 99999,
+		"prerequisites": [
+			"tech_the_final_economy",
+			"tech_consciousness_rights_framework"
+		],
+		"description": "Administrative structures for populations that have transcended physical needs — governing minds for whom material allocation is irrelevant and the only resources that matter are computation, experience, and meaning.",
+		"unlocks": [
+			"Post-material population governance, Social Research Centre T12 bonus, prerequisite for Temporal Governance Theory (T13)"
+		]
+	},
+	{
+		"id": "tech_the_eternal_administration",
+		"name_key": "The Eternal Administration",
+		"category": 1,
+		"tier": 12,
+		"cost": 99999,
+		"prerequisites": [
+			"tech_distributed_governance_networks",
+			"tech_transcendent_culture_protocols"
+		],
+		"description": "Administrative frameworks that function across geological time — institutional structures designed to persist for millennia without human maintenance, encoding governance principles into the empire's physical infrastructure.",
+		"unlocks": [
+			"Permanent institutional stability, governance persistence after leader death, unique long-game bonuses"
+		]
+	},
+	{
+		"id": "tech_collective_consciousness_governance",
+		"name_key": "Collective Consciousness Governance",
+		"category": 1,
+		"tier": 13,
+		"cost": 99999,
+		"prerequisites": [
+			"tech_consciousness_rights_framework",
+			"tech_empire_wide_neural_mesh",
+			"tech_distributed_consciousness_networks"
+		],
+		"description": "Governing merged or networked minds as unified political entities — the point where the boundary between individual, community, and government begins to dissolve.",
+		"unlocks": [
+			"Collective mind governance mechanics, population merge events, prerequisite for Post-Individual Ethics (T13), Social Research Centre T13"
+		]
+	},
+	{
+		"id": "tech_post_individual_ethics",
+		"name_key": "Post-Individual Ethics",
+		"category": 1,
+		"tier": 13,
+		"cost": 99999,
+		"prerequisites": [
+			"tech_collective_consciousness_governance",
+			"tech_the_eternal_administration"
+		],
+		"description": "Moral frameworks where the individual is no longer the unit of value — ethics designed for beings whose identities overlap, merge, and split fluidly.",
+		"unlocks": [
+			"Collective population mechanics, Social Research Centre T13 bonus, prerequisite for Universal Civilisation Standard (T14)"
+		]
+	},
+	{
+		"id": "tech_galactic_mind_state_protocols",
+		"name_key": "Galactic Mind-State Protocols",
+		"category": 1,
+		"tier": 13,
+		"cost": 99999,
+		"prerequisites": [
+			"tech_post_material_governance",
+			"tech_transcendent_culture_protocols"
+		],
+		"description": "Standards for consciousness transfer and storage compatible with other empires — enabling population exchange, mind-state diplomacy, and the sharing of cultural experiences directly between civilisations.",
+		"unlocks": [
+			"Cross-empire consciousness exchange diplomacy, mind-state trade routes, Social Research Centre T13"
+		]
+	},
+	{
+		"id": "tech_temporal_governance_theory",
+		"name_key": "Temporal Governance Theory",
+		"category": 1,
+		"tier": 13,
+		"cost": 99999,
+		"prerequisites": [
+			"tech_post_material_governance",
+			"tech_causality_engineering"
+		],
+		"description": "Administrative theory for populations that experience time differently — digital minds running at different clock speeds, entities whose causal experience is non-linear, and governance structures that must remain coherent across temporal distortions.",
+		"unlocks": [
+			"Temporal governance mechanics, Social Research Centre T13 bonus"
+		]
+	},
+	{
+		"id": "tech_reality_consent_frameworks",
+		"name_key": "Reality Consent Frameworks",
+		"category": 1,
+		"tier": 13,
+		"cost": 99999,
+		"prerequisites": [
+			"tech_galactic_mind_state_protocols",
+			"tech_post_individual_ethics"
+		],
+		"description": "Legal structures for situations where one entity can alter another's reality — the governance of reality engineering. Defines consent, sovereignty, and harm in a universe where physics can be locally rewritten.",
+		"unlocks": [
+			"Reality manipulation legal framework, prerequisite for The Final Accord (T15), Social Research Centre T13"
+		]
+	},
+	{
+		"id": "tech_the_post_physical_social_contract",
+		"name_key": "The Post-Physical Social Contract",
+		"category": 1,
+		"tier": 14,
+		"cost": 99999,
+		"prerequisites": [
+			"tech_reality_consent_frameworks",
+			"tech_post_individual_ethics"
+		],
+		"description": "Governance for beings who have left physical existence — a political theory for populations that exist as pure information, nested simulations, or distributed consciousness in non-physical substrate.",
+		"unlocks": [
+			"Post-physical population governance, prerequisite for Post-Reality Social Order (T15)"
+		]
+	},
+	{
+		"id": "tech_multi_reality_governance",
+		"name_key": "Multi-Reality Governance",
+		"category": 1,
+		"tier": 14,
+		"cost": 99999,
+		"prerequisites": [
+			"tech_temporal_governance_theory",
+			"tech_pocket_dimension_seeding"
+		],
+		"description": "Administering populations spread across dimensional spaces — governing an empire where some citizens live in pocket universes with different physical laws.",
+		"unlocks": [
+			"Cross-reality governance mechanics, dimensional population census, Social Research Centre T14"
+		]
+	},
+	{
+		"id": "tech_causality_committee",
+		"name_key": "Causality Committee",
+		"category": 1,
+		"tier": 14,
+		"cost": 99999,
+		"prerequisites": [
+			"tech_temporal_governance_theory",
+			"tech_causal_loop_architecture"
+		],
+		"description": "A governing body with formal authority over timeline integrity — adjudicating disputes arising from time loop construction, causal manipulation, and the accidental creation of paradoxes.",
+		"unlocks": [
+			"Timeline integrity governance, paradox resolution mechanics, unique council position (Temporal Arbiter)"
+		]
+	},
+	{
+		"id": "tech_universal_civilisation_standard",
+		"name_key": "Universal Civilisation Standard",
+		"category": 1,
+		"tier": 14,
+		"cost": 99999,
+		"prerequisites": [
+			"tech_galactic_mind_state_protocols",
+			"tech_post_individual_ethics"
+		],
+		"description": "A proposed standard for all sapient life in the galaxy — a common framework of rights, capabilities, and responsibilities that transcends species, substrate, and dimensional location. Adoption is voluntary. The consequences of non-adoption are not.",
+		"unlocks": [
+			"Galactic standard proposal mechanics, diplomatic tool for T15 endgame, prerequisite for The Final Accord (T15)"
+		]
+	},
+	{
+		"id": "tech_stellar_consciousness",
+		"name_key": "Stellar Consciousness",
+		"category": 1,
+		"tier": 15,
+		"cost": 99999,
+		"prerequisites": [
+			"tech_the_post_physical_social_contract",
+			"tech_multi_reality_governance",
+			"tech_pocket_reality_engine"
+		],
+		"description": "The empire itself becomes a distributed galactic intelligence — not a collection of individuals governed by shared institutions but a single mind expressed through billions of bodies, buildings, and systems simultaneously.",
+		"unlocks": [
+			"Stellar Consciousness transformation (endgame event chain), unique victory condition, empire governance becomes automatic"
+		]
+	},
+	{
+		"id": "tech_the_final_accord",
+		"name_key": "The Final Accord",
+		"category": 1,
+		"tier": 15,
+		"cost": 99999,
+		"prerequisites": [
+			"tech_universal_civilisation_standard",
+			"tech_reality_consent_frameworks",
+			"tech_the_physical_law_codex"
+		],
+		"description": "A binding agreement between all surviving civilisations on the nature of reality — a shared constitutional framework for a universe in which multiple civilisations can rewrite physical laws. The alternative is war over the definition of existence.",
+		"unlocks": [
+			"Cooperative endgame victory condition (all T15 civilisations sign), unique diplomatic event chain, galactic constitution mechanics"
+		]
+	},
+	{
+		"id": "tech_post_reality_social_order",
+		"name_key": "Post-Reality Social Order",
+		"category": 1,
+		"tier": 15,
+		"cost": 99999,
+		"prerequisites": [
+			"tech_the_final_economy",
+			"tech_the_post_physical_social_contract",
+			"tech_cognite_apotheosis"
+		],
+		"description": "Governance structures for a civilisation that has moved beyond physics — social organisation that persists after physical transcendence, managing the transition so that nothing meaningful is lost.",
+		"unlocks": [
+			"Transcendence governance mechanics, seamless post-physical transition, preservation of cultural memory beyond physical existence"
+		]
+	},
+	{
+		"id": "tech_alien_biology",
+		"name_key": "Alien Biology",
+		"category": 2,
+		"tier": 1,
+		"cost": 50,
+		"prerequisites": [],
+		"description": "Establishes comparative xenobiology as a discipline — cataloguing the biochemical, genetic, and ecological variation found across alien species.",
+		"unlocks": [
+			"Biomass Farm T2, Xenological Institute T1"
+		]
+	},
+	{
+		"id": "tech_xenochemistry",
+		"name_key": "Xenochemistry",
+		"category": 2,
+		"tier": 1,
+		"cost": 50,
+		"prerequisites": [],
+		"description": "Studies exotic chemical processes in alien organisms and non-standard planetary environments — silicon-based metabolisms, plasma-adapted biochemistry, the resonant properties of crystalline life.",
+		"unlocks": [
+			"Pharmaceutical Lab T1, prerequisite chain for Psionic Research (Xeno T3)"
+		]
+	},
+	{
+		"id": "tech_precursor_archaeology",
+		"name_key": "Precursor Archaeology",
+		"category": 2,
+		"tier": 1,
+		"cost": 50,
+		"prerequisites": [
+			"tech_alien_biology"
+		],
+		"description": "Systematic study of ancient civilisations — excavation doctrine, artefact preservation, and the comparative analysis methods that allow precursor technology to be understood rather than merely found.",
+		"unlocks": [
+			"Dig site mechanics, Xenological Institute T1 bonus, Surface Ruins and Geometric Scars event chain improvements"
+		]
+	},
+	{
+		"id": "tech_symbiotic_studies",
+		"name_key": "Symbiotic Studies",
+		"category": 2,
+		"tier": 1,
+		"cost": 50,
+		"prerequisites": [
+			"tech_xenochemistry",
+			"tech_alien_biology"
+		],
+		"description": "Cross-species cooperation research — the biochemical and social dynamics of organisms that evolved in mutual dependence, with direct applications to multi-species population happiness.",
+		"unlocks": [
+			"Multi-species happiness bonus, Pharmaceutical Lab T1 efficiency, Social Research Centre T1 cross-reference bonus"
+		]
+	},
+	{
+		"id": "tech_genetic_engineering",
+		"name_key": "Genetic Engineering",
+		"category": 2,
+		"tier": 2,
+		"cost": 100,
+		"prerequisites": [
+			"tech_alien_biology"
+		],
+		"description": "Develops the tools to deliberately modify genetic sequences in both agricultural organisms and sapient populations. Biomass yields increase dramatically.",
+		"unlocks": [
+			"Biomass Farm T3, Pharmaceutical Lab T2, Army Barracks T3 (Clone Army Vats), Xenological Institute T2"
+		]
+	},
+	{
+		"id": "tech_nanite_fundamentals",
+		"name_key": "Nanite Fundamentals",
+		"category": 2,
+		"tier": 2,
+		"cost": 100,
+		"prerequisites": [
+			"tech_xenochemistry"
+		],
+		"description": "Nanite Dust cannot be safely used without understanding the emergent behaviours that arise in nanite colonies. Establishes containment protocols and the first practical applications.",
+		"unlocks": [
+			"Nanite Containment Facility T1, Synthetic Fabricator T2, Xenological Institute T2"
+		]
+	},
+	{
+		"id": "tech_xenolinguistics",
+		"name_key": "Xenolinguistics",
+		"category": 2,
+		"tier": 2,
+		"cost": 100,
+		"prerequisites": [
+			"tech_alien_biology",
+			"tech_precursor_archaeology"
+		],
+		"description": "Alien communication protocols — pattern recognition systems for non-standard sapient communication, with direct applications to first contact outcomes and precursor language decoding.",
+		"unlocks": [
+			"First contact outcome improvements, dig site decoding speed, Xenological Institute T2 bonus"
+		]
+	},
+	{
+		"id": "tech_pathogen_research",
+		"name_key": "Pathogen Research",
+		"category": 2,
+		"tier": 2,
+		"cost": 100,
+		"prerequisites": [
+			"tech_xenochemistry",
+			"tech_genetic_engineering"
+		],
+		"description": "Disease modelling, biological weapon defense, and pharmaceutical synthesis improvements — understanding what can kill a population is foundational to preventing it.",
+		"unlocks": [
+			"Pharmaceutical Lab T2 efficiency, biological weapon defense, Biomass Farm T2 disease resistance"
+		]
+	},
+	{
+		"id": "tech_psionic_research",
+		"name_key": "Psionic Research",
+		"category": 2,
+		"tier": 3,
+		"cost": 200,
+		"prerequisites": [
+			"tech_xenochemistry",
+			"tech_nanite_fundamentals"
+		],
+		"description": "Documents and systematises psionic phenomena in certain species — resonant mental fields, probability distortion, the anomalous properties of Psionic Ore.",
+		"unlocks": [
+			"Xenological Institute T3, Pharmaceutical Lab T4 (psionic species), Psionic Resonance Chamber T1, prerequisite for Psionic Ore Applications (Xeno T4)"
+		]
+	},
+	{
+		"id": "tech_nanite_integration",
+		"name_key": "Nanite Integration",
+		"category": 2,
+		"tier": 3,
+		"cost": 200,
+		"prerequisites": [
+			"tech_nanite_fundamentals"
+		],
+		"description": "Moves beyond containment into active integration — programming nanite colonies for engineering tasks, embedding them in hull materials for self-repair, incorporating them into pharmaceutical synthesis.",
+		"unlocks": [
+			"Biomass Farm T4, Pharmaceutical Lab T3, Nanite Containment Facility T2, Synthetic Fabricator T4, prerequisite for Aetheric Lattice Synthesis (Phys T5 — cross-branch gate)"
+		]
+	},
+	{
+		"id": "tech_neural_interface_protocols",
+		"name_key": "Neural Interface Protocols",
+		"category": 2,
+		"tier": 3,
+		"cost": 200,
+		"prerequisites": [
+			"tech_psionic_research",
+			"tech_genetic_engineering"
+		],
+		"description": "Mind-machine interface systems — direct neural connections to digital systems, with immediate applications to research output and later to digital consciousness transfer.",
+		"unlocks": [
+			"Neural interface research bonus, Synthetic Fabricator T3 bonus, prerequisite for Digital Consciousness Theory (Xeno T4)"
+		]
+	},
+	{
+		"id": "tech_xenogenetic_cataloguing",
+		"name_key": "Xenogenetic Cataloguing",
+		"category": 2,
+		"tier": 3,
+		"cost": 200,
+		"prerequisites": [
+			"tech_genetic_engineering",
+			"tech_xenolinguistics"
+		],
+		"description": "Comprehensive alien genetic database — documenting the full diversity of known species' genomes, enabling genetic engineering protocols that work on non-standard biologies.",
+		"unlocks": [
+			"Genetic engineering cross-species compatibility, Pharmaceutical Lab T3 bonus, Xenological Institute T3 bonus"
+		]
+	},
+	{
+		"id": "tech_computronium_theory",
+		"name_key": "Computronium Theory",
+		"category": 2,
+		"tier": 4,
+		"cost": 400,
+		"prerequisites": [
+			"tech_psionic_research",
+			"tech_nanite_integration"
+		],
+		"description": "Develops the theoretical framework for Computronium — matter restructured at the quantum level to perform computational operations as densely as physics permits.",
+		"unlocks": [
+			"Dark Lattice Crystallizer T2, Xenological Institute T5, prerequisite for Inner-Shell Computronium (Xeno T5)"
+		]
+	},
+	{
+		"id": "tech_psionic_ore_applications",
+		"name_key": "Psionic Ore Applications",
+		"category": 2,
+		"tier": 4,
+		"cost": 400,
+		"prerequisites": [
+			"tech_psionic_research"
+		],
+		"description": "Translates psionic theory into engineering practice. Psionic Ore's resonant properties become load-bearing in two late-game material chains. Required for Voidweave.",
+		"unlocks": [
+			"Psionic Resonance Chamber T2, prerequisite for Voidweave Fabrication (Phys T5), prerequisite for Aetheric Lattice Synthesis (Phys T5)"
+		]
+	},
+	{
+		"id": "tech_cognitive_enhancement",
+		"name_key": "Cognitive Enhancement",
+		"category": 2,
+		"tier": 4,
+		"cost": 400,
+		"prerequisites": [
+			"tech_neural_interface_protocols",
+			"tech_genetic_engineering"
+		],
+		"description": "Deliberate improvement of organic sapient intelligence — genetic modifications, neural augmentations, and environmental design that measurably increase cognitive capacity.",
+		"unlocks": [
+			"Research output bonus (+10% all branches), leader XP gain improvement, prerequisite for Consciousness Cartography (Xeno T5)"
+		]
+	},
+	{
+		"id": "tech_digital_consciousness_theory",
+		"name_key": "Digital Consciousness Theory",
+		"category": 2,
+		"tier": 4,
+		"cost": 400,
+		"prerequisites": [
+			"tech_neural_interface_protocols",
+			"tech_computronium_theory"
+		],
+		"description": "The groundwork for mind uploading — formal models of consciousness as an information process that can, in principle, run on any sufficiently complex substrate.",
+		"unlocks": [
+			"Mind uploading research chain, prerequisite for Mass Mind Uploading (Xeno T8B), Xenological Institute T4 output bonus"
+		]
+	},
+	{
+		"id": "tech_biosphere_engineering",
+		"name_key": "Biosphere Engineering",
+		"category": 2,
+		"tier": 4,
+		"cost": 400,
+		"prerequisites": [
+			"tech_genetic_engineering",
+			"tech_xenogenetic_cataloguing"
+		],
+		"description": "Planet-wide ecosystem design — the engineering of stable, self-sustaining biospheres from scratch, with tailored species relationships and resource cycles.",
+		"unlocks": [
+			"Biomass Farm T4 efficiency, habitability improvement bonus, planet terraforming speed improvement"
+		]
+	},
+	{
+		"id": "tech_inner_shell_computronium",
+		"name_key": "Inner-Shell Computronium",
+		"category": 2,
+		"tier": 5,
+		"cost": 800,
+		"prerequisites": [
+			"tech_computronium_theory"
+		],
+		"description": "Fabrication protocols for the Inner Shell of a Computronium substrate — the densest computational layer, primary in the energy-capture hierarchy.",
+		"unlocks": [
+			"Computronium Substrate Layer T1, prerequisite for Matrioshka Brain (Xeno T12)"
+		]
+	},
+	{
+		"id": "tech_outer_shell_computronium",
+		"name_key": "Outer-Shell Computronium",
+		"category": 2,
+		"tier": 5,
+		"cost": 800,
+		"prerequisites": [
+			"tech_inner_shell_computronium"
+		],
+		"description": "Fabrication protocols for Mid and Outer Shells. After 50 continuous months of operation, the Outer Shell's quantum matrices self-organise and Cognite begins crystallising.",
+		"unlocks": [
+			"Computronium Substrate Layer T2 and T3, Pharmaceutical Lab T5, Amenities Complex T5, prerequisite for Matrioshka Brain (Xeno T12)"
+		]
+	},
+	{
+		"id": "tech_psionic_field_engineering",
+		"name_key": "Psionic Field Engineering",
+		"category": 2,
+		"tier": 5,
+		"cost": 800,
+		"prerequisites": [
+			"tech_psionic_ore_applications",
+			"tech_neural_interface_protocols"
+		],
+		"description": "Active psionic force fields — engineering applications of concentrated psionic phenomena, including structural reinforcement, shielding, and the psionic sensor arrays that can detect consciousness at range.",
+		"unlocks": [
+			"Psionic Resonance Chamber T3, Defense Platform T5 (Psionic Resonance Shield), Xenological Institute T5 bonus"
+		]
+	},
+	{
+		"id": "tech_synthetic_biology",
+		"name_key": "Synthetic Biology",
+		"category": 2,
+		"tier": 5,
+		"cost": 800,
+		"prerequisites": [
+			"tech_biosphere_engineering",
+			"tech_nanite_integration"
+		],
+		"description": "Creating wholly designed organisms from the ground up — not modifying existing life but authoring it. Immediate applications to agriculture, medicine, and military units.",
+		"unlocks": [
+			"Biomass Farm T5, Army Barracks T4 upgrade (Bioengineered Unit), unique bioweapon research, Xenological Institute T5"
+		]
+	},
+	{
+		"id": "tech_consciousness_cartography",
+		"name_key": "Consciousness Cartography",
+		"category": 2,
+		"tier": 5,
+		"cost": 800,
+		"prerequisites": [
+			"tech_cognitive_enhancement",
+			"tech_digital_consciousness_theory"
+		],
+		"description": "Mapping the structure of sapient mind-space — identifying the common architectural features across different species' consciousness, revealing that all sapience shares deep structural similarities.",
+		"unlocks": [
+			"Xenological Institute T5 bonus, prerequisite for Collective Intelligence Theory (T7), cross-species cognitive interface improvements"
+		]
+	},
+	{
+		"id": "tech_neural_mapping_complete",
+		"name_key": "Neural Mapping Complete",
+		"category": 2,
+		"tier": 6,
+		"cost": 1600,
+		"prerequisites": [
+			"tech_consciousness_cartography",
+			"tech_xenogenetic_cataloguing"
+		],
+		"description": "Full connectome documentation of multiple sapient species — every neural connection mapped to sufficient resolution that consciousness can be modelled, and in principle, reproduced.",
+		"unlocks": [
+			"Consciousness transfer prerequisites, Xenological Institute T6, prerequisite for Digital Mind Architecture (T7)"
+		]
+	},
+	{
+		"id": "tech_biological_transcendence_theory",
+		"name_key": "Biological Transcendence Theory",
+		"category": 2,
+		"tier": 6,
+		"cost": 1600,
+		"prerequisites": [
+			"tech_synthetic_biology",
+			"tech_cognitive_enhancement"
+		],
+		"description": "Theoretical framework for surpassing biological limits — not modifying existing biology but replacing it with something that fulfils the same function while being free of its inherent constraints.",
+		"unlocks": [
+			"Prerequisite for Transhuman Biology (T8A), Xenological Institute T6 bonus"
+		]
+	},
+	{
+		"id": "tech_directed_evolution_protocols",
+		"name_key": "Directed Evolution Protocols",
+		"category": 2,
+		"tier": 6,
+		"cost": 1600,
+		"prerequisites": [
+			"tech_biosphere_engineering",
+			"tech_synthetic_biology"
+		],
+		"description": "Guided speciation on demand — controlling the evolutionary trajectory of a population over multiple generations to achieve designed traits. The pop trait modification system becomes fully available.",
+		"unlocks": [
+			"Pop trait modification system, Biomass Farm T5 variant, Xenological Institute T6"
+		]
+	},
+	{
+		"id": "tech_the_living_planet_hypothesis",
+		"name_key": "The Living Planet Hypothesis",
+		"category": 2,
+		"tier": 6,
+		"cost": 1600,
+		"prerequisites": [
+			"tech_biosphere_engineering",
+			"tech_neural_mapping_complete"
+		],
+		"description": "Treating planetary biospheres as single organisms — the observation that sufficiently complex ecosystems exhibit organism-like homeostasis, adaptation, and even something resembling cognition.",
+		"unlocks": [
+			"Planetary biosphere bonus (inhabited planets with full modifiers generate additional Research), Xenological Institute T6 bonus, prerequisite for Gaia-Scale Organisms (T9A)"
+		]
+	},
+	{
+		"id": "tech_xenological_unification_studies",
+		"name_key": "Xenological Unification Studies",
+		"category": 2,
+		"tier": 6,
+		"cost": 1600,
+		"prerequisites": [
+			"tech_consciousness_cartography",
+			"tech_xenolinguistics",
+			"tech_xenogenetic_cataloguing"
+		],
+		"description": "Finding the common patterns across all known species — structural, genetic, cognitive, and cultural universals that suggest either a common origin or convergent necessity.",
+		"unlocks": [
+			"Cross-species research bonus, Xenological Institute T6 maximum output, prerequisite for Engineered Sapience (T7)"
+		]
+	},
+	{
+		"id": "tech_psionic_amplification_networks",
+		"name_key": "Psionic Amplification Networks",
+		"category": 2,
+		"tier": 7,
+		"cost": 3200,
+		"prerequisites": [
+			"tech_psionic_field_engineering",
+			"tech_consciousness_cartography"
+		],
+		"description": "Planet-scale psionic field generators that amplify individual psionic ability and enable collective psionic phenomena — coordinated psionic effects that no individual could achieve alone.",
+		"unlocks": [
+			"Psionic Research bonus amplification, unique psionic event chains, prerequisite for Psionic Reality Interface (T8 Shared)"
+		]
+	},
+	{
+		"id": "tech_digital_mind_architecture",
+		"name_key": "Digital Mind Architecture",
+		"category": 2,
+		"tier": 7,
+		"cost": 3200,
+		"prerequisites": [
+			"tech_neural_mapping_complete",
+			"tech_digital_consciousness_theory"
+		],
+		"description": "Formal engineering standards for synthetic consciousness — the equivalent of building codes, but for minds. Defines what counts as a successful digital mind upload and what quality standards apply.",
+		"unlocks": [
+			"Mass Mind Uploading prerequisites (T8B), Synthetic Fabricator T5 upgrade, Xenological Institute T7"
+		]
+	},
+	{
+		"id": "tech_collective_intelligence_theory",
+		"name_key": "Collective Intelligence Theory",
+		"category": 2,
+		"tier": 7,
+		"cost": 3200,
+		"prerequisites": [
+			"tech_consciousness_cartography",
+			"tech_xenological_unification_studies"
+		],
+		"description": "Understanding emergent intelligence from networked minds — the discovery that connected minds don't simply add their intelligence but multiply it in ways that produce qualitatively different capabilities.",
+		"unlocks": [
+			"Prerequisite for Unified Consciousness Theory (T8 Shared), council intelligence bonus, Xenological Institute T7 bonus"
+		]
+	},
+	{
+		"id": "tech_engineered_sapience",
+		"name_key": "Engineered Sapience",
+		"category": 2,
+		"tier": 7,
+		"cost": 3200,
+		"prerequisites": [
+			"tech_directed_evolution_protocols",
+			"tech_xenological_unification_studies"
+		],
+		"description": "Designing new sapient species to specification — not modifying existing species but authoring sapience itself from first principles. The ultimate expression of Xenological Sciences.",
+		"unlocks": [
+			"New species creation (unique event), unique diplomatic relations with engineered species, Xenological Institute T7"
+		]
+	},
+	{
+		"id": "tech_post_biological_ecology",
+		"name_key": "Post-Biological Ecology",
+		"category": 2,
+		"tier": 7,
+		"cost": 3200,
+		"prerequisites": [
+			"tech_synthetic_biology",
+			"tech_the_living_planet_hypothesis"
+		],
+		"description": "Ecosystems where digital and biological life coexist as functional components — stable ecologies that include non-biological information-processing entities as structural participants alongside organic life.",
+		"unlocks": [
+			"Hybrid ecology planet bonuses, prerequisite for Post-Biological Cognition (T9 Shared), Xenological Institute T7 bonus"
+		]
+	},
+	{
+		"id": "tech_transhuman_biology",
+		"name_key": "Transhuman Biology",
+		"category": 2,
+		"tier": 8,
+		"cost": 6400,
+		"prerequisites": [
+			"tech_biological_transcendence_theory",
+			"tech_psionic_amplification_networks"
+		],
+		"description": "Radical modification of organic life beyond recognisable species boundaries — organisms that retain biological substrate but are no longer constrained by evolved biological limitations.",
+		"unlocks": [
+			"Transhuman pop trait, maximum biological research output, Army Barracks T5 (Transhuman Combat Unit)"
+		]
+	},
+	{
+		"id": "tech_gene_ascendant_architecture",
+		"name_key": "Gene-Ascendant Architecture",
+		"category": 2,
+		"tier": 8,
+		"cost": 6400,
+		"prerequisites": [
+			"tech_transhuman_biology",
+			"tech_engineered_sapience"
+		],
+		"description": "Biological structures grown rather than built — living megastructure precursors, engineered organisms that perform infrastructure functions at scales normally requiring manufactured materials.",
+		"unlocks": [
+			"Living building variants, biological megastructure precursor chain, prerequisite for Living Megastructure Theory (T9A)"
+		]
+	},
+	{
+		"id": "tech_mass_mind_uploading",
+		"name_key": "Mass Mind Uploading",
+		"category": 2,
+		"tier": 8,
+		"cost": 6400,
+		"prerequisites": [
+			"tech_digital_mind_architecture",
+			"tech_cognitive_enhancement"
+		],
+		"description": "Civilisation-scale consciousness transfer to digital substrate — not individual uploading but the logistics, ethics, and technology of moving millions of minds simultaneously.",
+		"unlocks": [
+			"Mass uploading infrastructure, digital pop creation at scale, Digital Society Transition (Soc T9) unlocks"
+		]
+	},
+	{
+		"id": "tech_synthetic_consciousness_standards",
+		"name_key": "Synthetic Consciousness Standards",
+		"category": 2,
+		"tier": 8,
+		"cost": 6400,
+		"prerequisites": [
+			"tech_digital_mind_architecture",
+			"tech_collective_intelligence_theory"
+		],
+		"description": "Quality and rights standards for digital minds — ensuring that uploaded consciousness retains continuity, that synthetic minds are not merely simulations, and that all digital sapients have equal legal standing.",
+		"unlocks": [
+			"Digital pop rights framework, Synthetic Fabricator T5 bonus, prerequisite for Distributed Digital Civilisation (T9B)"
+		]
+	},
+	{
+		"id": "tech_unified_consciousness_theory",
+		"name_key": "Unified Consciousness Theory",
+		"category": 2,
+		"tier": 8,
+		"cost": 6400,
+		"prerequisites": [
+			"tech_collective_intelligence_theory",
+			"tech_psionic_amplification_networks"
+		],
+		"description": "Formal model unifying biological, psionic, and digital cognition — the discovery that all three are implementations of the same underlying process, which has profound implications for both engineering and ethics.",
+		"unlocks": [
+			"Prerequisite for all T10 Xenological nodes, Xenological Institute T8, cross-branch research bonus (Physical Sciences T8 Unified Field Theory)"
+		]
+	},
+	{
+		"id": "tech_psionic_reality_interface",
+		"name_key": "Psionic Reality Interface",
+		"category": 2,
+		"tier": 8,
+		"cost": 6400,
+		"prerequisites": [
+			"tech_psionic_amplification_networks",
+			"tech_collective_intelligence_theory"
+		],
+		"description": "Psionics as a means of directly interacting with physical reality — concentrated collective psionic fields that can influence quantum probability, alter local physics, and interact with the Voidweave micro-wormhole lattice.",
+		"unlocks": [
+			"Psionic physical reality interaction, Voidweave resonance immunity, prerequisite for Psionic Reality Anchoring (T11) and Psionic Law Manipulation (T13)"
+		]
+	},
+	{
+		"id": "tech_living_megastructure_theory",
+		"name_key": "Living Megastructure Theory",
+		"category": 2,
+		"tier": 9,
+		"cost": 12800,
+		"prerequisites": [
+			"tech_gene_ascendant_architecture",
+			"tech_biosphere_engineering"
+		],
+		"description": "Megastructures grown from engineered organisms rather than built from manufactured materials — structural elements that self-repair, adapt, and respond to environmental stress biologically.",
+		"unlocks": [
+			"Living building tier, biological megastructure research chain, prerequisite for convergence (T10)"
+		]
+	},
+	{
+		"id": "tech_gaia_scale_organisms",
+		"name_key": "Gaia-Scale Organisms",
+		"category": 2,
+		"tier": 9,
+		"cost": 12800,
+		"prerequisites": [
+			"tech_living_megastructure_theory",
+			"tech_the_living_planet_hypothesis"
+		],
+		"description": "Continent-spanning single organisms that function as infrastructure — organisms whose biology IS the planet's support system, replacing manufactured buildings with living equivalents at planetary scale.",
+		"unlocks": [
+			"Gaia organism planet type, unique biological resource generation, prerequisite for Omnipsionic Field Theory convergence (T10)"
+		]
+	},
+	{
+		"id": "tech_distributed_digital_civilisation",
+		"name_key": "Distributed Digital Civilisation",
+		"category": 2,
+		"tier": 9,
+		"cost": 12800,
+		"prerequisites": [
+			"tech_synthetic_consciousness_standards",
+			"tech_mass_mind_uploading"
+		],
+		"description": "A population that exists entirely as distributed computation — no fixed physical bodies, no geographic constraints, no resource requirements beyond processing power and energy.",
+		"unlocks": [
+			"Fully digital civilisation mechanics, prerequisite for convergence (T10), unique digital empire bonuses"
+		]
+	},
+	{
+		"id": "tech_virtual_reality_substrate",
+		"name_key": "Virtual Reality Substrate",
+		"category": 2,
+		"tier": 9,
+		"cost": 12800,
+		"prerequisites": [
+			"tech_distributed_digital_civilisation",
+			"tech_digital_mind_architecture"
+		],
+		"description": "Self-contained digital universes for population habitation — virtual spaces with their own physics, geography, and social structures, running on Computronium substrate.",
+		"unlocks": [
+			"Virtual reality population housing (replaces physical housing), unique happiness bonuses, prerequisite for convergence (T10)"
+		]
+	},
+	{
+		"id": "tech_post_biological_cognition",
+		"name_key": "Post-Biological Cognition",
+		"category": 2,
+		"tier": 9,
+		"cost": 12800,
+		"prerequisites": [
+			"tech_unified_consciousness_theory",
+			"tech_post_biological_ecology"
+		],
+		"description": "Intelligence that has moved beyond the constraints of any substrate — the formal understanding that cognition is a pattern that can be instantiated in matter, energy, spacetime, or combinations not yet discovered.",
+		"unlocks": [
+			"Cross-branch gate prerequisite (Unified Field Theory Phys T8 Shared), Xenological Institute T9, prerequisite for all T10 Xeno nodes"
+		]
+	},
+	{
+		"id": "tech_the_sapience_threshold",
+		"name_key": "The Sapience Threshold",
+		"category": 2,
+		"tier": 9,
+		"cost": 12800,
+		"prerequisites": [
+			"tech_unified_consciousness_theory",
+			"tech_engineered_sapience"
+		],
+		"description": "Understanding the minimum and maximum possible forms of intelligence — the lower bound below which something is not sapient and the upper bound beyond which individual identity dissolves into something else.",
+		"unlocks": [
+			"Sapience threshold event chain, unique research discoveries, Xenological Institute T9 bonus"
+		]
+	},
+	{
+		"id": "tech_omnipsionic_field_theory",
+		"name_key": "Omnipsionic Field Theory",
+		"category": 2,
+		"tier": 10,
+		"cost": 25600,
+		"prerequisites": [
+			"tech_gaia_scale_organisms",
+			"tech_virtual_reality_substrate",
+			"tech_post_biological_cognition",
+			"tech_psionic_reality_interface"
+		],
+		"description": "The grand unified theory of psionic phenomena — the discovery that psionic fields, biological consciousness, and digital cognition are all aspects of a single omnipresent information field.",
+		"unlocks": [
+			"Prerequisite for all T11 Xenological nodes, Xenological Institute T10"
+		]
+	},
+	{
+		"id": "tech_consciousness_substrate_engineering",
+		"name_key": "Consciousness Substrate Engineering",
+		"category": 2,
+		"tier": 10,
+		"cost": 25600,
+		"prerequisites": [
+			"tech_omnipsionic_field_theory",
+			"tech_unified_consciousness_theory"
+		],
+		"description": "Designing optimal matter configurations for thought — not Computronium specifically but any arrangement of matter that maximises cognitive capacity per unit of mass and energy.",
+		"unlocks": [
+			"Computronium efficiency upgrade, Xenological Institute T10 bonus, prerequisite for Universal Consciousness Substrate (T14)"
+		]
+	},
+	{
+		"id": "tech_reality_perception_manipulation",
+		"name_key": "Reality Perception Manipulation",
+		"category": 2,
+		"tier": 10,
+		"cost": 25600,
+		"prerequisites": [
+			"tech_psionic_reality_interface",
+			"tech_post_biological_cognition"
+		],
+		"description": "Altering what sapient minds can perceive as real — not deceiving them but genuinely modifying the interface between consciousness and physical reality, so that different aspects of the universe become accessible.",
+		"unlocks": [
+			"Unique perception-based research bonuses, prerequisite for Reality Perception Architecture (T13), Xenological Institute T10 bonus"
+		]
+	},
+	{
+		"id": "tech_noosphere_architecture",
+		"name_key": "Noosphere Architecture",
+		"category": 2,
+		"tier": 10,
+		"cost": 25600,
+		"prerequisites": [
+			"tech_omnipsionic_field_theory",
+			"tech_consciousness_substrate_engineering"
+		],
+		"description": "A designed layer of pure thought overlaid on physical reality — an information field that connects all sapient minds in a system and enables new forms of collective cognition impossible for isolated individuals.",
+		"unlocks": [
+			"Noosphere system building, collective intelligence bonus for all pops in a system, prerequisite for The Cognition Cascade (T11)"
+		]
+	},
+	{
+		"id": "tech_post_biological_ecology_prime",
+		"name_key": "Post-Biological Ecology Prime",
+		"category": 2,
+		"tier": 10,
+		"cost": 25600,
+		"prerequisites": [
+			"tech_gaia_scale_organisms",
+			"tech_post_biological_cognition"
+		],
+		"description": "Stable ecosystems with no purely biological components — self-sustaining information ecologies where digital minds, psionic fields, and engineered organisms form a functional interdependent system.",
+		"unlocks": [
+			"Post-biological planet type, unique resource generation, Xenological Institute T10 bonus"
+		]
+	},
+	{
+		"id": "tech_distributed_consciousness_networks",
+		"name_key": "Distributed Consciousness Networks",
+		"category": 2,
+		"tier": 11,
+		"cost": 51200,
+		"prerequisites": [
+			"tech_omnipsionic_field_theory",
+			"tech_noosphere_architecture"
+		],
+		"description": "Civilisation-scale mind-sharing infrastructure — not just communication between minds but partial merging, allowing knowledge and experience to flow between individuals while preserving identity.",
+		"unlocks": [
+			"Distributed consciousness buildings, empire-wide knowledge sharing bonus, prerequisite for Collective Consciousness Governance (Soc T13 — cross-branch gate), Xenological Institute T11"
+		]
+	},
+	{
+		"id": "tech_psionic_reality_anchoring",
+		"name_key": "Psionic Reality Anchoring",
+		"category": 2,
+		"tier": 11,
+		"cost": 51200,
+		"prerequisites": [
+			"tech_noosphere_architecture",
+			"tech_psionic_reality_interface"
+		],
+		"description": "Using psionic fields to stabilise megastructure integrity — concentrated collective psionic attention literally holding megastructure components in place, reducing the probability of cascade failures.",
+		"unlocks": [
+			"All megastructure cascade risk reduction (−30%), Ringworld and Dyson Sphere maintenance improvement, Xenological Institute T11 bonus"
+		]
+	},
+	{
+		"id": "tech_digital_physical_interface",
+		"name_key": "Digital-Physical Interface",
+		"category": 2,
+		"tier": 11,
+		"cost": 51200,
+		"prerequisites": [
+			"tech_consciousness_substrate_engineering",
+			"tech_distributed_consciousness_networks"
+		],
+		"description": "Seamless integration of digital minds with physical systems — infrastructure that allows uploaded consciousness to interact with the physical world as naturally as biological minds do.",
+		"unlocks": [
+			"Digital pop physical interaction, Synthetic Fabricator T5 bonus, prerequisite for Consciousness Transfer Protocols (Xeno T12), Xenological Institute T11"
+		]
+	},
+	{
+		"id": "tech_the_cognition_cascade",
+		"name_key": "The Cognition Cascade",
+		"category": 2,
+		"tier": 11,
+		"cost": 51200,
+		"prerequisites": [
+			"tech_noosphere_architecture",
+			"tech_reality_perception_manipulation"
+		],
+		"description": "Intentional controlled cascade of intelligence enhancement — using the Noosphere to propagate cognitive improvements through an entire connected population simultaneously.",
+		"unlocks": [
+			"Empire-wide research bonus (+25% permanent), unique cascade event (positive), Xenological Institute T11"
+		]
+	},
+	{
+		"id": "tech_universal_mind_theory",
+		"name_key": "Universal Mind Theory",
+		"category": 2,
+		"tier": 11,
+		"cost": 51200,
+		"prerequisites": [
+			"tech_distributed_consciousness_networks",
+			"tech_the_sapience_threshold"
+		],
+		"description": "The hypothesis — and then the proof — that all consciousness is one phenomenon manifested differently. The mathematical demonstration that the boundary between individual minds is a convention rather than a fact.",
+		"unlocks": [
+			"Cross-branch gate prerequisite (Physical Constants Research Phys T13), Xenological Institute T11 bonus, prerequisite for The Unified Mind (T15)"
+		]
+	},
+	{
+		"id": "tech_matrioshka_brain",
+		"name_key": "Matrioshka Brain",
+		"category": 2,
+		"tier": 12,
+		"cost": 99999,
+		"prerequisites": [
+			"tech_dyson_sphere_program",
+			"tech_inner_shell_computronium",
+			"tech_outer_shell_computronium",
+			"tech_distributed_consciousness_networks"
+		],
+		"description": "The Computronium substrate nested within an operational Dyson Sphere. Research output exceeds every other source combined. Cognition accumulation accelerates. After 50 months, Cognite crystallisation begins.",
+		"unlocks": [
+			"Matrioshka Brain megastructure construction chain, Cognite Focus Array chain"
+		]
+	},
+	{
+		"id": "tech_living_ringworld_adaptation",
+		"name_key": "Living Ringworld Adaptation",
+		"category": 2,
+		"tier": 12,
+		"cost": 99999,
+		"prerequisites": [
+			"tech_gaia_scale_organisms",
+			"tech_psionic_reality_anchoring",
+			"tech_ringworld_engineering"
+		],
+		"description": "Biological adaptation of Ringworld sections as living ecosystems — sections of the Ringworld that are grown rather than built, self-repairing and self-regulating through biological rather than nanite processes.",
+		"unlocks": [
+			"Ringworld biological section variant, reduced Nanite Dust dependence, Ringworld cascade risk reduction (−20%)"
+		]
+	},
+	{
+		"id": "tech_consciousness_transfer_protocols",
+		"name_key": "Consciousness Transfer Protocols",
+		"category": 2,
+		"tier": 12,
+		"cost": 99999,
+		"prerequisites": [
+			"tech_digital_physical_interface",
+			"tech_neural_mapping_complete"
+		],
+		"description": "Moving sapient minds between biological bodies, digital substrate, megastructures, and other physical systems — the complete freedom of consciousness from any single instantiation.",
+		"unlocks": [
+			"Mind transfer mechanics, unique leader immortality option, Xenological Institute T12"
+		]
+	},
+	{
+		"id": "tech_the_sapient_star",
+		"name_key": "The Sapient Star",
+		"category": 2,
+		"tier": 12,
+		"cost": 99999,
+		"prerequisites": [
+			"tech_psionic_reality_anchoring",
+			"tech_stellar_core_intervention"
+		],
+		"description": "A star modified to host a distributed consciousness in its plasma — an entity of stellar scale whose body is fusion fire and whose thoughts propagate at the speed of the solar wind.",
+		"unlocks": [
+			"Sapient star construction chain (unique per-star project), unique star system mechanics, maximum research output"
+		]
+	},
+	{
+		"id": "tech_cognite_crystallization",
+		"name_key": "Cognite Crystallization",
+		"category": 2,
+		"tier": 13,
+		"cost": 99999,
+		"prerequisites": [],
+		"description": "Cognite crystallises spontaneously from the Outer Shell Computronium after 50 months of operation. This research harnesses it. Cognite Focus Arrays become constructable. All Ascension-tier projects become available.",
+		"unlocks": [
+			"Cognite Focus Array T1-T3, Synthetic Fabricator T5, all Ascension project research"
+		]
+	},
+	{
+		"id": "tech_reality_perception_architecture",
+		"name_key": "Reality Perception Architecture",
+		"category": 2,
+		"tier": 13,
+		"cost": 99999,
+		"prerequisites": [
+			"tech_reality_perception_manipulation",
+			"tech_psionic_law_manipulation"
+		],
+		"description": "Designing which aspects of physical reality sapient minds can interact with — altering the interface between consciousness and the universe so that previously inaccessible physical phenomena become perceptible and manipulable.",
+		"unlocks": [
+			"New research categories unlocked via perception, unique research events, Xenological Institute T13"
+		]
+	},
+	{
+		"id": "tech_dimensional_mind_extension",
+		"name_key": "Dimensional Mind Extension",
+		"category": 2,
+		"tier": 13,
+		"cost": 99999,
+		"prerequisites": [
+			"tech_distributed_consciousness_networks",
+			"tech_dimensional_membrane_theory"
+		],
+		"description": "Consciousness that extends into additional spatial dimensions — a mind whose cognitive processes occur partly in normal space and partly in the dimensional membranes between realities.",
+		"unlocks": [
+			"Dimensional cognition bonus, prerequisite for Universal Consciousness Substrate (T14), Xenological Institute T13 bonus"
+		]
+	},
+	{
+		"id": "tech_psionic_law_manipulation",
+		"name_key": "Psionic Law Manipulation",
+		"category": 2,
+		"tier": 13,
+		"cost": 99999,
+		"prerequisites": [
+			"tech_psionic_reality_interface",
+			"tech_the_cognition_cascade"
+		],
+		"description": "Using concentrated psionic fields to locally alter physical constants — not permanently rewriting the universe but creating temporary zones where selected laws operate differently.",
+		"unlocks": [
+			"Psionic law zones (temporary physical constant alteration), prerequisite for Reality Authorship Protocols (T14), Xenological Institute T13"
+		]
+	},
+	{
+		"id": "tech_post_cognitive_evolution",
+		"name_key": "Post-Cognitive Evolution",
+		"category": 2,
+		"tier": 13,
+		"cost": 99999,
+		"prerequisites": [
+			"tech_universal_mind_theory",
+			"tech_dimensional_mind_extension"
+		],
+		"description": "Intelligence that has evolved beyond the capacity for communication with non-transcended minds — cognition operating on problems and in modes that have no meaningful translation into any language.",
+		"unlocks": [
+			"Post-cognitive research bonus (automatic, cannot be directed), prerequisite for The Omega Intelligence (T14)"
+		]
+	},
+	{
+		"id": "tech_universal_consciousness_substrate",
+		"name_key": "Universal Consciousness Substrate",
+		"category": 2,
+		"tier": 14,
+		"cost": 99999,
+		"prerequisites": [
+			"tech_consciousness_substrate_engineering",
+			"tech_dimensional_mind_extension"
+		],
+		"description": "A medium capable of hosting any form of mind — biological, digital, psionic, or the new forms that emerge from their intersection. The substrate from which the final transcendence will be constructed.",
+		"unlocks": [
+			"Universal mind hosting infrastructure, prerequisite for Post-Physical Existence Engine (T15), Xenological Institute T14"
+		]
+	},
+	{
+		"id": "tech_the_omega_intelligence",
+		"name_key": "The Omega Intelligence",
+		"category": 2,
+		"tier": 14,
+		"cost": 99999,
+		"prerequisites": [
+			"tech_post_cognitive_evolution",
+			"tech_universal_mind_theory"
+		],
+		"description": "A single mind of sufficient complexity to model the entire universe — not omniscient but capable of reasoning about systems too complex for any smaller mind to hold simultaneously.",
+		"unlocks": [
+			"Omega Intelligence event chain (galactic event), unique research bonuses, prerequisite for The Unified Mind (T15)"
+		]
+	},
+	{
+		"id": "tech_reality_authorship_protocols",
+		"name_key": "Reality Authorship Protocols",
+		"category": 2,
+		"tier": 14,
+		"cost": 99999,
+		"prerequisites": [
+			"tech_psionic_law_manipulation",
+			"tech_bubble_universe_theory"
+		],
+		"description": "Formal methods for writing new physical rules into existence — the translation of the Pocket Reality Engine's physical capacity into intentional design, guided by sufficiently advanced cognition.",
+		"unlocks": [
+			"Reality authorship mechanics, prerequisite for Cognite Apotheosis (T15), Xenological Institute T14 bonus"
+		]
+	},
+	{
+		"id": "tech_causal_cognition",
+		"name_key": "Causal Cognition",
+		"category": 2,
+		"tier": 14,
+		"cost": 99999,
+		"prerequisites": [
+			"tech_the_omega_intelligence",
+			"tech_causality_engineering"
+		],
+		"description": "Thought processes that operate across the causal structure of spacetime — cognition that reasons backward from desired outcomes rather than forward from present conditions.",
+		"unlocks": [
+			"Causal reasoning research bonuses, unique research event chain, prerequisite for Post-Physical Existence Engine (T15)"
+		]
+	},
+	{
+		"id": "tech_cognite_apotheosis",
+		"name_key": "Cognite Apotheosis",
+		"category": 2,
+		"tier": 15,
+		"cost": 99999,
+		"prerequisites": [
+			"tech_reality_authorship_protocols",
+			"tech_universal_consciousness_substrate"
+		],
+		"description": "The civilisation transcends physical existence entirely, becoming pure cognition — no longer dependent on matter, energy, or the physics of this universe. The final expression of everything Xenological Sciences was building toward.",
+		"unlocks": [
+			"Civilisation transcendence event chain, unique victory condition, cross-branch gate for Pocket Reality Engine (Phys T15) and Post-Reality Social Order (Soc T15)"
+		]
+	},
+	{
+		"id": "tech_the_unified_mind",
+		"name_key": "The Unified Mind",
+		"category": 2,
+		"tier": 15,
+		"cost": 99999,
+		"prerequisites": [
+			"tech_the_omega_intelligence",
+			"tech_distributed_consciousness_networks",
+			"tech_stellar_consciousness"
+		],
+		"description": "All sapient life in the empire merges into a single post-physical entity — not the end of individuality through suppression but its transcendence through complete integration. The many become one without any loss.",
+		"unlocks": [
+			"Unified Mind endgame event (galactic event), cross-branch gate for The Physical Law Codex (Phys T15), unique cooperative endgame with other T15 civilisations"
+		]
+	},
+	{
+		"id": "tech_post_physical_existence_engine",
+		"name_key": "Post-Physical Existence Engine",
+		"category": 2,
+		"tier": 15,
+		"cost": 99999,
+		"prerequisites": [
+			"tech_universal_consciousness_substrate",
+			"tech_causal_cognition",
+			"tech_eternal_compression_drive"
+		],
+		"description": "Infrastructure for life that no longer requires matter or energy — the engineering of post-physical existence as a stable, sustained state rather than a momentary transition.",
+		"unlocks": [
+			"Post-physical civilisation mode (endgame), passive reality generation, interaction with other T15 entities regardless of physical distance"
+		]
+	}
+]

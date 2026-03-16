@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PlanetBuildingDefinitionResource" load_steps=2 format=3 uid="uid://planet_building_energy_amp"]
+
+[ext_resource type="Script" path="res://scripts/resources/planet_building_definition.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "energy_amplifier"
+name_key = "Energy Grid"
+description = "Amplifies generator district output. No jobs; +20% technician output when specialized."
+cost = { 0: 100, 1: 50 }
+jobs = {}
+upkeep = {}
+building_slots = 0
+slot_type = "district_amplifier"
+district_type = "energy"
+icon_path = ""

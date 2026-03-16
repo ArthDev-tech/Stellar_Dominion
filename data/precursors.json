@@ -1,0 +1,4 @@
+[
+	{ "id": "cybrex", "name_key": "Cybrex", "description": "An ancient machine civilization.", "anomalies_required": 6, "reward_tech": "tech_computers_1", "reward_energy": 500 },
+	{ "id": "first_league", "name_key": "First League", "description": "A multi-species alliance.", "anomalies_required": 6, "reward_tech": "tech_admin_capacity", "reward_minerals": 300 }
+]

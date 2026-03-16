@@ -1,0 +1,63 @@
+---
+description: Stellar Dominion core project identity, engine constraints, and non-negotiable architectural rules
+alwaysApply: true
+---
+
+# Stellar Dominion — Core Rules
+
+## Project Identity
+- Game: 4X space strategy, Godot 4 / GDScript 4
+- Design inspiration: Stellaris — but with deliberate, researched divergences (not a clone)
+- Target: Inspector-driven architecture for rapid iteration without touching code
+
+## Engine & Language
+- Godot 4 only — never suggest Godot 3 APIs
+- GDScript only — never suggest C#, C++, or gdextension unless explicitly asked
+- Use `@tool` on any script that needs live editor preview of exported values
+- Node composition over inheritance — prefer small focused nodes over deep class hierarchies
+
+## THE Non-Negotiable Constraint: Inspector-First Design
+Every balance-relevant number in the game MUST be an `@export` on its owning node or Resource.
+This is the single most important architectural rule in the project.
+
+```gdscript
+# CORRECT — tunable without opening this file
+@export var base_output: float = 10.0
+@export var efficiency_ratio: float = 0.75
+
+# WRONG — hardcoded, requires script edit to tune
+var base_output: float = 10.0
+```
+
+- Use `@export_group("Section Name")` to organize related exports
+- Use `@export_subgroup("Sub")` for nested organization
+- Resources embedded in scenes must also expose their data via `@export`
+- Never put balance numbers in `const` — use `@export` with sensible defaults
+
+## Code Style
+- `snake_case` for variables, functions, file names
+- `PascalCase` for class names and node names in the scene tree
+- Autoloads are named in `PascalCase` (e.g. `SelectionManager`, `ResourceManager`)
+- Signals use past-tense verb phrases: `selection_changed`, `building_completed`, `fleet_destroyed`
+- All signals must be declared with typed parameters
+- Functions over 30 lines should be refactored — extract to helper methods
+- Comment `# --- SECTION ---` headers inside large scripts to aid navigation
+
+## Scope Discipline
+Every implementation task has a defined boundary. When in doubt about scope:
+1. Build only what was explicitly specified
+2. Add a `# TODO:` comment noting what was deliberately left out
+3. Never silently add "helpful" extra systems — ask first
+
+## Monthly Tick
+The canonical processing order for the monthly economy tick is:
+1. Resource extraction (raw)
+2. Refinement
+3. Building upkeep deduction
+4. Job output calculation
+5. Population changes
+6. Research accumulation
+7. Influence accumulation
+8. Unity accumulation
+9. Event triggers
+10. UI refresh signal emit

@@ -1,0 +1,593 @@
+[gd_scene load_steps=2 format=3 uid="uid://ckmit1p78hd3w"]
+
+[sub_resource type="GDScript" id="GDScript_utk44"]
+script/source = "extends DraggableOverlay
+## Full tech tree overlay: branches × tiers, node states, detail panel, Research button.
+
+signal closed
+
+var _empire: Empire
+var _available_tech_ids: Dictionary = {}  # tech_id -> true
+var _selected_tech_def: Dictionary = {}
+
+@onready var top_bar: PanelContainer = $Margin/VBox/TopBar
+@onready var title_label: Label = $Margin/VBox/TopBar/HBox/TitleLabel
+@onready var research_status_label: Label = $Margin/VBox/TopBar/HBox/ResearchStatus
+@onready var research_progress_bar: ProgressBar = $Margin/VBox/TopBar/HBox/ResearchProgress
+@onready var close_button: Button = $Margin/VBox/TopBar/HBox/CloseButton
+@onready var top_bar_research_button: Button = $Margin/VBox/TopBar/HBox/ResearchButton
+@onready var tree_pane: Control = $Margin/VBox/ContentHBox/TreePane
+@onready var tech_canvas: Control = $Margin/VBox/ContentHBox/TreePane/TechCanvas
+@onready var tree_container: VBoxContainer = $Margin/VBox/ContentHBox/TreePane/TechCanvas/TreeVBox
+@onready var detail_panel: PanelContainer = $Margin/VBox/ContentHBox/DetailPanel
+@onready var detail_vbox: VBoxContainer = $Margin/VBox/ContentHBox/DetailPanel/DetailVBox
+@onready var detail_name: Label = $Margin/VBox/ContentHBox/DetailPanel/DetailVBox/NameLabel
+@onready var detail_branch_tier: Label = $Margin/VBox/ContentHBox/DetailPanel/DetailVBox/BranchTierLabel
+@onready var detail_cost: Label = $Margin/VBox/ContentHBox/DetailPanel/DetailVBox/CostLabel
+@onready var detail_desc: Label = $Margin/VBox/ContentHBox/DetailPanel/DetailVBox/DescLabel
+@onready var detail_prereqs: Label = $Margin/VBox/ContentHBox/DetailPanel/DetailVBox/PrereqsLabel
+@onready var research_button: Button = $Margin/VBox/ContentHBox/DetailPanel/DetailVBox/ResearchButton
+@onready var queue_button: Button = $Margin/VBox/ContentHBox/DetailPanel/DetailVBox/QueueButton
+
+@export var pan_margin_left: int = 0
+@export var pan_margin_top: int = 0
+@export var pan_margin_right: int = 0
+@export var pan_margin_bottom: int = 0
+
+@export_group(\"Tech tree layout\")
+@export var branch_color_physical: Color = Color(0.0, 0.78, 1.0)
+@export var branch_color_social: Color = Color(1.0, 0.77, 0.3)
+@export var branch_color_xenological: Color = Color(0.71, 0.3, 1.0)
+@export var tree_zoom_min: float = 0.35
+@export var tree_zoom_max: float = 2.0
+@export var tree_zoom_step: float = 1.1
+@export var tree_base_size: Vector2 = Vector2(1580, 1480)
+
+var _panning: bool = false
+var _pan_start_mouse: Vector2 = Vector2.ZERO
+var _pan_start_canvas: Vector2 = Vector2.ZERO
+var _tree_zoom: float = 1.0
+
+
+func _get_branch_colors() -> Dictionary:
+	return {
+		\"physical\": branch_color_physical,
+		\"social\": branch_color_social,
+		\"xenological\": branch_color_xenological,
+	}
+
+
+func _ready() -> void:
+	super._ready()
+	close_button.pressed.connect(_on_close_pressed)
+	top_bar_research_button.pressed.connect(_on_research_pressed)
+	top_bar_research_button.disabled = true
+	research_button.pressed.connect(_on_research_pressed)
+	if queue_button != null:
+		queue_button.pressed.connect(_on_queue_pressed)
+	detail_panel.visible = false
+	_style_top_bar()
+	_style_detail_panel()
+	_style_overlay_and_tree()
+	# If setup() was called before we were in the tree, tree_container was null; populate now.
+	if _empire != null:
+		_refresh_tree()
+	_update_research_status()
+
+
+func _style_top_bar() -> void:
+	if top_bar == null:
+		return
+	var style := StyleBoxFlat.new()
+	style.bg_color = Color(\"#060a12\")
+	style.border_color = Color(\"#1e3a5f\")
+	style.set_border_width_all(0)
+	style.border_width_bottom = 1
+	top_bar.add_theme_stylebox_override(\"panel\", style)
+
+
+func _style_detail_panel() -> void:
+	var style := StyleBoxFlat.new()
+	style.bg_color = Color(0.1, 0.12, 0.18, 0.95)
+	style.border_color = Color(0.3, 0.35, 0.5, 1.0)
+	style.set_border_width_all(1)
+	style.set_corner_radius_all(6)
+	style.set_content_margin_all(12)
+	detail_panel.add_theme_stylebox_override(\"panel\", style)
+
+
+func _style_overlay_and_tree() -> void:
+	# Darker, more polished overlay panel
+	var panel_style := StyleBoxFlat.new()
+	panel_style.bg_color = Color(0.08, 0.09, 0.14, 0.98)
+	panel_style.border_color = Color(0.2, 0.5, 0.75, 0.6)
+	panel_style.set_border_width_all(2)
+	panel_style.set_corner_radius_all(8)
+	panel_style.set_content_margin_all(0)
+	add_theme_stylebox_override(\"panel\", panel_style)
+	# Tree pane: subtle inner background
+	if tree_pane != null:
+		var pane_style := StyleBoxFlat.new()
+		pane_style.bg_color = Color(0.06, 0.07, 0.11, 0.95)
+		pane_style.set_corner_radius_all(6)
+		pane_style.set_content_margin_all(4)
+		tree_pane.add_theme_stylebox_override(\"panel\", pane_style)
+
+
+func _input(event: InputEvent) -> void:
+	# Middle mouse pan — must be in _input(), NOT _unhandled_input()
+	# Cards with MOUSE_FILTER_STOP consume middle mouse before _unhandled_input fires
+	if tech_canvas == null:
+		return
+	if event is InputEventMouseButton:
+		var mb: InputEventMouseButton = event as InputEventMouseButton
+		if mb.button_index == MOUSE_BUTTON_MIDDLE:
+			_panning = mb.pressed
+			if mb.pressed:
+				_pan_start_mouse = get_viewport().get_mouse_position()
+				_pan_start_canvas = tech_canvas.position
+			get_viewport().set_input_as_handled()
+			return
+		if mb.button_index == MOUSE_BUTTON_WHEEL_UP and _mouse_over_canvas():
+			var new_zoom := clampf(_tree_zoom * tree_zoom_step, tree_zoom_min, tree_zoom_max)
+			_apply_zoom_toward_cursor(new_zoom)
+			get_viewport().set_input_as_handled()
+			return
+		if mb.button_index == MOUSE_BUTTON_WHEEL_DOWN and _mouse_over_canvas():
+			var new_zoom := clampf(_tree_zoom / tree_zoom_step, tree_zoom_min, tree_zoom_max)
+			_apply_zoom_toward_cursor(new_zoom)
+			get_viewport().set_input_as_handled()
+			return
+	if _panning and event is InputEventMouseMotion:
+		var delta := get_viewport().get_mouse_position() - _pan_start_mouse
+		tech_canvas.position = _pan_start_canvas + delta
+		get_viewport().set_input_as_handled()
+
+
+func _mouse_over_canvas() -> bool:
+	# Only zoom when cursor is in the canvas area, not over the top bar
+	if tree_pane == null:
+		return false
+	return tree_pane.get_global_rect().has_point(get_global_mouse_position())
+
+
+func _update_research_status() -> void:
+	if research_status_label == null:
+		return
+	if _empire == null or _empire.current_research_tech_id.is_empty():
+		research_status_label.text = \"⚠  No active research — select a technology to begin\"
+		research_status_label.add_theme_color_override(\"font_color\", Color(\"#f4a942\"))
+		if research_progress_bar != null:
+			research_progress_bar.visible = false
+		return
+	var tid: String = _empire.current_research_tech_id
+	var tech_def: Dictionary = ResearchManager.get_tech_def(tid) if ResearchManager else {}
+	var name_key: String = tech_def.get(\"name_key\", tid)
+	var branch_key: String = ResearchManager.get_tech_branch_key(tech_def) if ResearchManager else \"\"
+	var branch_initial: String = \"P\" if branch_key == \"physical\" else \"S\" if branch_key == \"social\" else \"X\"
+	var branch_name: String = ResearchManager.BRANCH_NAMES.get(branch_key, branch_key) if ResearchManager else branch_key
+	var tier: int = int(tech_def.get(\"tier\", 1))
+	var cost: float = float(tech_def.get(\"cost\", 0))
+	var current_rp: float = _empire.research_progress
+	research_status_label.text = \"[ %s ]  %s  ·  %s T%d  ·  %.0f / %.0f RP\" % [branch_initial, name_key, branch_name, tier, current_rp, cost]
+	research_status_label.add_theme_color_override(\"font_color\", Color(\"#c8e8ff\"))
+	if research_progress_bar != null:
+		research_progress_bar.visible = true
+		research_progress_bar.value = (current_rp / cost) if cost > 0.0 else 0.0
+
+
+func _apply_zoom_toward_cursor(new_zoom: float) -> void:
+	if tech_canvas == null or tree_pane == null:
+		return
+	var mouse_global := get_global_mouse_position()
+	var canvas_global := tech_canvas.global_position
+	var local_before := (mouse_global - canvas_global) / _tree_zoom
+	_tree_zoom = new_zoom
+	tech_canvas.scale = Vector2(_tree_zoom, _tree_zoom)
+	tech_canvas.custom_minimum_size = tree_base_size
+	var desired_global := mouse_global - local_before * _tree_zoom
+	tech_canvas.position = tree_pane.get_global_transform_with_canvas().affine_inverse() * desired_global
+
+
+func _apply_tree_zoom() -> void:
+	if tech_canvas == null:
+		return
+	tech_canvas.scale = Vector2(_tree_zoom, _tree_zoom)
+	tech_canvas.custom_minimum_size = tree_base_size
+
+
+func setup(empire: Empire) -> void:
+	_empire = empire
+	_refresh_tree()
+
+
+const CARD_W: int = 260
+const CARD_H: int = 140
+const PAD_X: int = 32
+const PAD_Y: int = 28
+const BRANCH_GAP: int = 460
+const LABEL_ROW_H: int = 28
+
+func _refresh_tree() -> void:
+	if tree_container == null:
+		return
+	for c in tree_container.get_children():
+		c.queue_free()
+	if _empire == null or ResearchManager == null:
+		return
+	_available_tech_ids.clear()
+	for t in ResearchManager.get_available_techs(_empire):
+		_available_tech_ids[t.get(\"id\", \"\")] = true
+	var tech_centers: Dictionary = {}
+	var tech_prereqs: Dictionary = {}
+	var tech_branches: Dictionary = {}
+	var content_scene: PackedScene = load(\"res://ui/tech_tree/technology_cards/tech_tree.tscn\") as PackedScene
+	var content: Control = content_scene.instantiate() as Control
+	if content == null:
+		return
+	var tree_canvas: Control = content.get_node_or_null(\"TreeCanvas\") as Control
+	if tree_canvas == null:
+		content.queue_free()
+		return
+	var lines_layer: Control = tree_canvas.get_node_or_null(\"LinesLayer\") as Control
+	# Use existing card nodes from the scene (editor-placed); apply state and build line data
+	var grouped: Dictionary = ResearchManager.get_all_techs_grouped_by_branch_and_tier()
+	var tech_ids_in_scene: Dictionary = {}
+	for c in tree_canvas.get_children():
+		if c == lines_layer or c.name == \"Background\" or c.name.begins_with(\"BranchLabel\"):
+			continue
+		if c is Control and c.name.begins_with(\"tech_\"):
+			var tid: String = c.name
+			var tech_def: Dictionary = ResearchManager.get_tech_def(tid)
+			if tech_def.is_empty():
+				continue
+			tech_ids_in_scene[tid] = true
+			var branch_key: String = ResearchManager.get_tech_branch_key(tech_def)
+			var state: String = _node_state(tid)
+			var card: Control = c as Control
+			if card.has_method(\"apply_tech_def\"):
+				card.apply_tech_def(tech_def, branch_key, state)
+			if card.has_signal(\"pressed\"):
+				card.pressed.connect(_on_node_pressed)
+			else:
+				var btn: Button = card.get_node_or_null(\"CardButton\")
+				if btn != null:
+					btn.pressed.connect(_on_node_pressed.bind(tech_def))
+			card.set_meta(\"tech_def\", tech_def)
+			var sz: Vector2 = card.size
+			if sz.x <= 0 or sz.y <= 0:
+				sz = card.custom_minimum_size
+			if sz.x <= 0 or sz.y <= 0:
+				sz = Vector2(CARD_W, CARD_H)
+			tech_centers[tid] = card.position + sz * 0.5
+			tech_branches[tid] = branch_key
+			var prereqs: Array = tech_def.get(\"prerequisites\", [])
+			if prereqs.size() > 0:
+				tech_prereqs[tid] = prereqs
+	# Add any techs that exist in data but have no node in the scene (e.g. new techs before re-running generator)
+	var branch_order: Array = [\"physical\", \"social\", \"xenological\"]
+	var branch_idx: int = 0
+	for branch_key in branch_order:
+		if not grouped.has(branch_key):
+			branch_idx += 1
+			continue
+		var tiers: Dictionary = grouped[branch_key]
+		var tier_nums: Array = tiers.keys()
+		tier_nums.sort()
+		for tier_num in tier_nums:
+			var techs_in_tier: Array = tiers[tier_num]
+			for t in range(techs_in_tier.size()):
+				var tech_def: Dictionary = techs_in_tier[t]
+				var tid: String = tech_def.get(\"id\", \"\")
+				if tid.is_empty() or tech_ids_in_scene.get(tid, false):
+					continue
+				var x: int = (int(tier_num) - 1) * (CARD_W + PAD_X) + 32
+				var y: int = branch_idx * BRANCH_GAP + LABEL_ROW_H + t * (CARD_H + PAD_Y)
+				var card: Control = _instantiate_tech_card(tech_def, branch_key)
+				card.name = tid
+				card.position = Vector2(x, y)
+				tree_canvas.add_child(card)
+				tech_centers[tid] = Vector2(x + CARD_W * 0.5, y + CARD_H * 0.5)
+				tech_branches[tid] = branch_key
+				var prereqs: Array = tech_def.get(\"prerequisites\", [])
+				if prereqs.size() > 0:
+					tech_prereqs[tid] = prereqs
+				card.set_meta(\"tech_def\", tech_def)
+		branch_idx += 1
+	if lines_layer != null:
+		var extra: Variant = lines_layer.get(\"extra_connections\")
+		if extra != null and extra is PackedStringArray:
+			for conn in extra:
+				var parts: PackedStringArray = conn.split(\"|\")
+				if parts.size() != 2:
+					continue
+				var from_id: String = parts[0].strip_edges()
+				var to_id: String = parts[1].strip_edges()
+				if from_id.is_empty() or to_id.is_empty():
+					continue
+				if not tech_prereqs.has(to_id):
+					tech_prereqs[to_id] = []
+				var arr: Array = tech_prereqs[to_id]
+				if from_id in arr:
+					continue
+				arr.append(from_id)
+		lines_layer.set_meta(\"card_half_size\", Vector2(CARD_W * 0.5, CARD_H * 0.5))
+		lines_layer.set_meta(\"tech_centers\", tech_centers)
+		lines_layer.set_meta(\"tech_prereqs\", tech_prereqs)
+		lines_layer.set_meta(\"tech_branches\", tech_branches)
+		lines_layer.queue_redraw()
+	# Style branch labels with branch colors
+	for c in tree_canvas.get_children():
+		if c.name == \"BranchLabel0\":
+			c.add_theme_color_override(\"font_color\", _get_branch_colors().get(\"physical\", Color.WHITE))
+		elif c.name == \"BranchLabel1\":
+			c.add_theme_color_override(\"font_color\", _get_branch_colors().get(\"social\", Color.WHITE))
+		elif c.name == \"BranchLabel2\":
+			c.add_theme_color_override(\"font_color\", _get_branch_colors().get(\"xenological\", Color.WHITE))
+	var wrapper := Control.new()
+	content.position = Vector2(pan_margin_left, pan_margin_top)
+	wrapper.add_child(content)
+	tree_container.add_child(wrapper)
+	_tree_zoom = 1.0
+	_apply_tree_zoom()
+	_update_research_status()
+
+
+func _instantiate_tech_card(tech_def: Dictionary, branch_key: String) -> Control:
+	var tid: String = tech_def.get(\"id\", \"\")
+	var state: String = _node_state(tid)
+	var scene_path: String = ResearchManager.get_tech_card_scene_path(tech_def)
+	var packed: PackedScene = load(scene_path) as PackedScene
+	if packed == null:
+		# Fallback: minimal card so tree still works
+		var fallback: PanelContainer = PanelContainer.new()
+		fallback.custom_minimum_size = Vector2(260, 140)
+		var btn: Button = Button.new()
+		btn.flat = true
+		btn.text = tech_def.get(\"name_key\", tid)
+		btn.pressed.connect(_on_node_pressed.bind(tech_def))
+		fallback.add_child(btn)
+		return fallback
+	var card: Control = packed.instantiate() as Control
+	if card == null:
+		return _instantiate_tech_card_fallback(tech_def)
+	if card.has_method(\"apply_tech_def\"):
+		card.apply_tech_def(tech_def, branch_key, state)
+	if card.has_signal(\"pressed\"):
+		card.pressed.connect(_on_node_pressed)
+	else:
+		var btn: Button = card.get_node_or_null(\"CardButton\")
+		if btn != null:
+			btn.pressed.connect(_on_node_pressed.bind(tech_def))
+	return card
+
+
+func _instantiate_tech_card_fallback(tech_def: Dictionary) -> Control:
+	var panel: PanelContainer = PanelContainer.new()
+	panel.custom_minimum_size = Vector2(260, 140)
+	var btn: Button = Button.new()
+	btn.flat = true
+	btn.text = tech_def.get(\"name_key\", \"?\")
+	btn.pressed.connect(_on_node_pressed.bind(tech_def))
+	panel.add_child(btn)
+	return panel
+
+
+func _node_state(tech_id: String) -> String:
+	if _empire == null:
+		return \"locked\"
+	if tech_id in _empire.completed_tech_ids:
+		return \"completed\"
+	if _empire.current_research_tech_id == tech_id:
+		return \"in_progress\"
+	if _available_tech_ids.get(tech_id, false):
+		return \"available\"
+	return \"locked\"
+
+
+func _on_node_pressed(tech_def: Dictionary) -> void:
+	_selected_tech_def = tech_def
+	var branch_key: String = ResearchManager.get_tech_branch_key(tech_def)
+	detail_name.text = tech_def.get(\"name_key\", \"?\")
+	detail_name.add_theme_color_override(\"font_color\", _get_branch_colors().get(branch_key, Color.WHITE))
+	detail_branch_tier.text = \"%s — Tier %d\" % [ResearchManager.BRANCH_NAMES.get(branch_key, branch_key), int(tech_def.get(\"tier\", 1))]
+	detail_cost.text = \"%d Research\" % int(tech_def.get(\"cost\", 0))
+	var desc: String = tech_def.get(\"description\", \"\")
+	detail_desc.text = desc if desc != \"\" else \"No description.\"
+	detail_desc.visible = desc != \"\"
+	var prereqs: Array = tech_def.get(\"prerequisites\", [])
+	if prereqs.is_empty():
+		detail_prereqs.text = \"None\"
+	else:
+		var names: PackedStringArray = []
+		for pid in prereqs:
+			var d: Dictionary = ResearchManager.get_tech_def(pid)
+			names.append(d.get(\"name_key\", pid))
+		detail_prereqs.text = \", \".join(names)
+	var tid: String = tech_def.get(\"id\", \"\")
+	var available: bool = _available_tech_ids.get(tid, false)
+	var no_current: bool = _empire != null and _empire.current_research_tech_id.is_empty()
+	var state: String = _node_state(tid)
+	top_bar_research_button.disabled = !(available and no_current)
+	research_button.visible = available and no_current
+	if queue_button != null:
+		queue_button.visible = (state == \"locked\" or state == \"available\") and _empire != null
+		if state == \"locked\":
+			queue_button.text = \"Queue this tech and prerequisites\"
+		else:
+			queue_button.text = \"Queue this tech\"
+	detail_panel.visible = true
+
+
+func _on_research_pressed() -> void:
+	if _empire == null or _selected_tech_def.is_empty():
+		return
+	if not _empire.current_research_tech_id.is_empty():
+		return
+	var tid: String = _selected_tech_def.get(\"id\", \"\")
+	if not _available_tech_ids.get(tid, false):
+		return
+	_empire.current_research_tech_id = tid
+	_empire.research_progress = 0.0
+	_refresh_tree()
+	_update_research_status()
+	# Update detail panel to show in progress
+	top_bar_research_button.disabled = true
+	research_button.visible = false
+	detail_branch_tier.text = detail_branch_tier.text + \" — In progress\"
+	if EventBus != null:
+		EventBus.tech_research_confirmed.emit(tid)
+	if DebugLogger != null:
+		DebugLogger.log_info(\"TechTree\", \"Research confirmed: %s\" % tid)
+
+
+func _on_queue_pressed() -> void:
+	if _empire == null or _selected_tech_def.is_empty():
+		return
+	var tid: String = _selected_tech_def.get(\"id\", \"\")
+	if _empire.completed_tech_ids.has(tid):
+		return
+	ResearchManager.queue_tech_and_prerequisites(_empire, tid)
+	_refresh_tree()
+	queue_button.visible = false
+	detail_branch_tier.text = detail_branch_tier.text + \" — Queued\"
+
+
+func _on_close_pressed() -> void:
+	hide()
+	closed.emit()
+"
+
+[node name="TechTreeOverlay" type="PanelContainer"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -420.0
+offset_top = -320.0
+offset_right = 420.0
+offset_bottom = 320.0
+grow_horizontal = 2
+grow_vertical = 2
+script = SubResource("GDScript_utk44")
+
+[node name="Margin" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBox" type="VBoxContainer" parent="Margin"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="TopBar" type="PanelContainer" parent="Margin/VBox"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="HBox" type="HBoxContainer" parent="Margin/VBox/TopBar"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="TitleLabel" type="Label" parent="Margin/VBox/TopBar/HBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5, 0.65, 0.85, 1)
+theme_override_font_sizes/font_size = 16
+text = "RESEARCH & TECHNOLOGY TREE"
+
+[node name="ResearchStatus" type="Label" parent="Margin/VBox/TopBar/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.85, 0.88, 1, 1)
+theme_override_font_sizes/font_size = 14
+text = "No active research"
+
+[node name="ResearchProgress" type="ProgressBar" parent="Margin/VBox/TopBar/HBox"]
+custom_minimum_size = Vector2(120, 8)
+layout_mode = 2
+max_value = 1.0
+show_percentage = false
+
+[node name="HSeparator" type="HSeparator" parent="Margin/VBox/TopBar/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ResearchButton" type="Button" parent="Margin/VBox/TopBar/HBox"]
+layout_mode = 2
+disabled = true
+text = "Begin Research"
+
+[node name="CloseButton" type="Button" parent="Margin/VBox/TopBar/HBox"]
+layout_mode = 2
+text = "✕"
+
+[node name="ContentHBox" type="HBoxContainer" parent="Margin/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 16
+
+[node name="TreePane" type="PanelContainer" parent="Margin/VBox/ContentHBox"]
+clip_contents = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="TechCanvas" type="Control" parent="Margin/VBox/ContentHBox/TreePane"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="TreeVBox" type="VBoxContainer" parent="Margin/VBox/ContentHBox/TreePane/TechCanvas"]
+layout_mode = 0
+size_flags_horizontal = 3
+theme_override_constants/separation = 12
+
+[node name="DetailPanel" type="PanelContainer" parent="Margin/VBox/ContentHBox"]
+visible = false
+custom_minimum_size = Vector2(260, 0)
+layout_mode = 2
+
+[node name="DetailVBox" type="VBoxContainer" parent="Margin/VBox/ContentHBox/DetailPanel"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="NameLabel" type="Label" parent="Margin/VBox/ContentHBox/DetailPanel/DetailVBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9, 0.9, 1, 1)
+theme_override_font_sizes/font_size = 16
+text = "Tech Name"
+
+[node name="BranchTierLabel" type="Label" parent="Margin/VBox/ContentHBox/DetailPanel/DetailVBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.75, 0.9, 1)
+theme_override_font_sizes/font_size = 12
+text = "Branch — Tier"
+
+[node name="CostLabel" type="Label" parent="Margin/VBox/ContentHBox/DetailPanel/DetailVBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "0 RP"
+
+[node name="DescLabel" type="Label" parent="Margin/VBox/ContentHBox/DetailPanel/DetailVBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.75, 0.8, 0.9, 1)
+theme_override_font_sizes/font_size = 11
+text = "Description"
+autowrap_mode = 2
+
+[node name="PrereqsLabel" type="Label" parent="Margin/VBox/ContentHBox/DetailPanel/DetailVBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.65, 0.7, 0.85, 1)
+theme_override_font_sizes/font_size = 11
+text = "Prerequisites: None"
+autowrap_mode = 2
+
+[node name="ResearchButton" type="Button" parent="Margin/VBox/ContentHBox/DetailPanel/DetailVBox"]
+layout_mode = 2
+text = "Research"
+
+[node name="QueueButton" type="Button" parent="Margin/VBox/ContentHBox/DetailPanel/DetailVBox"]
+visible = false
+layout_mode = 2
+text = "Queue tech and prerequisites"

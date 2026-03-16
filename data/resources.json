@@ -1,0 +1,17 @@
+[
+	{ "id": 0, "name_key": "Energy", "short": "E", "category": "basic", "display_order": 0 },
+	{ "id": 1, "name_key": "Minerals", "short": "M", "category": "basic", "display_order": 1 },
+	{ "id": 2, "name_key": "Food", "short": "F", "category": "basic", "display_order": 2 },
+	{ "id": 3, "name_key": "Alloys", "short": "A", "category": "advanced", "display_order": 3 },
+	{ "id": 4, "name_key": "Research", "short": "R", "category": "research", "display_order": 4 },
+	{ "id": 5, "name_key": "Consumer Goods", "short": "CG", "category": "advanced", "display_order": 5 },
+	{ "id": 6, "name_key": "Influence", "short": "I", "category": "empire", "display_order": 6 },
+	{ "id": 7, "name_key": "Unity", "short": "U", "category": "empire", "display_order": 7 },
+	{ "id": 8, "name_key": "Trade", "short": "T", "category": "trade", "display_order": 8 },
+	{ "id": 9, "name_key": "Volatile Motes", "short": "VM", "category": "strategic", "display_order": 9 },
+	{ "id": 10, "name_key": "Exotic Gases", "short": "EG", "category": "strategic", "display_order": 10 },
+	{ "id": 11, "name_key": "Rare Crystals", "short": "RC", "category": "strategic", "display_order": 11 },
+	{ "id": 12, "name_key": "Super Tensiles", "short": "ST", "category": "strategic", "display_order": 12 },
+	{ "id": 13, "name_key": "Dark Matter", "short": "DM", "category": "strategic", "display_order": 13 },
+	{ "id": 14, "name_key": "Zro", "short": "Zro", "category": "strategic", "display_order": 14 }
+]
