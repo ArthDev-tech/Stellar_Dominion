@@ -8,16 +8,18 @@ extends Node2D
 @export var overlay_technology: PackedScene = null
 @export var overlay_tech_tree: PackedScene = null
 @export var overlay_leaders: PackedScene = null
+@export var overlay_government: PackedScene = null
 @export var overlay_planet_view: PackedScene = null
 @export var overlay_space_station: PackedScene = null
 @export var overlay_ship_designer: PackedScene = null
 
 @onready var galaxy_map: Node2D = $GalaxyMap
+@onready var parallax_background: ParallaxBackground = $ParallaxBackground
+@onready var solar_system_view_root: Node2D = $SolarSystemViewRoot
 @onready var camera: Camera2D = $Camera2D
 @onready var hyperlines: Node2D = $GalaxyMap/Hyperlines
 @onready var systems_layer: Node2D = $GalaxyMap/SystemsLayer
 @onready var ships_layer: Node2D = $GalaxyMap/ShipsLayer
-var _route_preview_line: Line2D = null  ## Child of GalaxyMap/RoutePreviewLayer, created in _ready
 @onready var top_bar: PanelContainer = $UICanvas/TopBar
 @onready var pause_button: Button = $UICanvas/TopBar/MarginContainer/VBox/Row1/PauseButton
 @onready var selected_panel: PanelContainer = $UICanvas/SelectedPanel
@@ -39,6 +41,7 @@ var manage_station_button: Button
 @onready var technology_button: Button = $UICanvas/NavStrip/MarginContainer/VBox/TechnologyButton
 @onready var tech_tree_button: Button = $UICanvas/NavStrip/MarginContainer/VBox/TechTreeButton
 @onready var leaders_button: Button = $UICanvas/NavStrip/MarginContainer/VBox/LeadersButton
+@onready var government_button: Button = $UICanvas/NavStrip/MarginContainer/VBox/GovernmentButton
 @onready var ship_designer_button: Button = $UICanvas/NavStrip/MarginContainer/VBox/ShipDesignerButton
 @onready var music_player_panel: PanelContainer = $UICanvas/MusicPlayerPanel
 @onready var music_play_button: Button = $UICanvas/MusicPlayerPanel/MarginContainer/HBox/MusicPlayButton
@@ -47,6 +50,7 @@ var manage_station_button: Button
 @onready var music_volume_slider: HSlider = $UICanvas/MusicPlayerPanel/MarginContainer/HBox/MusicVolumeSlider
 
 var selected_panel_vbox: VBoxContainer
+@onready var selection_overlay: CanvasLayer = $SelectionOverlay
 @onready var galaxy_selection_handler: Control = $SelectionOverlay/GalaxySelectionHandler
 @onready var ui_canvas: CanvasLayer = $UICanvas
 @onready var nav_strip: PanelContainer = $UICanvas/NavStrip
@@ -58,6 +62,8 @@ var _active_nav_button: Button = null
 var _send_ships_container: VBoxContainer = null
 var _station_buttons_container: VBoxContainer = null  ## When system has multiple stations, holds one button per station
 var _galaxy_ship_filter: String = "all"  ## "all" | "science" | "construction" | "military"
+var _last_galaxy_ship_layout_sig: int = -1
+var _galaxy_ui_visibility_backup: Dictionary = {}
 var _galaxy_selected_indicator: String = ""  ## "science" | "construction" | "military" | "station" when an indicator is selected
 var _dragging: bool = false
 var _drag_start: Vector2
@@ -70,6 +76,7 @@ var _hover_last_indicator: String = ""
 var _resource_hover_type: int = -1
 var _resource_strip_controller: ResourceStripController = null
 var _research_panel_controller: ResearchPanelController = null
+var _government_overlay_container: Control = null
 
 
 func _get_cfg() -> GameplayConfig:
@@ -154,6 +161,7 @@ func _overlay_rect(rect_key: String) -> Vector4:
 			"colonies": return Vector4(-280, -220, 280, 220)
 			"technology": return Vector4(-320, -240, 320, 240)
 			"leaders": return Vector4(-260, -200, 260, 200)
+			"government": return Vector4(-320, -280, 320, 280)
 			"planet_view": return Vector4(-675, -540, 675, 540)
 			"station": return Vector4(-450, -350, 450, 350)
 			"ship_designer": return Vector4(-470, -310, 470, 310)
@@ -162,6 +170,7 @@ func _overlay_rect(rect_key: String) -> Vector4:
 		"colonies": return c.overlay_colonies_rect
 		"technology": return c.overlay_technology_rect
 		"leaders": return c.overlay_leaders_rect
+		"government": return c.overlay_government_rect
 		"planet_view": return c.overlay_planet_view_rect
 		"station": return c.overlay_station_rect
 		"ship_designer": return c.overlay_ship_designer_rect
@@ -197,8 +206,9 @@ func _ready() -> void:
 		GalaxyManager.generate_galaxy(sys_count, seed_val, num_ai)
 		EmpireManager.create_empires_from_galaxy(GalaxyManager.galaxy)
 	GalaxyManager.galaxy_generated.connect(_build_galaxy_map)
+	if EconomyManager != null and EconomyManager.has_signal("ship_built"):
+		EconomyManager.ship_built.connect(_on_ship_built_galaxy)
 	_build_galaxy_map()
-	_setup_route_preview_layer()
 	_center_camera_on_galaxy()
 	GameState.system_selected.connect(_on_system_selected)
 	pause_button.toggled.connect(_on_pause_toggled)
@@ -228,6 +238,7 @@ func _ready() -> void:
 	technology_button.pressed.connect(_on_technology_pressed)
 	tech_tree_button.pressed.connect(_on_tech_tree_pressed)
 	leaders_button.pressed.connect(_on_leaders_pressed)
+	government_button.pressed.connect(_on_government_pressed)
 	if ship_designer_button != null:
 		ship_designer_button.pressed.connect(_on_ship_designer_pressed)
 	if music_play_button != null:
@@ -249,12 +260,13 @@ func _ready() -> void:
 	_resource_strip_controller.update_resource_display()
 	_research_panel_controller.update_research_panel()
 	_apply_ui_canvas_styles()
+	if ShipMoveOrder != null:
+		ShipMoveOrder.apply_gameplay_config(_get_cfg())
 	if SelectionManager != null:
 		SelectionManager.clear_selection()
 
 
 func _process(delta: float) -> void:
-	_update_route_preview()
 	if GameState.game_phase == GameState.GamePhase.PLAYING:
 		_resource_strip_controller.update_resource_display()
 		_update_hover_tooltip(delta)
@@ -263,7 +275,7 @@ func _process(delta: float) -> void:
 			_indicator_redraw_timer = 0.0
 			for c in systems_layer.get_children():
 				c.queue_redraw()
-			_refresh_galaxy_ship_nodes()
+			_refresh_galaxy_ship_nodes_if_layout_changed()
 	if GameState.is_paused() or GameState.game_phase != GameState.GamePhase.PLAYING:
 		return
 	var mult: float = GameState.get_time_scale_multiplier()
@@ -276,6 +288,7 @@ func _process(delta: float) -> void:
 		_day_accumulator -= step_days
 	if _day_accumulator < 0.0:
 		_day_accumulator = 0.0
+	_refresh_galaxy_ship_nodes_if_layout_changed()
 	_research_panel_controller.update_research_panel()
 
 
@@ -301,6 +314,7 @@ func _build_galaxy_map() -> void:
 		node.set_script(preload("res://scenes/galaxy/star_system_node.gd"))
 		node.set_meta("system_id", s.id)
 		systems_layer.add_child(node)
+	_last_galaxy_ship_layout_sig = -1
 	_refresh_galaxy_ship_nodes()
 
 
@@ -311,7 +325,105 @@ func _clear_galaxy_children() -> void:
 		c.queue_free()
 	if ships_layer != null:
 		for c in ships_layer.get_children():
+			if c is Node:
+				(c as Node).remove_from_group("galaxy_ship_icons")
 			c.queue_free()
+
+
+func _galaxy_ship_layout_signature() -> int:
+	if EmpireManager == null:
+		return 0
+	var emp: Empire = EmpireManager.get_player_empire()
+	if emp == null:
+		return 0
+	var sig: int = emp.ships.size() * 100003
+	for s in emp.ships:
+		var sh: Ship = s as Ship
+		if sh == null:
+			continue
+		sig = hash(sig + sh.system_id * 9176 + (1 if sh.in_hyperlane else 0) * 1315423911)
+		sig = hash(sig + hash(sh.name_key))
+	return sig
+
+
+func _on_ship_built_galaxy(_system_id: int) -> void:
+	## Force galaxy ship icons to refresh so newly built ships get selectable icons.
+	_last_galaxy_ship_layout_sig = -1
+	_refresh_galaxy_ship_nodes_if_layout_changed()
+
+
+func _refresh_galaxy_ship_nodes_if_layout_changed() -> void:
+	if solar_system_view_root != null and solar_system_view_root.visible:
+		return
+	var sig: int = _galaxy_ship_layout_signature()
+	if sig == _last_galaxy_ship_layout_sig:
+		return
+	_last_galaxy_ship_layout_sig = sig
+	_refresh_galaxy_ship_nodes()
+
+
+func _galaxy_ship_icon_layout_offset(slot_index: int) -> Vector2:
+	var col: int = slot_index % 6
+	var row: int = int(floor(float(slot_index) / 6.0))
+	return Vector2(-30.0 + float(col) * 12.0, 22.0 + float(row) * 12.0)
+
+
+func _open_embedded_solar_system() -> void:
+	if solar_system_view_root == null:
+		return
+	_galaxy_ui_visibility_backup.clear()
+	for c in ui_canvas.get_children():
+		_galaxy_ui_visibility_backup[c] = c.visible
+		c.visible = c.name == "FleetPanel"
+	solar_system_view_root.visible = true
+	galaxy_map.visible = false
+	if parallax_background != null:
+		parallax_background.visible = false
+	camera.enabled = false
+	var sys_cam: Camera2D = solar_system_view_root.get_node_or_null("Camera2D") as Camera2D
+	if sys_cam != null:
+		sys_cam.enabled = true
+	if selection_overlay != null:
+		selection_overlay.visible = false
+	if solar_system_view_root.has_method("enter_embedded"):
+		solar_system_view_root.call("enter_embedded", GameState.selected_system_id)
+
+
+func close_embedded_solar_system() -> void:
+	if solar_system_view_root == null:
+		return
+	solar_system_view_root.visible = false
+	galaxy_map.visible = true
+	if parallax_background != null:
+		parallax_background.visible = true
+	camera.enabled = true
+	var sys_cam: Camera2D = solar_system_view_root.get_node_or_null("Camera2D") as Camera2D
+	if sys_cam != null:
+		sys_cam.enabled = false
+	if selection_overlay != null:
+		selection_overlay.visible = true
+	for c in ui_canvas.get_children():
+		if c in _galaxy_ui_visibility_backup:
+			c.visible = _galaxy_ui_visibility_backup[c]
+	_galaxy_ui_visibility_backup.clear()
+	_last_galaxy_ship_layout_sig = -1
+	_refresh_galaxy_ship_nodes()
+
+
+func spawn_ship_icon(ship: Ship, position: Vector2) -> Node2D:
+	## Single authoritative place to create a galaxy ship icon; always same parent, z_index, and registration.
+	if ship == null or ships_layer == null:
+		return null
+	var script_ship_icon: GDScript = preload("res://scenes/galaxy/ship_galaxy_icon.gd") as GDScript
+	var node: Node2D = Node2D.new()
+	node.set_script(script_ship_icon)
+	node.position = position
+	node.z_index = 2
+	node.call("setup_galaxy_ship", ship)
+	ships_layer.add_child(node)
+	if SelectionManager != null:
+		SelectionManager.register_ship_icon(node)
+	return node
 
 
 func _refresh_galaxy_ship_nodes() -> void:
@@ -320,118 +432,33 @@ func _refresh_galaxy_ship_nodes() -> void:
 	var player_emp: Empire = EmpireManager.get_player_empire()
 	if player_emp == null:
 		return
-	var previously_selected_fleet_ids: Array = []
 	if SelectionManager != null:
-		for n in SelectionManager.selected_ships:
-			if is_instance_valid(n):
-				var fd: FleetData = n.get_meta("fleet_data", null) as FleetData
-				if fd == null and "fleet_data" in n:
-					fd = n.fleet_data
-				if fd != null and fd.fleet_id != "":
-					previously_selected_fleet_ids.append(fd.fleet_id)
+		SelectionManager.clear_icon_registry()
 	for c in ships_layer.get_children():
+		if c is Node:
+			(c as Node).remove_from_group("galaxy_ship_icons")
 		c.queue_free()
-	var script_fleet_icon: GDScript = preload("res://scenes/galaxy/fleet_galaxy_icon.gd") as GDScript
-	var ships_by_system: Dictionary = {}  # (empire_id, system_id) -> Array[Ship]
+	var per_system_slot: Dictionary = {}
 	for ship in player_emp.ships:
 		var s: Ship = ship as Ship
 		if s == null or s.in_hyperlane:
 			continue
-		var key: String = "e%d_s%d" % [s.empire_id, s.system_id]
-		if not ships_by_system.has(key):
-			ships_by_system[key] = []
-		ships_by_system[key].append(s)
-	for key in ships_by_system:
-		var ship_list: Array = ships_by_system[key]
-		if ship_list.is_empty():
-			continue
-		var first: Ship = ship_list[0] as Ship
-		if first == null:
-			continue
-		var sys: StarSystem = GalaxyManager.get_system(first.system_id)
+		var sys: StarSystem = GalaxyManager.get_system(s.system_id)
 		if sys == null:
 			continue
-		var fleet_data: FleetData = FleetData.new()
-		fleet_data.fleet_id = "emp_%d_sys_%d" % [first.empire_id, first.system_id]
-		fleet_data.fleet_name = "Fleet"
-		fleet_data.owner_empire_id = str(first.empire_id)
-		fleet_data.current_system_id = str(first.system_id)
-		for ship in ship_list:
-			var s: Ship = ship as Ship
-			if s == null:
-				continue
-			var sd: ShipData = ShipData.new()
-			sd.ship_name = s.name_key
-			sd.ship_class = EconomyManager.get_ship_display_type(s.design_id) if EconomyManager != null else "construction"
-			sd.combat_power = 0.0
-			sd.hull_current = 100.0
-			sd.hull_max = 100.0
-			fleet_data.ships.append(sd)
-		var node: Node2D = Node2D.new()
-		node.position = sys.position
-		node.set_script(script_fleet_icon)
-		node.fleet_data = fleet_data
-		node.empire_color = player_emp.color
-		node.set_meta("fleet_data", fleet_data)
-		node.add_to_group("galaxy_ships")
-		ships_layer.add_child(node)
-	if SelectionManager != null and previously_selected_fleet_ids.size() > 0:
-		var to_select: Array = []
-		for c in ships_layer.get_children():
-			var fd: FleetData = c.get_meta("fleet_data", null) as FleetData
-			if fd == null and "fleet_data" in c:
-				fd = c.fleet_data
-			if fd != null and fd.fleet_id in previously_selected_fleet_ids:
-				to_select.append(c)
-		if to_select.size() > 0:
-			SelectionManager.set_selection(to_select)
-
-
-func _setup_route_preview_layer() -> void:
-	var c: GameplayConfig = _get_cfg()
-	var layer: Node2D = Node2D.new()
-	layer.name = "RoutePreviewLayer"
-	layer.z_index = c.route_preview_z_index if c != null else 10
-	galaxy_map.add_child(layer)
-	_route_preview_line = Line2D.new()
-	_route_preview_line.width = c.route_preview_width if c != null else 3.0
-	_route_preview_line.default_color = c.route_preview_color if c != null else Color(1.0, 0.85, 0.2, 0.95)
-	_route_preview_line.begin_cap_mode = Line2D.LINE_CAP_ROUND
-	_route_preview_line.end_cap_mode = Line2D.LINE_CAP_ROUND
-	layer.add_child(_route_preview_line)
-
-
-func _update_route_preview() -> void:
-	if _route_preview_line == null:
-		return
-	_route_preview_line.clear_points()
-	var sid: int = GameState.selected_system_id
-	if sid < 0 or GalaxyManager == null or EmpireManager == null:
-		return
-	var player_emp: Empire = EmpireManager.get_player_empire()
-	if player_emp == null:
-		return
-	var rep_ship: Ship = null
-	for s in player_emp.ships:
-		var ship: Ship = s as Ship
-		if ship == null or ship.system_id != sid or ship.in_hyperlane:
+		var sid: int = s.system_id
+		var slot: int = int(per_system_slot.get(sid, 0))
+		per_system_slot[sid] = slot + 1
+		# AUDIT: NEEDS REVIEW — icon creation centralized in spawn_ship_icon
+		spawn_ship_icon(s, sys.position + _galaxy_ship_icon_layout_offset(slot))
+	for ship in player_emp.ships:
+		var s: Ship = ship as Ship
+		if s == null or not s.in_hyperlane:
 			continue
-		if ship.target_system_id >= 0 or ship.path_queue.size() > 0:
-			rep_ship = ship
-			break
-	if rep_ship == null:
-		return
-	var path_ids: Array[int] = [rep_ship.system_id]
-	if rep_ship.target_system_id >= 0:
-		path_ids.append(rep_ship.target_system_id)
-	for i in rep_ship.path_queue.size():
-		path_ids.append(rep_ship.path_queue[i])
-	if path_ids.size() < 2:
-		return
-	for id in path_ids:
-		var sys: StarSystem = GalaxyManager.get_system(id)
-		if sys != null:
-			_route_preview_line.add_point(sys.position)
+		# AUDIT: NEEDS REVIEW — same as above
+		spawn_ship_icon(s, Vector2.ZERO)
+	if SelectionManager != null:
+		SelectionManager.refresh_after_galaxy_ship_rebuild()
 
 
 func _center_camera_on_galaxy() -> void:
@@ -447,6 +474,8 @@ func _center_camera_on_galaxy() -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	var vp = get_viewport()
 	if vp == null:
+		return
+	if solar_system_view_root != null and solar_system_view_root.visible:
 		return
 	# LMB release: run selection handler first so ship/box selection takes priority. Only change system when no ship was selected.
 	if event is InputEventMouseButton:
@@ -500,16 +529,39 @@ func _unhandled_input(event: InputEvent) -> void:
 		camera.position -= delta
 		_drag_start = e.position
 		vp.set_input_as_handled()
+	if event is InputEventKey:
+		var k: InputEventKey = event as InputEventKey
+		if k.pressed and not k.echo and k.keycode == KEY_ESCAPE:
+			if SelectionManager != null:
+				SelectionManager.clear_selection()
+			vp.set_input_as_handled()
+			return
+		if k.pressed and not k.echo and k.keycode == KEY_G:
+			if _government_overlay_container != null and is_instance_valid(_government_overlay_container):
+				_on_government_overlay_closed(_government_overlay_container)
+			else:
+				_open_government_overlay()
+			vp.set_input_as_handled()
 
 
 func _try_select_system_at(screen_pos: Vector2) -> void:
 	var best_id := _get_hover_system_id_at(screen_pos)
 	if best_id < 0:
+		if SelectionManager != null:
+			SelectionManager.clear_selection()
 		return
+	if SelectionManager != null:
+		SelectionManager.clear_selection()
 	var world_pos: Vector2 = get_viewport().get_canvas_transform().affine_inverse() * screen_pos
 	var indicator: String = _get_ship_indicator_at(best_id, world_pos)
 	if indicator == "science" or indicator == "construction" or indicator == "military" or indicator == "station":
 		_galaxy_ship_filter = indicator
+		if SelectionManager != null:
+			SelectionManager.set_selection_filter(indicator)
+	else:
+		_galaxy_ship_filter = "all"
+		if SelectionManager != null:
+			SelectionManager.set_selection_filter("all")
 	_galaxy_selected_indicator = indicator if not indicator.is_empty() else ""
 	GameState.set_selected_system(best_id)
 	# Always refresh panel and indicator highlight (e.g. when clicking a different indicator on same system, GameState may not emit).
@@ -528,57 +580,118 @@ func _handle_right_click_galaxy(screen_pos: Vector2) -> void:
 	var source_id: int = GameState.selected_system_id
 	if target_id < 0 or GalaxyManager == null:
 		return
-	# Right-click on the selected system = open system view (replaces View System button).
+	# Right-click on the selected system = open embedded system view.
 	if target_id == source_id:
-		get_tree().change_scene_to_file(ProjectPaths.SCENE_SOLAR_SYSTEM_VIEW)
+		_open_embedded_solar_system()
 		return
 	_try_order_ships_to_system_at(screen_pos)
 
 
-## Order filtered player ships in selected system to the clicked system (pathfind if not neighbor).
+func _galaxy_icon_global_position_for_ship(ship: Ship) -> Vector2:
+	if ships_layer == null:
+		return Vector2.ZERO
+	for c in ships_layer.get_children():
+		if not (c is Node2D) or not c.has_method("get_galaxy_ship"):
+			continue
+		var gs: Ship = c.call("get_galaxy_ship") as Ship
+		if gs == ship:
+			return (c as Node2D).global_position
+	return Vector2.ZERO
+
+
+func _prepare_galaxy_transit_origins_for_move_orders(ships: Array) -> void:
+	if GalaxyManager == null:
+		return
+	for item in ships:
+		var ship: Ship = item as Ship
+		if ship == null:
+			continue
+		if ship.in_hyperlane:
+			ship.pending_galaxy_transit_origin_use = true
+			var gp: Vector2 = _galaxy_icon_global_position_for_ship(ship)
+			if gp.length_squared() < 0.0001:
+				var o_sys: StarSystem = GalaxyManager.get_system(ship.system_id)
+				if o_sys != null:
+					gp = o_sys.position
+			ship.pending_galaxy_transit_origin = gp
+		else:
+			ship.pending_galaxy_transit_origin_use = false
+
+
+## Live player ships that match current SelectionManager entries (any system).
+func _live_ships_matching_galaxy_selection() -> Array:
+	var out: Array = []
+	if SelectionManager == null or EmpireManager == null:
+		return out
+	var player_emp: Empire = EmpireManager.get_player_empire()
+	if player_emp == null or SelectionManager.selected_ships.is_empty():
+		return out
+	var seen: Dictionary = {}
+	for sd in SelectionManager.selected_ships:
+		for s in player_emp.ships:
+			var ship: Ship = s as Ship
+			if ship == null or seen.get(ship, false):
+				continue
+			if sd.matches_ship(ship):
+				out.append(ship)
+				seen[ship] = true
+				break
+	return out
+
+
+func _group_ships_by_system_id(ships: Array) -> Dictionary:
+	var by: Dictionary = {}
+	for item in ships:
+		var sh: Ship = item as Ship
+		if sh == null:
+			continue
+		var sid: int = sh.system_id
+		if not by.has(sid):
+			by[sid] = []
+		(by[sid] as Array).append(sh)
+	return by
+
+
+## Order ships to target system. Uses galaxy ship selection when non-empty; otherwise selected system + filter.
 func _try_order_ships_to_system_at(screen_pos: Vector2) -> void:
 	var target_id: int = _get_hover_system_id_at(screen_pos)
-	var source_id: int = GameState.selected_system_id
-	if source_id < 0 or target_id < 0 or target_id == source_id or GalaxyManager == null or EmpireManager == null:
+	if target_id < 0 or GalaxyManager == null or EmpireManager == null:
 		return
 	var player_emp: Empire = EmpireManager.get_player_empire()
 	if player_emp == null:
 		return
-	var ships_here: Array = _get_ships_in_system_filtered(source_id, _galaxy_ship_filter)
+	var from_selection: Array = _live_ships_matching_galaxy_selection()
+	if not from_selection.is_empty():
+		var by_sys: Dictionary = _group_ships_by_system_id(from_selection)
+		var any_ordered: bool = false
+		for source_id in by_sys.keys():
+			if target_id == int(source_id):
+				continue
+			var grp: Array = by_sys[source_id] as Array
+			if grp.is_empty():
+				continue
+			_prepare_galaxy_transit_origins_for_move_orders(grp)
+			if ShipMoveOrder != null:
+				ShipMoveOrder.issue_move_orders_for_ships(grp, int(source_id), target_id)
+			any_ordered = true
+		if any_ordered:
+			_update_selected_panel()
+			for c in systems_layer.get_children():
+				c.queue_redraw()
+		return
+	var source_id: int = GameState.selected_system_id
+	if source_id < 0 or target_id == source_id:
+		return
+	var ships_here: Array = []
+	if SelectionManager != null:
+		ships_here = SelectionManager.get_selected_live_ships_in_system(source_id)
+	if ships_here.is_empty():
+		ships_here = _get_ships_in_system_filtered(source_id, _galaxy_ship_filter)
 	if ships_here.is_empty():
 		return
-	var neighbors: Array[StarSystem] = GalaxyManager.get_system_neighbors(source_id)
-	var target_is_neighbor: bool = false
-	for nb in neighbors:
-		if nb.id == target_id:
-			target_is_neighbor = true
-			break
-	if target_is_neighbor:
-		for ship in ships_here:
-			var s: Ship = ship as Ship
-			if s != null:
-				s.target_system_id = target_id
-				s.path_queue.clear()
-				s.target_position = Vector2(-99999.0, -99999.0)
-				s.in_hyperlane = false
-				s.hyperlane_to_system_id = -1
-				s.hyperlane_progress = 0.0
-	else:
-		var path: Array[int] = GalaxyManager.get_path_between_systems(source_id, target_id)
-		if path.size() < 2:
-			return
-		var path_rest: Array[int] = []
-		for i in range(2, path.size()):
-			path_rest.append(path[i])
-		for ship in ships_here:
-			var s: Ship = ship as Ship
-			if s != null:
-				s.target_system_id = path[1]
-				s.path_queue = path_rest.duplicate()
-				s.target_position = Vector2(-99999.0, -99999.0)
-				s.in_hyperlane = false
-				s.hyperlane_to_system_id = -1
-				s.hyperlane_progress = 0.0
+	_prepare_galaxy_transit_origins_for_move_orders(ships_here)
+	if ShipMoveOrder != null:
+		ShipMoveOrder.issue_move_orders_for_ships(ships_here, source_id, target_id)
 	_update_selected_panel()
 	for c in systems_layer.get_children():
 		c.queue_redraw()
@@ -722,6 +835,11 @@ func _on_resource_row_exited() -> void:
 func _update_hover_tooltip(delta: float) -> void:
 	if _hover_tooltip == null:
 		return
+	# Full-screen government UI sits above the map but mouse still maps to systems underneath — hide map tooltips.
+	if _government_overlay_container != null and is_instance_valid(_government_overlay_container):
+		if _hover_tooltip.has_method("hide_tooltip"):
+			_hover_tooltip.hide_tooltip()
+		return
 	var screen_pos: Vector2 = get_viewport().get_mouse_position()
 	if _resource_hover_type >= 0:
 		var name_str: String = GameResources.RESOURCE_NAMES.get(_resource_hover_type, "?")
@@ -779,6 +897,22 @@ func _update_hover_tooltip(delta: float) -> void:
 			_hover_tooltip.show_tooltip(title, body, screen_pos)
 			return
 	body = "%d planets, %d asteroid belts" % [sys.planets.size(), sys.asteroid_belts.size()]
+	# If a ship is selected and hovered system is a neighbor of that ship's system, show one-hop transit time.
+	# AUDIT: NEEDS REVIEW — total trip time for multi-hop path must sum each hop's transit days.
+	if SelectionManager != null and GalaxyManager != null and EconomyManager != null:
+		var neighbors: Array = GalaxyManager.get_system_neighbors(sys_id)
+		var added_transit: bool = false
+		for sd in SelectionManager.selected_ships:
+			if added_transit:
+				break
+			for n in neighbors:
+				if sd.galaxy_system_id == n.id:
+					var base: int = EconomyManager.base_transit_days
+					var mod: float = sd.transit_time_modifier
+					var transit_days: int = clampi(int(base * mod), 30, 99999)
+					body += "\nTransit: %d days" % transit_days
+					added_transit = true
+					break
 	_hover_tooltip.show_tooltip(sys.name_key, body, screen_pos)
 
 
@@ -1117,12 +1251,14 @@ func _on_pause_toggled(paused: bool) -> void:
 
 func _on_view_system_pressed() -> void:
 	if GameState.selected_system_id >= 0:
-		get_tree().change_scene_to_file(ProjectPaths.SCENE_SOLAR_SYSTEM_VIEW)
+		_open_embedded_solar_system()
 
 
 func _on_ship_filter_pressed(filter_key: String) -> void:
 	_galaxy_ship_filter = filter_key
 	_galaxy_selected_indicator = "" if filter_key == "all" else filter_key
+	if SelectionManager != null:
+		SelectionManager.set_selection_filter(filter_key)
 	for c in systems_layer.get_children():
 		if c.get_meta("system_id", -1) == GameState.selected_system_id:
 			c.set_meta("highlighted_indicator", _galaxy_selected_indicator)
@@ -1131,21 +1267,40 @@ func _on_ship_filter_pressed(filter_key: String) -> void:
 
 
 func _on_send_ships_to_neighbor_pressed(neighbor_system_id: int) -> void:
-	var source_id: int = GameState.selected_system_id
-	if source_id < 0 or EmpireManager == null:
+	if EmpireManager == null:
 		return
-	var ships_here: Array = _get_ships_in_system_filtered(source_id, _galaxy_ship_filter)
+	var from_selection: Array = _live_ships_matching_galaxy_selection()
+	if not from_selection.is_empty():
+		var by_sys: Dictionary = _group_ships_by_system_id(from_selection)
+		var any_ordered: bool = false
+		for source_id in by_sys.keys():
+			if neighbor_system_id == int(source_id):
+				continue
+			var grp: Array = by_sys[source_id] as Array
+			if grp.is_empty():
+				continue
+			_prepare_galaxy_transit_origins_for_move_orders(grp)
+			if ShipMoveOrder != null:
+				ShipMoveOrder.issue_move_orders_for_ships(grp, int(source_id), neighbor_system_id)
+			any_ordered = true
+		if any_ordered:
+			_update_selected_panel()
+			for c in systems_layer.get_children():
+				c.queue_redraw()
+		return
+	var source_id: int = GameState.selected_system_id
+	if source_id < 0:
+		return
+	var ships_here: Array = []
+	if SelectionManager != null:
+		ships_here = SelectionManager.get_selected_live_ships_in_system(source_id)
+	if ships_here.is_empty():
+		ships_here = _get_ships_in_system_filtered(source_id, _galaxy_ship_filter)
 	if ships_here.is_empty():
 		return
-	for ship in ships_here:
-		var s: Ship = ship as Ship
-		if s != null:
-			s.target_system_id = neighbor_system_id
-			s.path_queue.clear()
-			s.target_position = Vector2(-99999.0, -99999.0)
-			s.in_hyperlane = false
-			s.hyperlane_to_system_id = -1
-			s.hyperlane_progress = 0.0
+	_prepare_galaxy_transit_origins_for_move_orders(ships_here)
+	if ShipMoveOrder != null:
+		ShipMoveOrder.issue_move_orders_for_ships(ships_here, source_id, neighbor_system_id)
 	_update_selected_panel()
 	for c in systems_layer.get_children():
 		c.queue_redraw()
@@ -1226,6 +1381,10 @@ func _on_leaders_pressed() -> void:
 	_open_leaders_overlay()
 
 
+func _on_government_pressed() -> void:
+	_open_government_overlay()
+
+
 func _open_colonies_overlay() -> void:
 	var colonies: Control = _instantiate_overlay(overlay_colonies, ProjectPaths.SCENE_COLONIES_OVERLAY) as Control
 	var container: Control = OverlayManager.create_overlay_container(_overlay_dimmer_color(), colonies, _overlay_rect("colonies"), false, false)
@@ -1273,6 +1432,23 @@ func _open_leaders_overlay() -> void:
 	if leaders.has_signal("closed"):
 		leaders.closed.connect(_on_generic_overlay_closed.bind(container))
 	overlay_layer.add_child(container)
+
+
+func _open_government_overlay() -> void:
+	var gov: Control = _instantiate_overlay(overlay_government, ProjectPaths.SCENE_GOVERNMENT_OVERLAY) as Control
+	var container: Control = OverlayManager.create_overlay_container(_overlay_dimmer_color(), gov, Vector4.ZERO, true, false)
+	_government_overlay_container = container
+	if gov.has_signal("closed"):
+		gov.closed.connect(_on_government_overlay_closed.bind(container))
+	overlay_layer.add_child(container)
+
+
+func _on_government_overlay_closed(container: Control) -> void:
+	_government_overlay_container = null
+	if is_instance_valid(container):
+		container.queue_free()
+	_resource_strip_controller.update_resource_display()
+	_research_panel_controller.update_research_panel()
 
 
 func _on_generic_overlay_closed(overlay_container: Control) -> void:

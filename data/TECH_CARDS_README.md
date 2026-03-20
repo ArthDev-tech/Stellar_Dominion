@@ -52,8 +52,11 @@ tech_mining_1, tech_alloy_1, tech_armor_1, tech_mass_drivers, tech_mining_2, tec
 **Xenological (category 2):**  
 tech_farming_1, tech_admin_capacity, tech_colonial_centralization, tech_farming_2, tech_gene_clinics, tech_diplomacy_1, tech_habitability_1, tech_trade_policy, tech_galactic_bureaucracy, tech_arcology_project
 
+**See also:** [TECHNOLOGIES.md](TECHNOLOGIES.md) — full list of all technologies with names and descriptions, grouped by tree and tier. Regenerate with `python tools/gen_technologies_md.py`.
+
 ## Tools
 
 - **print_tech_ids.gd** — Run from Godot (Editor → Run or open as script and run). Loads `data/techs.json` and prints all tech ids grouped by branch (and tier) so you can copy-paste into `prerequisites`.
 - **parse_techtree_md.py** — Parses the expanded tech tree markdown (e.g. `stellar_dominion_techtree_v2.md`) and writes `data/techs.json`. Run from project root: `python tools/parse_techtree_md.py [path/to/techtree.md]`. Default input: `data/stellar_dominion_techtree_v2.md` or `~/Downloads/stellar_dominion_techtree_v2.md`.
 - **gen_tech_tree_scene.py** — Updates `ui/tech_tree/technology_cards/tech_tree.tscn` with all techs from `techs.json` (card nodes and layout). Run from project root: `python tools/gen_tech_tree_scene.py`. Run after updating `techs.json`.
+- **gen_technologies_md.py** — Generates `data/TECHNOLOGIES.md` from `techs.json` (all techs with names and descriptions by tree and tier). Run from project root: `python tools/gen_technologies_md.py`.

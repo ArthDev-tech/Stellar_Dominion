@@ -9,11 +9,14 @@ extends Node2D
 @export var overlay_technology: PackedScene = null
 @export var overlay_tech_tree: PackedScene = null
 @export var overlay_leaders: PackedScene = null
+@export var overlay_government: PackedScene = null
 @export var overlay_planet_view: PackedScene = null
 @export var overlay_space_station: PackedScene = null
 @export var overlay_ship_designer: PackedScene = null
 ## Optional: tune star/planet colors and station/ship click radii in the inspector.
 @export var system_view_palette: SystemViewPalette = null
+## When true, lives under game_scene; Back returns to galaxy without scene swap.
+@export var embedded_in_game_scene: bool = false
 
 enum SelectedType { NONE, STAR, PLANET, BELT, STATION, SHIP }
 
@@ -39,13 +42,12 @@ var _ships_selected_label: Label = null  # Created in _ready
 @onready var info_text: Label = $UICanvas/InfoPanel/MarginContainer/VBox/InfoText
 @onready var manage_colony_button: Button = $UICanvas/InfoPanel/MarginContainer/VBox/ManageColonyButton
 @onready var manage_station_button: Button = $UICanvas/InfoPanel/MarginContainer/VBox/ManageStationButton
-@onready var jump_to_vbox: VBoxContainer = $UICanvas/InfoPanel/MarginContainer/VBox/JumpToVBox
-@onready var jump_to_buttons_container: HBoxContainer = $UICanvas/InfoPanel/MarginContainer/VBox/JumpToVBox/JumpToButtonsContainer
 @onready var overlay_layer: CanvasLayer = $OverlayLayer
 @onready var planets_button: Button = $UICanvas/NavStrip/MarginContainer/VBox/PlanetsButton
 @onready var technology_button: Button = $UICanvas/NavStrip/MarginContainer/VBox/TechnologyButton
 @onready var tech_tree_button: Button = $UICanvas/NavStrip/MarginContainer/VBox/TechTreeButton
 @onready var leaders_button: Button = $UICanvas/NavStrip/MarginContainer/VBox/LeadersButton
+@onready var government_button: Button = $UICanvas/NavStrip/MarginContainer/VBox/GovernmentButton
 @onready var ship_designer_button: Button = $UICanvas/NavStrip/MarginContainer/VBox/ShipDesignerButton
 @onready var ui_canvas: CanvasLayer = $UICanvas
 @onready var top_bar: PanelContainer = $UICanvas/TopBar
@@ -79,8 +81,16 @@ var _hover_last_id: String = ""  # "star"|"planet:0"|"belt:0"|"station:0"|"ship:
 var _resource_hover_type: int = -1  # GameResources.ResourceType when mouse over a resource row
 var _resource_strip_controller: ResourceStripController = null
 var _scale_buttons: Array[Button] = []
+var _government_overlay_container: Control = null
+## Jump markers + boundary + selection paths (child of SystemContent, draw-only).
+var _overlay_draw: Node2D = null
+## Per-neighbor jump data for hit-test and labels: { "id": int, "name": String, "pos": Vector2 }
+var _jump_targets: Array = []
 
 var _ResourceStationScript: GDScript = preload("res://ships/resource_station.gd") as GDScript
+
+const JUMP_RIGHT_CLICK_RADIUS: float = 52.0
+const JUMP_MARKER_RADIUS: float = 22.0
 
 
 func _get_cfg() -> GameplayConfig:
@@ -145,6 +155,7 @@ func _overlay_rect(rect_key: String) -> Vector4:
 			"colonies": return Vector4(-280, -220, 280, 220)
 			"technology": return Vector4(-320, -240, 320, 240)
 			"leaders": return Vector4(-260, -200, 260, 200)
+			"government": return Vector4(-320, -280, 320, 280)
 			"planet_view": return Vector4(-675, -540, 675, 540)
 			"station": return Vector4(-450, -350, 450, 350)
 			"ship_designer": return Vector4(-470, -310, 470, 310)
@@ -153,6 +164,7 @@ func _overlay_rect(rect_key: String) -> Vector4:
 		"colonies": return c.overlay_colonies_rect
 		"technology": return c.overlay_technology_rect
 		"leaders": return c.overlay_leaders_rect
+		"government": return c.overlay_government_rect
 		"planet_view": return c.overlay_planet_view_rect
 		"station": return c.overlay_station_rect
 		"ship_designer": return c.overlay_ship_designer_rect
@@ -217,6 +229,7 @@ func _ready() -> void:
 	technology_button.pressed.connect(_on_technology_pressed)
 	tech_tree_button.pressed.connect(_on_tech_tree_pressed)
 	leaders_button.pressed.connect(_on_leaders_pressed)
+	government_button.pressed.connect(_on_government_pressed)
 	if ship_designer_button != null:
 		ship_designer_button.pressed.connect(_on_ship_designer_pressed)
 	if music_play_button != null:
@@ -244,6 +257,23 @@ func _ready() -> void:
 	_resource_strip_controller.resource_row_exited.connect(_on_resource_row_exited)
 	_resource_strip_controller.build_resource_strip()
 	_apply_ui_canvas_styles()
+	_setup_selection_rect()
+	_setup_hover_tooltip()
+	_setup_context_menu()
+	_ensure_ships_selected_label()
+	if ShipMoveOrder != null:
+		ShipMoveOrder.apply_gameplay_config(_get_cfg())
+	_ensure_overlay_draw()
+	if SelectionManager != null:
+		SelectionManager.selection_changed.connect(_on_selection_manager_changed)
+	if embedded_in_game_scene:
+		visible = false
+		if EconomyManager != null:
+			if EconomyManager.has_signal("ship_built"):
+				EconomyManager.ship_built.connect(_on_ship_built)
+			if EconomyManager.has_signal("resource_station_built"):
+				EconomyManager.resource_station_built.connect(_on_resource_station_built)
+		return
 	var system_id: int = GameState.selected_system_id
 	if system_id < 0:
 		title_label.text = "No system selected"
@@ -257,20 +287,120 @@ func _ready() -> void:
 	_build_system(sys)
 	_update_info_panel()
 	_resource_strip_controller.update_resource_display()
-	_setup_selection_rect()
-	_setup_hover_tooltip()
-	_setup_context_menu()
-	if _ships_selected_label == null:
-		_ships_selected_label = Label.new()
-		_ships_selected_label.name = "ShipsSelectedLabel"
-		_ships_selected_label.add_theme_color_override("font_color", Color(0.9, 0.85, 0.5))
-		$UICanvas/TopBar/MarginContainer/VBox/Row1.add_child(_ships_selected_label)
 	_update_ships_selected_label()
 	if EconomyManager != null:
 		if EconomyManager.has_signal("ship_built"):
 			EconomyManager.ship_built.connect(_on_ship_built)
 		if EconomyManager.has_signal("resource_station_built"):
 			EconomyManager.resource_station_built.connect(_on_resource_station_built)
+
+
+func _ensure_ships_selected_label() -> void:
+	if _ships_selected_label != null:
+		return
+	_ships_selected_label = Label.new()
+	_ships_selected_label.name = "ShipsSelectedLabel"
+	_ships_selected_label.add_theme_color_override("font_color", Color(0.9, 0.85, 0.5))
+	$UICanvas/TopBar/MarginContainer/VBox/Row1.add_child(_ships_selected_label)
+
+
+func _on_selection_manager_changed(_ships: Array) -> void:
+	if not visible or _current_system == null:
+		return
+	_sync_local_ships_from_selection_manager()
+	_update_ship_selection_indicators()
+
+
+func _clear_system_geometry() -> void:
+	for c in belts_node.get_children():
+		c.queue_free()
+	for c in orbits_node.get_children():
+		c.queue_free()
+	for c in planets_node.get_children():
+		c.queue_free()
+	for c in stations_node.get_children():
+		c.queue_free()
+	for c in ships_node.get_children():
+		c.queue_free()
+	_planet_nodes.clear()
+	_station_nodes.clear()
+	_ship_nodes.clear()
+
+
+## Called from GameScene when opening system view while embedded.
+func enter_embedded(system_id: int) -> void:
+	if ShipMoveOrder != null:
+		ShipMoveOrder.apply_gameplay_config(_get_cfg())
+	_clear_system_geometry()
+	_selected_type = SelectedType.NONE
+	_selected_planet = null
+	_selected_belt = null
+	_selected_station = null
+	_selected_ships.clear()
+	GameState.selected_system_id = system_id
+	if system_id < 0:
+		title_label.text = "No system selected"
+		_current_system = null
+		return
+	var sys: StarSystem = GalaxyManager.get_system(system_id)
+	if sys == null:
+		title_label.text = "Unknown system"
+		_current_system = null
+		return
+	title_label.text = sys.name_key
+	_current_system = sys
+	_build_system(sys)
+	_update_info_panel()
+	_resource_strip_controller.update_resource_display()
+	_sync_local_ships_from_selection_manager()
+	_update_ship_selection_indicators()
+	_update_ships_selected_label()
+
+
+func _planet_return_scene() -> String:
+	return ProjectPaths.SCENE_GAME_SCENE if embedded_in_game_scene else ProjectPaths.SCENE_SOLAR_SYSTEM_VIEW
+
+
+func _ship_to_selection_data(ship: Ship) -> ShipData:
+	var d := ShipData.new()
+	if ship == null:
+		return d
+	d.ship_name = ship.name_key
+	d.ship_class = EconomyManager.get_ship_display_type(ship.design_id) if EconomyManager != null else "construction"
+	d.galaxy_system_id = ship.system_id
+	d.galaxy_empire_id = ship.empire_id
+	d.galaxy_selection_instance_id = int(ship.get_instance_id())
+	d.transit_time_modifier = ship.transit_time_modifier
+	if ship.in_hyperlane:
+		d.transit_days_total = ship.hyperlane_transit_days
+		d.transit_days_remaining = ceili((1.0 - ship.hyperlane_progress) * float(ship.hyperlane_transit_days))
+	return d
+
+
+func _sync_local_ships_from_selection_manager() -> void:
+	_selected_ships.clear()
+	if SelectionManager == null or _current_system == null or EmpireManager == null:
+		return
+	var player_emp: Empire = EmpireManager.get_player_empire()
+	if player_emp == null:
+		return
+	for sd in SelectionManager.selected_ships:
+		for s in player_emp.ships:
+			var ship: Ship = s as Ship
+			if ship == null or ship.system_id != _current_system.id or ship.in_hyperlane:
+				continue
+			if sd.matches_ship(ship):
+				_selected_ships.append(ship)
+				break
+
+
+func _command_ships_in_current_system() -> Array[Ship]:
+	var out: Array[Ship] = []
+	if _current_system == null or SelectionManager == null:
+		return out
+	for ship in SelectionManager.get_selected_live_ships_in_system(_current_system.id):
+		out.append(ship as Ship)
+	return out
 
 
 func _apply_ui_canvas_styles() -> void:
@@ -623,6 +753,40 @@ func _build_system(sys: StarSystem) -> void:
 			for rs in player_emp.get_resource_stations_in_system(sys.id):
 				_add_resource_station_node(rs, sys)
 	_refresh_ships_in_system(sys)
+	_ensure_overlay_draw()
+	_rebuild_jump_targets(sys)
+
+
+func _ensure_overlay_draw() -> void:
+	if _overlay_draw != null and is_instance_valid(_overlay_draw):
+		return
+	var n := Node2D.new()
+	n.name = "JumpPointDecorations"
+	n.z_index = -6
+	n.set_script(preload("res://scenes/galaxy/system_view_overlay_draw.gd"))
+	_overlay_draw = n
+	system_content.add_child(n)
+	n.set("solar_view", self)
+
+
+func _rebuild_jump_targets(sys: StarSystem) -> void:
+	_jump_targets.clear()
+	if sys == null or GalaxyManager == null:
+		return
+	for nb in GalaxyManager.get_system_neighbors(sys.id):
+		_jump_targets.append({
+			"id": nb.id,
+			"name": nb.name_key,
+			"pos": GalaxyManager.get_hyperlane_exit_position_in_system(sys.id, nb.id),
+		})
+
+
+func _jump_neighbor_id_at(world_pos: Vector2) -> int:
+	for j in _jump_targets:
+		var p: Vector2 = j.get("pos", Vector2.ZERO) as Vector2
+		if world_pos.distance_to(p) <= JUMP_RIGHT_CLICK_RADIUS:
+			return int(j.get("id", -1))
+	return -1
 
 
 func _refresh_station_nodes() -> void:
@@ -677,7 +841,21 @@ func _refresh_ships_in_system(sys: StarSystem) -> void:
 		return
 	for s in player_emp.ships:
 		var ship: Ship = s as Ship
-		if ship.system_id != sys.id:
+		if ship == null or ship.empire_id != player_emp.id:
+			continue
+		# Incoming hyperlane: show at entry jump toward origin system.
+		if ship.in_hyperlane and ship.hyperlane_to_system_id == sys.id:
+			var pos_in: Vector2 = GalaxyManager.get_hyperlane_exit_position_in_system(sys.id, ship.system_id)
+			var node_in := Area2D.new()
+			node_in.position = pos_in
+			node_in.rotation = ship.facing_angle
+			node_in.set_script(preload("res://scenes/galaxy/ship_draw.gd"))
+			node_in.set_meta("ship", ship)
+			node_in.set_meta("is_incoming_transit", true)
+			ships_node.add_child(node_in)
+			_ship_nodes.append(node_in)
+			continue
+		if ship.system_id != sys.id or ship.in_hyperlane:
 			continue
 		var pos: Vector2 = ship.position_in_system
 		var node := Area2D.new()
@@ -702,27 +880,34 @@ func _on_resource_station_built(system_id: int) -> void:
 
 
 func _update_ship_node_positions() -> void:
+	if _current_system == null:
+		return
 	for node in _ship_nodes:
 		var ship: Ship = node.get_meta("ship", null) as Ship
-		if ship != null:
+		if ship == null:
+			continue
+		if node.get_meta("is_incoming_transit", false):
+			node.position = GalaxyManager.get_hyperlane_exit_position_in_system(_current_system.id, ship.system_id)
+		else:
 			node.position = ship.position_in_system
-			node.rotation = ship.facing_angle
+		node.rotation = ship.facing_angle
 
 
 const SHIP_FORMATION_SPACING: float = 14.0
 
 func _assign_ship_targets_in_formation(click_pos: Vector2) -> void:
-	var n: int = _selected_ships.size()
+	var cmd: Array[Ship] = _command_ships_in_current_system()
+	var n: int = cmd.size()
 	if n <= 0:
 		return
 	if n == 1:
-		(_selected_ships[0] as Ship).target_position = click_pos
+		cmd[0].target_position = click_pos
 		return
 	# Line formation: perpendicular to direction from origin to click, centered on click
 	var dir: Vector2 = click_pos.normalized() if click_pos.length_squared() > 0.01 else Vector2(1, 0)
 	var perp: Vector2 = Vector2(-dir.y, dir.x)
 	for i in n:
-		var ship: Ship = _selected_ships[i] as Ship
+		var ship: Ship = cmd[i]
 		var offset: float = (float(i) - (n - 1) * 0.5) * SHIP_FORMATION_SPACING
 		ship.target_position = click_pos + perp * offset
 
@@ -828,8 +1013,8 @@ func _get_build_resource_station_hint(body_type: String, body_index: int) -> Str
 	if player_emp == null:
 		return ""
 	var has_construction: bool = false
-	for ship in _selected_ships:
-		if (ship as Ship).design_id == "construction_ship":
+	for ship in _command_ships_in_current_system():
+		if ship.design_id == "construction_ship":
 			has_construction = true
 			break
 	if not has_construction:
@@ -876,8 +1061,7 @@ func _try_build_resource_station(hover: Dictionary, _world_pos: Vector2) -> bool
 	if deposits.is_empty():
 		return false
 	var construction_ship: Ship = null
-	for ship in _selected_ships:
-		var s: Ship = ship as Ship
+	for s in _command_ships_in_current_system():
 		if s.design_id == "construction_ship":
 			construction_ship = s
 			break
@@ -932,8 +1116,8 @@ func _get_build_mining_station_menu_item(hover: Dictionary) -> Dictionary:
 		out.label = "Build mining station (No resource deposits here)"
 		return out
 	var has_construction: bool = false
-	for ship in _selected_ships:
-		if (ship as Ship).design_id == "construction_ship":
+	for ship in _command_ships_in_current_system():
+		if ship.design_id == "construction_ship":
 			has_construction = true
 			break
 	if not has_construction:
@@ -962,9 +1146,8 @@ func _can_colonize_at_hover(hover: Dictionary) -> bool:
 		return false
 	if planet.habitability <= 0.0 or player_emp.get_colony(_current_system.id, _current_system.planets.find(planet)) != null:
 		return false
-	for ship in _selected_ships:
-		var s: Ship = ship as Ship
-		if s != null and s.design_id == "colony_ship" and s.system_id == _current_system.id:
+	for s in _command_ships_in_current_system():
+		if s.design_id == "colony_ship":
 			return true
 	return false
 
@@ -977,7 +1160,7 @@ func _show_right_click_context_menu(screen_pos: Vector2, world_pos: Vector2, hov
 	if build_item.show:
 		_context_menu.add_item(build_item.label, _MENU_ID_BUILD_MINING_STATION)
 		_context_menu.set_item_disabled(_context_menu.item_count - 1, not build_item.enabled)
-	if _selected_ships.size() > 0:
+	if _command_ships_in_current_system().size() > 0:
 		_context_menu.add_item("Move here", _MENU_ID_MOVE_HERE)
 	if _can_colonize_at_hover(hover):
 		_context_menu.add_item("Colonize", _MENU_ID_COLONIZE)
@@ -1007,6 +1190,8 @@ func _on_context_menu_id_pressed(id: int) -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
+	if not visible:
+		return
 	# Pan/zoom/select: use _unhandled_input so UI buttons receive clicks first
 	if event is InputEventMouseButton:
 		var e: InputEventMouseButton = event
@@ -1024,10 +1209,18 @@ func _unhandled_input(event: InputEvent) -> void:
 		elif e.button_index == MOUSE_BUTTON_RIGHT:
 			if not e.pressed:
 				var world_pos: Vector2 = get_viewport().get_canvas_transform().affine_inverse() * e.position
+				var jump_nid: int = _jump_neighbor_id_at(world_pos)
+				if jump_nid >= 0 and ShipMoveOrder != null and _current_system != null:
+					var cmd_jump: Array[Ship] = _command_ships_in_current_system()
+					if cmd_jump.size() > 0:
+						ShipMoveOrder.issue_move_orders_for_ships(cmd_jump, _current_system.id, jump_nid)
+						_refresh_ships_in_system(_current_system)
+						get_viewport().set_input_as_handled()
+						return
 				var hover: Dictionary = _get_hover_at(world_pos)
 				var ht: int = hover.get("type", -1)
 				var hover_is_body: bool = (ht == SelectedType.STAR or ht == SelectedType.PLANET or ht == SelectedType.BELT)
-				if _selected_ships.size() > 0 or hover_is_body:
+				if _command_ships_in_current_system().size() > 0 or hover_is_body:
 					_show_right_click_context_menu(e.position, world_pos, hover)
 			get_viewport().set_input_as_handled()
 		elif e.button_index == MOUSE_BUTTON_LEFT:
@@ -1061,6 +1254,19 @@ func _unhandled_input(event: InputEvent) -> void:
 		elif _select_dragging:
 			_select_drag_end = e.position
 			_update_selection_rect()
+			get_viewport().set_input_as_handled()
+	if event is InputEventKey:
+		var k: InputEventKey = event as InputEventKey
+		if k.pressed and not k.echo and k.keycode == KEY_ESCAPE and SelectionManager != null:
+			SelectionManager.set_selection([])
+			_sync_local_ships_from_selection_manager()
+			_update_ship_selection_indicators()
+			get_viewport().set_input_as_handled()
+		elif k.pressed and not k.echo and k.keycode == KEY_G:
+			if _government_overlay_container != null and is_instance_valid(_government_overlay_container):
+				_on_government_overlay_closed(_government_overlay_container)
+			else:
+				_open_government_overlay()
 			get_viewport().set_input_as_handled()
 
 
@@ -1096,6 +1302,15 @@ func _finish_drag_select(from: Vector2, to: Vector2) -> void:
 			_selected_ships.append(ship)
 	if _selected_ships.is_empty():
 		_selected_type = SelectedType.NONE
+		if SelectionManager != null:
+			SelectionManager.set_selection([])
+	else:
+		var payload: Array = []
+		for sh in _selected_ships:
+			payload.append(_ship_to_selection_data(sh as Ship))
+		if SelectionManager != null:
+			SelectionManager.set_selection(payload)
+	_sync_local_ships_from_selection_manager()
 	_update_info_panel()
 
 
@@ -1143,6 +1358,8 @@ func _try_select_at(world_pos: Vector2) -> void:
 			if ship != null:
 				_selected_type = SelectedType.SHIP
 				_selected_ships = [ship]
+				if SelectionManager != null:
+					SelectionManager.set_selection([_ship_to_selection_data(ship)])
 				_update_info_panel()
 				return
 	# Planets
@@ -1158,10 +1375,13 @@ func _try_select_at(world_pos: Vector2) -> void:
 				if player_emp != null and player_emp.get_colony(GameState.selected_system_id, i) != null:
 					GameState.selected_colony_system_id = GameState.selected_system_id
 					GameState.selected_colony_planet_index = i
-					GameState.planet_view_return_scene = ProjectPaths.SCENE_SOLAR_SYSTEM_VIEW
+					GameState.planet_view_return_scene = _planet_return_scene()
 					_open_planet_view_overlay()
 			_update_info_panel()
 			return
+	if SelectionManager != null:
+		SelectionManager.set_selection([])
+	_sync_local_ships_from_selection_manager()
 	_update_info_panel()
 
 
@@ -1182,15 +1402,20 @@ func _colonize_with_ship(planet_index: int) -> void:
 	if player_emp == null:
 		return
 	var colony_ship_to_use: Ship = null
-	for ship in _selected_ships:
-		var s: Ship = ship as Ship
-		if s.design_id == "colony_ship" and s.system_id == _current_system.id:
+	for s in _command_ships_in_current_system():
+		if s.design_id == "colony_ship":
 			colony_ship_to_use = s
 			break
 	if colony_ship_to_use == null:
 		return
 	player_emp.ships.erase(colony_ship_to_use)
 	_selected_ships.erase(colony_ship_to_use)
+	if SelectionManager != null:
+		var keep: Array = []
+		for sd in SelectionManager.selected_ships:
+			if sd.ship_name != colony_ship_to_use.name_key or sd.galaxy_empire_id != colony_ship_to_use.empire_id:
+				keep.append(sd)
+		SelectionManager.set_selection(keep)
 	var colony := Colony.new(player_emp.id, _current_system.id, planet_index, false)
 	player_emp.add_colony(colony)
 	_refresh_ships_in_system(_current_system)
@@ -1200,31 +1425,13 @@ func _colonize_with_ship(planet_index: int) -> void:
 func _update_info_panel() -> void:
 	manage_colony_button.visible = false
 	manage_station_button.visible = false
-	if jump_to_vbox != null:
-		jump_to_vbox.visible = false
-	for c in jump_to_buttons_container.get_children():
-		c.queue_free()
 	if _selected_type == SelectedType.NONE:
 		info_title.text = "Select a body"
-		info_text.text = "Click the star, a planet, station, or ships. Middle mouse to pan. Drag to select multiple ships."
+		info_text.text = "Click the star, a planet, station, or ships. Middle mouse to pan. Drag to select multiple ships. Fleet panel (bottom-left) lists selected ships."
 		return
 	if _selected_type == SelectedType.SHIP and _selected_ships.size() > 0:
-		info_title.text = "Ships selected (%d)" % _selected_ships.size()
-		var names: PackedStringArray = []
-		for s in _selected_ships:
-			names.append((s as Ship).name_key)
-		info_text.text = "\n".join(names)
-		# Jump to neighbor: only for ships in this system and not in hyperlane
-		var can_jump: bool = _current_system != null
-		if can_jump and GalaxyManager != null:
-			var neighbors: Array[StarSystem] = GalaxyManager.get_system_neighbors(_current_system.id)
-			if jump_to_vbox != null and jump_to_buttons_container != null and neighbors.size() > 0:
-				jump_to_vbox.visible = true
-				for neighbor in neighbors:
-					var btn: Button = Button.new()
-					btn.text = neighbor.name_key
-					btn.pressed.connect(_on_jump_to_system_pressed.bind(neighbor.id))
-					jump_to_buttons_container.add_child(btn)
+		info_title.text = "Ships"
+		info_text.text = "Selection and orders: use the fleet panel (bottom-left). Right-click empty space to move selected ships in formation."
 		return
 	if _selected_type == SelectedType.STAR and _current_system != null:
 		var type_name: String = _get_star_type_name(_current_system.star_type)
@@ -1286,7 +1493,12 @@ func _update_ship_selection_indicators() -> void:
 		var ship: Ship = node.get_meta("ship", null) as Ship
 		if ship == null:
 			continue
-		var selected: bool = _selected_ships.has(ship)
+		var selected: bool = false
+		if SelectionManager != null:
+			for sd in SelectionManager.selected_ships:
+				if sd.matches_ship(ship):
+					selected = true
+					break
 		if "selected" in node:
 			node.selected = selected
 		node.queue_redraw()
@@ -1302,22 +1514,6 @@ func _update_ships_selected_label() -> void:
 		_ships_selected_label.text = " %d ship(s) selected — Right-click to move "
 	else:
 		_ships_selected_label.visible = false
-
-
-func _on_jump_to_system_pressed(toward_system_id: int) -> void:
-	if _current_system == null:
-		return
-	for s in _selected_ships:
-		var ship: Ship = s as Ship
-		if ship == null or ship.system_id != _current_system.id:
-			continue
-		ship.target_system_id = toward_system_id
-		ship.in_hyperlane = false
-		ship.hyperlane_to_system_id = -1
-		ship.hyperlane_progress = 0.0
-		ship.target_position = Vector2(-99999.0, -99999.0)
-	_refresh_ships_in_system(_current_system)
-	_update_info_panel()
 
 
 func _get_ships_in_system_count(system_id: int) -> int:
@@ -1372,13 +1568,17 @@ func _on_leaders_pressed() -> void:
 	_open_leaders_overlay()
 
 
+func _on_government_pressed() -> void:
+	_open_government_overlay()
+
+
 func _open_colonies_overlay() -> void:
 	var colonies: Control = _instantiate_overlay(overlay_colonies, ProjectPaths.SCENE_COLONIES_OVERLAY) as Control
 	var container: Control = OverlayManager.create_overlay_container(_overlay_dimmer_color(), colonies, _overlay_rect("colonies"), false, false)
 	colonies.set_manage_callback(func(sid: int, pidx: int) -> void:
 		GameState.selected_colony_system_id = sid
 		GameState.selected_colony_planet_index = pidx
-		GameState.planet_view_return_scene = ProjectPaths.SCENE_SOLAR_SYSTEM_VIEW
+		GameState.planet_view_return_scene = _planet_return_scene()
 		if is_instance_valid(container):
 			container.queue_free()
 		_open_planet_view_overlay()
@@ -1420,6 +1620,22 @@ func _open_leaders_overlay() -> void:
 	overlay_layer.add_child(container)
 
 
+func _open_government_overlay() -> void:
+	var gov: Control = _instantiate_overlay(overlay_government, ProjectPaths.SCENE_GOVERNMENT_OVERLAY) as Control
+	var container: Control = OverlayManager.create_overlay_container(_overlay_dimmer_color(), gov, Vector4.ZERO, true, false)
+	_government_overlay_container = container
+	if gov.has_signal("closed"):
+		gov.closed.connect(_on_government_overlay_closed.bind(container))
+	overlay_layer.add_child(container)
+
+
+func _on_government_overlay_closed(container: Control) -> void:
+	_government_overlay_container = null
+	if is_instance_valid(container):
+		container.queue_free()
+	_resource_strip_controller.update_resource_display()
+
+
 func _on_generic_overlay_closed(overlay_container: Control) -> void:
 	if is_instance_valid(overlay_container):
 		overlay_container.queue_free()
@@ -1454,7 +1670,107 @@ func _on_planet_view_overlay_closed(overlay_container: Control) -> void:
 	_resource_strip_controller.update_resource_display()
 
 
+func _max_orbit_radius_for_boundary(sys: StarSystem) -> float:
+	var m := 200.0
+	for p in sys.planets:
+		m = maxf(m, p.orbit_radius)
+	for b in sys.asteroid_belts:
+		m = maxf(m, b.outer_radius)
+	return maxf(m * 1.15, GalaxyManager.SYSTEM_EDGE_RADIUS)
+
+
+func _next_hop_system_id_for_path(ship: Ship) -> int:
+	if ship == null or _current_system == null:
+		return -1
+	if ship.in_hyperlane and ship.hyperlane_to_system_id == _current_system.id:
+		return -2
+	if ship.target_system_id >= 0:
+		return ship.target_system_id
+	return -1
+
+
+func _is_ship_selected_for_overlay(ship: Ship) -> bool:
+	if ship == null or SelectionManager == null:
+		return false
+	for sd in SelectionManager.selected_ships:
+		if sd is ShipData and (sd as ShipData).matches_ship(ship):
+			return true
+	return false
+
+
+func _draw_dashed_line_on(canvas: CanvasItem, from_p: Vector2, to_p: Vector2, col: Color, width: float, dash: float, gap: float) -> void:
+	var v: Vector2 = to_p - from_p
+	var L: float = v.length()
+	if L < 0.5:
+		return
+	var u: Vector2 = v / L
+	var t: float = 0.0
+	while t < L:
+		var te: float = minf(t + dash, L)
+		canvas.draw_line(from_p + u * t, from_p + u * te, col, width)
+		t = te + gap
+
+
+func _draw_arrow_at_end(canvas: CanvasItem, from_p: Vector2, to_p: Vector2, col: Color, head_len: float) -> void:
+	var d: Vector2 = to_p - from_p
+	if d.length_squared() < 4.0:
+		return
+	var dir: Vector2 = d.normalized()
+	var tip: Vector2 = to_p
+	var base: Vector2 = tip - dir * head_len
+	var perp: Vector2 = Vector2(-dir.y, dir.x) * head_len * 0.45
+	var pts: PackedVector2Array = PackedVector2Array([tip, base + perp, base - perp])
+	var cols: PackedColorArray = PackedColorArray([col, col, col])
+	canvas.draw_polygon(pts, cols)
+
+
+## Called from system_view_overlay_draw.gd each frame.
+func _draw_system_view_overlay(canvas: CanvasItem) -> void:
+	# AUDIT: NEEDS REVIEW — if camera zoom/parallax decouple label readability from _draw scale, use Control labels.
+	if _current_system == null:
+		return
+	var sys: StarSystem = _current_system
+	var boundary_r: float = _max_orbit_radius_for_boundary(sys)
+	var line_col := Color(0.35, 0.55, 0.78, 0.55)
+	var jump_ring := Color(0.28, 0.68, 0.98, 0.8)
+	var jump_fill := Color(0.12, 0.32, 0.52, 0.4)
+	var font: Font = ThemeDB.fallback_font
+	var seg_count: int = 96
+	for i in seg_count:
+		if i % 2 != 0:
+			continue
+		var a0: float = TAU * float(i) / float(seg_count)
+		var a1: float = TAU * float(i + 1) / float(seg_count)
+		canvas.draw_arc(Vector2.ZERO, boundary_r, a0, a1, 6, line_col, 2.0, true)
+	for j in _jump_targets:
+		var jp: Vector2 = j.get("pos", Vector2.ZERO) as Vector2
+		var nb_name: String = str(j.get("name", "?"))
+		canvas.draw_circle(jp, JUMP_MARKER_RADIUS, jump_fill)
+		canvas.draw_arc(jp, JUMP_MARKER_RADIUS, 0.0, TAU, 28, jump_ring, 2.5, true)
+		canvas.draw_string(font, jp + Vector2(-36.0, -JUMP_MARKER_RADIUS - 8.0), nb_name, HORIZONTAL_ALIGNMENT_LEFT, -1, 12, Color(0.78, 0.9, 1.0, 0.95))
+	var path_col := Color(0.95, 0.72, 0.22, 0.92)
+	var path_w: float = 2.5
+	for node in _ship_nodes:
+		var ship: Ship = node.get_meta("ship", null) as Ship
+		if ship == null or not _is_ship_selected_for_overlay(ship):
+			continue
+		var next_id: int = _next_hop_system_id_for_path(ship)
+		var from_v: Vector2 = node.position
+		if next_id == -2:
+			_draw_dashed_line_on(canvas, from_v, Vector2.ZERO, path_col, path_w, 14.0, 10.0)
+			_draw_arrow_at_end(canvas, from_v, Vector2.ZERO, path_col, 18.0)
+		elif next_id >= 0:
+			var jpt: Vector2 = GalaxyManager.get_hyperlane_exit_position_in_system(sys.id, next_id)
+			_draw_dashed_line_on(canvas, from_v, jpt, path_col, path_w, 14.0, 10.0)
+			_draw_arrow_at_end(canvas, from_v, jpt, path_col, 18.0)
+
+
 func _on_back_pressed() -> void:
+	if embedded_in_game_scene:
+		var host: Node = get_parent()
+		if host != null and host.has_method("close_embedded_solar_system"):
+			host.call("close_embedded_solar_system")
+		return
 	get_tree().change_scene_to_file(ProjectPaths.SCENE_GAME_SCENE)
 
 
@@ -1463,7 +1779,7 @@ func _on_manage_colony_pressed() -> void:
 	if planet_index is int and planet_index >= 0:
 		GameState.selected_colony_system_id = GameState.selected_system_id
 		GameState.selected_colony_planet_index = planet_index
-		GameState.planet_view_return_scene = ProjectPaths.SCENE_SOLAR_SYSTEM_VIEW
+		GameState.planet_view_return_scene = _planet_return_scene()
 		_open_planet_view_overlay()
 
 

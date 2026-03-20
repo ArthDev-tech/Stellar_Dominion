@@ -28,8 +28,10 @@ CouncilManager="*res://leaders/council/council_manager.gd"
 PrecursorManager="*res://galaxy/scripts/precursor_manager.gd"
 ProjectPaths="*res://core/project_paths.gd"
 EventBus="*res://core/event_bus.gd"
+GovernmentManager="*res://core/government_manager.gd"
 JobAssignmentManager="*res://buildings/jobs/job_assignment_manager.gd"
 SelectionManager="*res://core/selection_manager.gd"
+ShipMoveOrder="*res://core/ship_move_order.gd"
 MusicPlayer="*res://core/music_player.gd"
 
 [display]

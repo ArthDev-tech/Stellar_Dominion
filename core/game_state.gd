@@ -97,6 +97,9 @@ func start_new_game() -> void:
 	selected_system_id = -1
 	selected_ship_id = -1
 	selected_empire_id = player_empire_id
+	if SelectionManager != null:
+		SelectionManager.clear_selection()
+		SelectionManager.clear_icon_registry()
 
 
 ## Advance game time by delta_days (can be fractional for smooth ship movement at low speed).

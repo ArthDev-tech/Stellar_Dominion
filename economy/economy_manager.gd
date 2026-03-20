@@ -8,6 +8,10 @@ signal resource_station_built(system_id: int)  ## Emitted when a construction sh
 var _ResourceStation: GDScript = preload("res://ships/resource_station.gd") as GDScript
 const RESOURCE_STATION_BUILD_MONTHS: int = 6
 
+# --- Ship movement ---
+@export_group("Ship movement")
+@export var base_transit_days: int = 180  ## In-game days per hyperlane jump (before drive modifier).
+
 # --- Manpower (ES2-style) ---
 @export_group("Manpower")
 @export var manpower_from_food_percent: float = 0.10
@@ -38,6 +42,9 @@ func get_ship_display_type(design_id: String) -> String:
 func process_month() -> void:
 	for e in EmpireManager.empires:
 		_process_empire(e)
+	if GovernmentManager != null:
+		var player_emp: Empire = EmpireManager.get_player_empire() if EmpireManager != null else null
+		GovernmentManager.process_monthly_tick(player_emp)
 
 
 func _process_empire(empire: Empire) -> void:
@@ -98,6 +105,8 @@ func _process_station_builds(empire: Empire) -> void:
 				station.ship_build_queue.pop_front()
 				var name_key: String = _get_design_name(design_id)
 				var ship := Ship.new(empire.id, station.system_id, design_id, name_key)
+				if ShipDesignManager != null:
+					ship.transit_time_modifier = ShipDesignManager.get_transit_time_modifier_for_design(design_id)
 				var ships_in_system: int = 0
 				for s in empire.ships:
 					if (s as Ship).system_id == station.system_id:

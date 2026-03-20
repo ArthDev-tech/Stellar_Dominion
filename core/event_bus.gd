@@ -1,6 +1,9 @@
 extends Node
 ## Central event bus for game signals. Autoload: EventBus
 
+# Galaxy / selection
+signal ships_selected(selected_ships: Array)
+
 # Pause / time
 signal pause_state_changed(is_paused: bool)
 
@@ -32,3 +35,8 @@ signal council_agenda_launched(agenda: Variant)
 signal council_agenda_completed(agenda: Variant)
 signal council_position_unfilled(position_id: String)
 signal council_position_filled(position_id: String, leader: Variant)
+
+# Government / Keys to Power
+signal key_holder_loyalty_changed(id: StringName, new_loyalty: float)
+signal power_stability_changed(new_value: float)
+signal demand_fulfilled(id: StringName)

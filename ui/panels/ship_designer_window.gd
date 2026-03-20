@@ -98,6 +98,14 @@ func _on_design_list_item_pressed(design_id: String) -> void:
 	_current_design_id = design_id
 	_current_hull_id = d.get("hull_id", "")
 	_current_loadout = d.get("loadout", {}).duplicate()
+	# Default missing star_drive slot to drive_impulse_1.
+	if ShipDesignManager != null:
+		var hull: Dictionary = ShipDesignManager.get_hull(_current_hull_id)
+		for slot_def in hull.get("slots", []):
+			if slot_def.get("type", "") == "star_drive":
+				var sid: String = slot_def.get("id", "")
+				if _current_loadout.get(sid, "").is_empty():
+					_current_loadout[sid] = "drive_impulse_1"
 	_current_name_key = d.get("name_key", "Custom")
 	_current_ship_role = d.get("ship_role", "Custom")
 	_current_auto_upgrade = d.get("auto_upgrade", false)
@@ -159,13 +167,16 @@ func _refresh_slots_and_stats() -> void:
 	slots_grid.columns = min(4, max(1, slots.size()))
 	for slot_def in slots:
 		var slot_id: String = slot_def.get("id", "")
-		var _slot_type: String = slot_def.get("type", "")
+		var slot_type: String = slot_def.get("type", "")
 		var _slot_size: String = slot_def.get("size", "S")
 		var comp_id: String = _current_loadout.get(slot_id, "")
 		var comp_name: String = "Empty"
 		if not comp_id.is_empty() and ShipDesignManager != null:
 			var comp: Dictionary = ShipDesignManager.get_component(comp_id)
 			comp_name = comp.get("name_key", comp_id)
+			if slot_type == "star_drive":
+				var mod: float = float(comp.get("transit_time_modifier", 1.0))
+				comp_name = "%s — %d%% transit time" % [comp_name, int(mod * 100)]
 		var btn: Button = Button.new()
 		btn.custom_minimum_size = Vector2(100, 44)
 		btn.text = "%s\n%s" % [slot_id, comp_name]

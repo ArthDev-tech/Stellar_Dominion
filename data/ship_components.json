@@ -922,5 +922,61 @@
 		"power_produced": 8,
 		"upkeep": { "0": 0.52 },
 		"build_time_months": 2
+	},
+	{
+		"id": "drive_impulse_1",
+		"name_key": "Impulse Drive I",
+		"category": "star_drive",
+		"slot_type": "star_drive",
+		"size": "S",
+		"tier": 1,
+		"transit_time_modifier": 1.0,
+		"description": "Standard ion propulsion. No improvement over baseline transit time.",
+		"tech_required": null,
+		"cost": { "0": 5 },
+		"upkeep": {},
+		"build_time_months": 1
+	},
+	{
+		"id": "drive_impulse_2",
+		"name_key": "Impulse Drive II",
+		"category": "star_drive",
+		"slot_type": "star_drive",
+		"size": "S",
+		"tier": 2,
+		"transit_time_modifier": 0.85,
+		"description": "Improved ion arrays. Reduces transit time by 15%.",
+		"tech_required": "fusion_drive_arrays",
+		"cost": { "0": 10 },
+		"upkeep": {},
+		"build_time_months": 1
+	},
+	{
+		"id": "drive_fusion_1",
+		"name_key": "Fusion Drive",
+		"category": "star_drive",
+		"slot_type": "star_drive",
+		"size": "S",
+		"tier": 3,
+		"transit_time_modifier": 0.70,
+		"description": "Fusion torch propulsion. Reduces transit time by 30%.",
+		"tech_required": "fusion_drive_arrays",
+		"cost": { "0": 20 },
+		"upkeep": {},
+		"build_time_months": 1
+	},
+	{
+		"id": "drive_warp_1",
+		"name_key": "Warp Drive Mk I",
+		"category": "star_drive",
+		"slot_type": "star_drive",
+		"size": "S",
+		"tier": 4,
+		"transit_time_modifier": 0.50,
+		"description": "Experimental metric distortion. Halves transit time between systems.",
+		"tech_required": "spacetime_engineering",
+		"cost": { "0": 40 },
+		"upkeep": {},
+		"build_time_months": 1
 	}
 ]

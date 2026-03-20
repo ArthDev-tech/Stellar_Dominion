@@ -138,6 +138,10 @@ text = "Tech Tree"
 layout_mode = 2
 text = "Leaders"
 
+[node name="GovernmentButton" type="Button" parent="UICanvas/NavStrip/MarginContainer/VBox"]
+layout_mode = 2
+text = "Government"
+
 [node name="ShipDesignerButton" type="Button" parent="UICanvas/NavStrip/MarginContainer/VBox"]
 layout_mode = 2
 text = "Ships"
@@ -188,20 +192,6 @@ visible = false
 custom_minimum_size = Vector2(0, 36)
 layout_mode = 2
 text = "Manage Station"
-
-[node name="JumpToVBox" type="VBoxContainer" parent="UICanvas/InfoPanel/MarginContainer/VBox"]
-visible = false
-layout_mode = 2
-theme_override_constants/separation = 6
-
-[node name="JumpToLabel" type="Label" parent="UICanvas/InfoPanel/MarginContainer/VBox/JumpToVBox"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 14
-text = "Jump to system:"
-
-[node name="JumpToButtonsContainer" type="HBoxContainer" parent="UICanvas/InfoPanel/MarginContainer/VBox/JumpToVBox"]
-layout_mode = 2
-theme_override_constants/separation = 8
 
 [node name="MusicPlayerPanel" type="PanelContainer" parent="UICanvas"]
 anchors_preset = 1

@@ -28,6 +28,12 @@ extends Resource
 @export_group("Galaxy map visuals")
 @export var hyperline_width: float = 1.5
 @export var hyperline_color: Color = Color(0.35, 0.4, 0.6, 0.8)
+## Max galaxy-world offset from destination star toward origin along the lane (actual offset is min of this and lane_fraction * lane_length).
+@export var jump_point_radius_galaxy: float = 400.0
+## Jump point distance along hyperlane = min(radius_galaxy, lane_length * this). Keep ~0.15–0.25.
+@export var jump_point_lane_fraction: float = 0.2
+## Unused (ships remain at jump point after hyperlane). Kept for saved scenes / future use.
+@export var ingress_days: int = 14
 @export var route_preview_z_index: int = 10
 @export var route_preview_width: float = 3.0
 @export var route_preview_color: Color = Color(1.0, 0.85, 0.2, 0.95)
@@ -44,6 +50,7 @@ extends Resource
 @export var overlay_colonies_rect: Vector4 = Vector4(-280, -220, 280, 220)
 @export var overlay_technology_rect: Vector4 = Vector4(-320, -240, 320, 240)
 @export var overlay_leaders_rect: Vector4 = Vector4(-260, -200, 260, 200)
+@export var overlay_government_rect: Vector4 = Vector4(-320, -280, 320, 280)
 @export var overlay_planet_view_rect: Vector4 = Vector4(-675, -540, 675, 540)
 @export var overlay_station_rect: Vector4 = Vector4(-450, -350, 450, 350)
 @export var overlay_ship_designer_rect: Vector4 = Vector4(-470, -310, 470, 310)

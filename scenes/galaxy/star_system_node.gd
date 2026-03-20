@@ -20,10 +20,12 @@ const COLONIZABLE_ICON_SIZE := 3.5
 
 func _draw() -> void:
 	var id: int = get_meta("system_id", -1)
-	var selected: bool = (GameState != null and GameState.selected_system_id == id)
-	var r: float = SELECTED_RADIUS if selected else RADIUS
+	var system_focused: bool = (GameState != null and GameState.selected_system_id == id)
+	var ships_selected_here: bool = SelectionManager != null and SelectionManager.has_ship_selection_at_system(id)
+	var show_yellow_selection: bool = system_focused and not ships_selected_here
+	var r: float = SELECTED_RADIUS if show_yellow_selection else RADIUS
 	var color: Color
-	if selected:
+	if show_yellow_selection:
 		color = Color(1.0, 0.95, 0.7, 1.0)
 	elif EmpireManager != null:
 		var emp: Empire = EmpireManager.get_empire_for_home_system(id)
@@ -36,8 +38,10 @@ func _draw() -> void:
 	else:
 		color = Color(0.85, 0.82, 0.6, 0.95)
 	draw_circle(Vector2.ZERO, r, color)
-	if selected:
+	if show_yellow_selection:
 		draw_arc(Vector2.ZERO, r, 0.0, TAU, 32, Color(1.0, 1.0, 0.5, 0.8), 2.0)
+	elif system_focused and ships_selected_here:
+		draw_arc(Vector2.ZERO, RADIUS, 0.0, TAU, 32, Color(0.6, 0.7, 1.0, 0.35), 1.5)
 	_draw_ship_and_station_indicators(id, r)
 	if GalaxyManager != null and GalaxyManager.system_has_colonizable_planet(id):
 		_draw_colonizable_icon(r)
@@ -49,36 +53,11 @@ func _draw_ship_and_station_indicators(system_id: int, star_radius: float) -> vo
 	var player_emp: Empire = EmpireManager.get_player_empire()
 	if player_emp == null:
 		return
-	var science_count: int = 0
-	var construction_count: int = 0
-	var military_count: int = 0
-	for s in player_emp.ships:
-		var ship: Ship = s as Ship
-		if ship == null or ship.system_id != system_id or ship.in_hyperlane:
-			continue
-		var display_type: String = "construction"
-		if EconomyManager != null:
-			display_type = EconomyManager.get_ship_display_type(ship.design_id)
-		match display_type:
-			"science":
-				science_count += 1
-			"construction":
-				construction_count += 1
-			_:
-				military_count += 1
 	var station_count: int = player_emp.get_stations_in_system(system_id).size()
 	var base_y: float = star_radius + INDICATOR_Y_OFFSET
-	var dx: float = 8.0
 	var highlighted: String = get_meta("highlighted_indicator", "")
-	# Science (circle), Construction (square), Military (triangle), Station (diamond)
-	if science_count > 0:
-		_draw_indicator_circle(Vector2(-1.5 * dx, base_y), SCIENCE_COLOR, highlighted == "science")
-	if construction_count > 0:
-		_draw_indicator_rect(Vector2(-0.5 * dx, base_y), CONSTRUCTION_COLOR, highlighted == "construction")
-	if military_count > 0:
-		_draw_indicator_triangle(Vector2(0.5 * dx, base_y), MILITARY_COLOR, highlighted == "military")
 	if station_count > 0:
-		_draw_indicator_diamond(Vector2(1.5 * dx, base_y), STATION_COLOR, highlighted == "station")
+		_draw_indicator_diamond(Vector2(0.0, base_y), STATION_COLOR, highlighted == "station")
 
 
 func _draw_indicator_circle(center: Vector2, color: Color, selected: bool) -> void:

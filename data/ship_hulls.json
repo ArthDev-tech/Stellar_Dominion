@@ -13,7 +13,8 @@
 		"naval_capacity": 1.0,
 		"base_build_time_months": 12,
 		"slots": [
-			{ "id": "utility_1", "type": "utility", "size": "S" }
+			{ "id": "utility_1", "type": "utility", "size": "S" },
+			{ "id": "drive_1", "type": "star_drive", "size": "S" }
 		]
 	},
 	{
@@ -37,7 +38,8 @@
 			{ "id": "weapon_2", "type": "weapon", "size": "S" },
 			{ "id": "armor_1", "type": "armor", "size": "S" },
 			{ "id": "armor_2", "type": "armor", "size": "S" },
-			{ "id": "reactor_1", "type": "reactor", "size": "S" }
+			{ "id": "reactor_1", "type": "reactor", "size": "S" },
+			{ "id": "drive_1", "type": "star_drive", "size": "S" }
 		]
 	}
 ]

@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://dwo1vtasyjy6v"]
+[gd_scene load_steps=10 format=3 uid="uid://dwo1vtasyjy6v"]
 
 [ext_resource type="Script" uid="uid://l1lo61txu4s5" path="res://scenes/galaxy/game_scene.gd" id="1_script"]
 [ext_resource type="Resource" uid="uid://v0k3qubfiyf5" path="res://resources/default_gameplay_config.tres" id="2_config"]
@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://5hloswkcf1ts" path="res://ui/overlays/fleet_panel.tscn" id="5_fleetpanel"]
 [ext_resource type="Script" uid="uid://cqw04mf8vgbg" path="res://ui/components/draggable_panel.gd" id="6_draggable"]
 [ext_resource type="Script" uid="uid://c5rbo4sigk626" path="res://scripts/components/parallax_tiled_layer.gd" id="8_tiled"]
+[ext_resource type="PackedScene" uid="uid://1ggab8i21xjh" path="res://scenes/galaxy/solar_system_view.tscn" id="9_solar"]
 
 [node name="GameScene" type="Node2D"]
 script = ExtResource("1_script")
@@ -37,6 +38,10 @@ script = ExtResource("4_script")
 [node name="SystemsLayer" type="Node2D" parent="GalaxyMap"]
 
 [node name="ShipsLayer" type="Node2D" parent="GalaxyMap"]
+
+[node name="SolarSystemViewRoot" parent="." instance=ExtResource("9_solar")]
+visible = false
+embedded_in_game_scene = true
 
 [node name="UICanvas" type="CanvasLayer" parent="."]
 
@@ -254,12 +259,17 @@ text = "Tech Tree"
 layout_mode = 2
 text = "Leaders"
 
+[node name="GovernmentButton" type="Button" parent="UICanvas/NavStrip/MarginContainer/VBox"]
+layout_mode = 2
+text = "Government"
+
 [node name="ShipDesignerButton" type="Button" parent="UICanvas/NavStrip/MarginContainer/VBox"]
 layout_mode = 2
 text = "Ships"
 
 [node name="FleetPanel" parent="UICanvas" instance=ExtResource("5_fleetpanel")]
 anchors_preset = 2
+metadata/_edit_group_ = true
 
 [node name="MusicPlayerPanel" type="PanelContainer" parent="UICanvas"]
 anchors_preset = 1

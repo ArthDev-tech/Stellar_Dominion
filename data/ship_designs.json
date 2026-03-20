@@ -8,7 +8,7 @@
 		"shape": "arrow",
 		"cost": { "0": 60, "1": 100 },
 		"build_time_months": 12,
-		"loadout": {}
+		"loadout": { "drive_1": "drive_impulse_1" }
 	},
 	{
 		"id": "science_ship",
@@ -19,7 +19,7 @@
 		"shape": "diamond",
 		"cost": { "0": 60, "1": 100 },
 		"build_time_months": 12,
-		"loadout": { "utility_1": "utility_sensor_t1" }
+		"loadout": { "utility_1": "utility_sensor_t1", "drive_1": "drive_impulse_1" }
 	},
 	{
 		"id": "colony_ship",
@@ -30,7 +30,7 @@
 		"shape": "chevron",
 		"cost": { "0": 100, "1": 100, "2": 80, "3": 50 },
 		"build_time_months": 24,
-		"loadout": {}
+		"loadout": { "drive_1": "drive_impulse_1" }
 	},
 	{
 		"id": "corvette",
@@ -47,7 +47,8 @@
 			"weapon_1": "weapon_laser_s_t1",
 			"weapon_2": "weapon_kinetic_s_t1",
 			"armor_1": "armor_plate_s_t1",
-			"reactor_1": "reactor_s_t1"
+			"reactor_1": "reactor_s_t1",
+			"drive_1": "drive_impulse_1"
 		}
 	}
 ]

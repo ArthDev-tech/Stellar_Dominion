@@ -121,6 +121,9 @@ func get_components_for_slot(slot_type: String, size: String, empire: Empire = n
 			continue
 		if empire != null:
 			var req_tech: String = c.get("required_tech_id", "")
+			if req_tech.is_empty():
+				var tech_req: Variant = c.get("tech_required", null)
+				req_tech = "" if tech_req == null else str(tech_req)
 			if not req_tech.is_empty() and req_tech not in empire.completed_tech_ids:
 				continue
 		out.append(c.duplicate())
@@ -297,7 +300,31 @@ func compute_design_stats(hull_id: String, loadout: Dictionary) -> Dictionary:
 		stats["power"] += float(comp.get("power_produced", 0))
 		stats["power_drain"] += float(comp.get("power_drain", 0))
 	stats["power"] = stats["power"] - stats["power_drain"]
+	stats["transit_time_modifier"] = get_transit_time_modifier_from_loadout(loadout)
 	return stats
+
+
+## Returns transit time multiplier from design's loadout (1.0 = no change). Uses lowest modifier if multiple star_drive components.
+func get_transit_time_modifier_for_design(design_id: String) -> float:
+	var d: Dictionary = get_design(design_id)
+	if d.is_empty():
+		return 1.0
+	var loadout: Dictionary = d.get("loadout", {})
+	return get_transit_time_modifier_from_loadout(loadout)
+
+
+func get_transit_time_modifier_from_loadout(loadout: Dictionary) -> float:
+	var best: float = 1.0  # No drive = baseline
+	for slot_id in loadout:
+		var comp: Dictionary = get_component(loadout[slot_id])
+		if comp.is_empty():
+			continue
+		if comp.get("category", "") != "star_drive" and comp.get("slot_type", "") != "star_drive":
+			continue
+		var mod: float = float(comp.get("transit_time_modifier", 1.0))
+		if mod < best:
+			best = mod
+	return best
 
 
 func get_designs_for_empire(empire_id: int) -> Array:

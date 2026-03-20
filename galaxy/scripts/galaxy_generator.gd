@@ -69,7 +69,7 @@ func generate_with_options(options: Dictionary) -> Galaxy:
 
 func _fill_systems(galaxy: Galaxy, count: int) -> void:
 	var attempts := 0
-	var max_attempts := count * 120
+	var max_attempts := count * 250
 	while galaxy.systems.size() < count and attempts < max_attempts:
 		attempts += 1
 		var pos := _random_position_in_galaxy()
